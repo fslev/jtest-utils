@@ -1,4 +1,4 @@
-package io.jtest.utils;
+package io.jtest.utils.common;
 
 import java.util.Arrays;
 import java.util.Collections;

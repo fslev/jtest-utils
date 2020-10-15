@@ -1,5 +1,6 @@
-package io.jtest.utils;
+package io.jtest.utils.common;
 
+import io.jtest.utils.common.StringFormat;
 import org.junit.Test;
 
 import java.util.HashMap;

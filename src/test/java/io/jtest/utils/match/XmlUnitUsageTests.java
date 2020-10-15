@@ -1,6 +1,6 @@
 package io.jtest.utils.match;
 
-import io.jtest.utils.XmlUtils;
+import io.jtest.utils.common.XmlUtils;
 import org.junit.Test;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Node;

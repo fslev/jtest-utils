@@ -1,7 +1,9 @@
-package io.jtest.utils;
+package io.jtest.utils.common;
 
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import io.jtest.utils.common.JsonUtils;
+import io.jtest.utils.common.ResourceUtils;
 import org.junit.Assert;
 import org.junit.Test;
 

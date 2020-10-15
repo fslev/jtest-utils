@@ -1,4 +1,4 @@
-package io.jtest.utils;
+package io.jtest.utils.common;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.JsonNodeType;

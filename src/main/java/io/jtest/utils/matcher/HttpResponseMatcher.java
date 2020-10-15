@@ -97,7 +97,7 @@ public class HttpResponseMatcher extends AbstractObjectMatcher<HttpResponseWrapp
                 if (matchConditions.contains(MatchCondition.DO_NOT_MATCH_HTTP_RESPONSE_BY_BODY)) {
                     boolean error = false;
                     try {
-                        new ObjectMatcher().match(message, expectedEntity, actual.getEntity(), matchConditions);
+                        new FlowMatcher().match(message, expectedEntity, actual.getEntity(), matchConditions);
                     } catch (AssertionError ignored) {
                         error = true;
                     }
@@ -105,7 +105,7 @@ public class HttpResponseMatcher extends AbstractObjectMatcher<HttpResponseWrapp
                         fail(negativeMatchMessage);
                     }
                 } else {
-                    properties.putAll(new ObjectMatcher().match(message, expectedEntity, actual.getEntity(), matchConditions));
+                    properties.putAll(new FlowMatcher().match(message, expectedEntity, actual.getEntity(), matchConditions));
                 }
             }
         } catch (InvalidTypeException e) {

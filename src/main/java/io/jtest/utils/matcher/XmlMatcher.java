@@ -1,7 +1,7 @@
 package io.jtest.utils.matcher;
 
-import io.jtest.utils.RegexUtils;
-import io.jtest.utils.XmlUtils;
+import io.jtest.utils.common.RegexUtils;
+import io.jtest.utils.common.XmlUtils;
 import io.jtest.utils.exceptions.InvalidTypeException;
 import io.jtest.utils.matcher.comparators.xml.CustomXmlComparator;
 import io.jtest.utils.matcher.comparators.xml.XmlMatchException;
@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static io.jtest.utils.XmlUtils.isValid;
+import static io.jtest.utils.common.XmlUtils.isValid;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.fail;
 import static org.xmlunit.matchers.CompareMatcher.isSimilarTo;

@@ -1,4 +1,4 @@
-package io.jtest.utils;
+package io.jtest.utils.common;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.StringSubstitutor;
