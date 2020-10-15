@@ -11,14 +11,14 @@ import java.util.Set;
 
 import static org.junit.Assert.fail;
 
-class HttpResponseMatcher extends AbstractObjectMatcher<HttpResponseWrapper> {
+public class HttpResponseMatcher extends AbstractObjectMatcher<HttpResponseWrapper> {
 
     private final String expectedStatus;
     private final String expectedReason;
     private final Map<String, String> expectedHeaders;
     private final Object expectedEntity;
 
-    HttpResponseMatcher(String message, Object expected, Object actual, Set<MatchCondition> matchConditions) throws InvalidTypeException {
+    public HttpResponseMatcher(String message, Object expected, Object actual, Set<MatchCondition> matchConditions) throws InvalidTypeException {
         super(message, expected, actual, matchConditions);
         this.expectedStatus = this.expected.getStatus();
         this.expectedReason = this.expected.getReasonPhrase();
@@ -38,7 +38,7 @@ class HttpResponseMatcher extends AbstractObjectMatcher<HttpResponseWrapper> {
     }
 
     @Override
-    Map<String, Object> match() {
+    public Map<String, Object> match() {
         Map<String, Object> properties = new HashMap<>();
         matchConditions.remove(MatchCondition.DO_NOT_MATCH);
         try {

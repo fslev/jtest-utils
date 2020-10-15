@@ -23,7 +23,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.fail;
 import static org.xmlunit.matchers.CompareMatcher.isSimilarTo;
 
-class XmlMatcher extends AbstractObjectMatcher<String> {
+public class XmlMatcher extends AbstractObjectMatcher<String> {
 
     private final CustomXmlComparator comparator;
 
@@ -45,7 +45,7 @@ class XmlMatcher extends AbstractObjectMatcher<String> {
     }
 
     @Override
-    Map<String, Object> match() {
+    public Map<String, Object> match() {
         if (matchConditions.contains(MatchCondition.DO_NOT_MATCH)) {
             matchConditions.remove(MatchCondition.DO_NOT_MATCH);
             try {

@@ -1,6 +1,7 @@
-package io.jtest.utils.matcher;
+package io.jtest.utils.common;
 
 import io.jtest.utils.exceptions.InvalidTypeException;
+import io.jtest.utils.matcher.*;
 import io.jtest.utils.matcher.condition.MatchCondition;
 import io.jtest.utils.poller.MethodPoller;
 import org.apache.http.HttpResponse;
