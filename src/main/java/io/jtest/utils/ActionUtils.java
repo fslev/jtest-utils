@@ -1,4 +1,4 @@
-package io.jtest.utils.common;
+package io.jtest.utils;
 
 import io.jtest.utils.poller.MethodPoller;
 import org.apache.logging.log4j.LogManager;

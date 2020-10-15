@@ -1,4 +1,4 @@
-package io.jtest.utils.common;
+package io.jtest.utils;
 
 
 import java.util.ArrayList;

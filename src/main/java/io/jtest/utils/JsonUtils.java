@@ -1,4 +1,4 @@
-package io.jtest.utils.common;
+package io.jtest.utils;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;

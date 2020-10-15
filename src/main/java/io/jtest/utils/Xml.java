@@ -1,4 +1,4 @@
-package io.jtest.utils.common;
+package io.jtest.utils;
 
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;

@@ -1,7 +1,7 @@
 package io.jtest.utils.matcher;
 
-import io.jtest.utils.common.RegexUtils;
-import io.jtest.utils.common.StringParser;
+import io.jtest.utils.RegexUtils;
+import io.jtest.utils.StringParser;
 import io.jtest.utils.exceptions.InvalidTypeException;
 import io.jtest.utils.matcher.condition.MatchCondition;
 
