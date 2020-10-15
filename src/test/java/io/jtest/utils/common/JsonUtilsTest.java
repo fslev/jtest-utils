@@ -1,8 +1,5 @@
 package io.jtest.utils.common;
 
-import io.jtest.utils.common.JsonUtils;
-import io.jtest.utils.common.RegexUtils;
-import io.jtest.utils.common.ResourceUtils;
 import org.junit.Test;
 
 import java.io.IOException;

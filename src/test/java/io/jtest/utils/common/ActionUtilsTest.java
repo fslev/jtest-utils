@@ -1,6 +1,5 @@
 package io.jtest.utils.common;
 
-import io.jtest.utils.common.ActionUtils;
 import org.junit.Ignore;
 import org.junit.Test;
 

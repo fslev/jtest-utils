@@ -1,6 +1,5 @@
 package io.jtest.utils.common;
 
-import io.jtest.utils.common.RegexUtils;
 import org.junit.Test;
 
 import java.util.Collections;

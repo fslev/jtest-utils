@@ -1,8 +1,5 @@
 package io.jtest.utils.common;
 
-import io.jtest.utils.common.RegexUtils;
-import io.jtest.utils.common.ResourceUtils;
-import io.jtest.utils.common.XmlUtils;
 import org.junit.Test;
 import org.xml.sax.SAXException;
 
