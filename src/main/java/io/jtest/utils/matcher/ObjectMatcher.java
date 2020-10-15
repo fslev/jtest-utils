@@ -8,15 +8,15 @@ import org.apache.logging.log4j.Logger;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * Matches Objects with Strings
+ */
 public class ObjectMatcher {
-    private final static Logger LOG = LogManager.getLogger();
 
-    /**
-     * @return properties captured after the match
-     * Expected object can contain placeholders for capturing values from the actual object
-     */
-    public static Map<String, Object> match(String message, Object expected, Object actual, Set<MatchCondition> matchConditions) {
-        AbstractMatcher<?> matcher;
+    protected static final Logger LOG = LogManager.getLogger();
+
+    public Map<String, Object> match(String message, Object expected, Object actual, Set<MatchCondition> matchConditions) {
+        AbstractObjectMatcher<?> matcher;
         try {
             LOG.debug("Compare as JSONs");
             matcher = new JsonMatcher(message, expected, actual, matchConditions);

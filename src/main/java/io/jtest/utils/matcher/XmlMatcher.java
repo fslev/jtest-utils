@@ -23,7 +23,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.fail;
 import static org.xmlunit.matchers.CompareMatcher.isSimilarTo;
 
-public class XmlMatcher extends AbstractMatcher<String> {
+class XmlMatcher extends AbstractObjectMatcher<String> {
 
     private final CustomXmlComparator comparator;
 
@@ -33,7 +33,7 @@ public class XmlMatcher extends AbstractMatcher<String> {
     }
 
     @Override
-    protected String convert(Object value) throws InvalidTypeException {
+    String convert(Object value) throws InvalidTypeException {
         if (value == null) {
             throw new InvalidTypeException("Invalid XML");
         }
@@ -45,7 +45,7 @@ public class XmlMatcher extends AbstractMatcher<String> {
     }
 
     @Override
-    public Map<String, Object> match() {
+    Map<String, Object> match() {
         if (matchConditions.contains(MatchCondition.DO_NOT_MATCH)) {
             matchConditions.remove(MatchCondition.DO_NOT_MATCH);
             try {

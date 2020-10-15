@@ -11,7 +11,7 @@ import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-abstract class AbstractMatcher<T> {
+abstract class AbstractObjectMatcher<T> {
 
     protected static final Logger LOG = LogManager.getLogger();
 
@@ -21,7 +21,7 @@ abstract class AbstractMatcher<T> {
     protected T actual;
     protected Set<MatchCondition> matchConditions;
 
-    protected AbstractMatcher(String message, Object expected, Object actual, Set<MatchCondition> matchConditions) throws InvalidTypeException {
+    protected AbstractObjectMatcher(String message, Object expected, Object actual, Set<MatchCondition> matchConditions) throws InvalidTypeException {
         this.expected = convert(expected);
         this.actual = convert(actual);
         this.matchConditions = matchConditions != null ? matchConditions : new HashSet<>();
@@ -30,7 +30,7 @@ abstract class AbstractMatcher<T> {
         this.negativeMatchMessage = message == null ? defaultNegativeMessage : message + "\n" + defaultNegativeMessage;
     }
 
-    protected abstract T convert(Object value) throws InvalidTypeException;
+    abstract T convert(Object value) throws InvalidTypeException;
 
     /**
      * @return properties captured after the match
@@ -39,7 +39,7 @@ abstract class AbstractMatcher<T> {
     abstract Map<String, Object> match();
 
 
-    protected Set<MatchCondition> filteredMatchConditions(Set<MatchCondition> matchConditions, Predicate<MatchCondition> filter) {
+    Set<MatchCondition> filteredMatchConditions(Set<MatchCondition> matchConditions, Predicate<MatchCondition> filter) {
         return matchConditions.stream().filter(filter).collect(Collectors.toSet());
     }
 }

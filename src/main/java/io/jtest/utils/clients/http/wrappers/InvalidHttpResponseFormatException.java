@@ -1,5 +1,6 @@
-package io.jtest.utils.exceptions;
+package io.jtest.utils.clients.http.wrappers;
 
+import io.jtest.utils.exceptions.InvalidTypeException;
 import org.apache.logging.log4j.message.ParameterizedMessage;
 
 public class InvalidHttpResponseFormatException extends InvalidTypeException {

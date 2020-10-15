@@ -17,7 +17,7 @@ import static org.junit.Assert.fail;
 /**
  * Matches Objects with Strings
  */
-public class StringMatcher extends AbstractMatcher<Object> {
+public class StringMatcher extends AbstractObjectMatcher<Object> {
 
     public static final String CAPTURE_PLACEHOLDER_PREFIX = "~[";
     public static final String CAPTURE_PLACEHOLDER_SUFFIX = "]";
@@ -32,7 +32,7 @@ public class StringMatcher extends AbstractMatcher<Object> {
     }
 
     @Override
-    protected Object convert(Object value) {
+    Object convert(Object value) {
         return value;
     }
 

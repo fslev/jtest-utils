@@ -11,14 +11,14 @@ import java.util.Set;
 
 import static org.junit.Assert.fail;
 
-public class HttpResponseMatcher extends AbstractMatcher<HttpResponseWrapper> {
+class HttpResponseMatcher extends AbstractObjectMatcher<HttpResponseWrapper> {
 
     private final String expectedStatus;
     private final String expectedReason;
     private final Map<String, String> expectedHeaders;
     private final Object expectedEntity;
 
-    public HttpResponseMatcher(String message, Object expected, Object actual, Set<MatchCondition> matchConditions) throws InvalidTypeException {
+    HttpResponseMatcher(String message, Object expected, Object actual, Set<MatchCondition> matchConditions) throws InvalidTypeException {
         super(message, expected, actual, matchConditions);
         this.expectedStatus = this.expected.getStatus();
         this.expectedReason = this.expected.getReasonPhrase();
@@ -29,7 +29,7 @@ public class HttpResponseMatcher extends AbstractMatcher<HttpResponseWrapper> {
     }
 
     @Override
-    protected HttpResponseWrapper convert(Object value) throws InvalidTypeException {
+    HttpResponseWrapper convert(Object value) throws InvalidTypeException {
         try {
             return new HttpResponseWrapper(value);
         } catch (Exception e) {
@@ -38,7 +38,7 @@ public class HttpResponseMatcher extends AbstractMatcher<HttpResponseWrapper> {
     }
 
     @Override
-    public Map<String, Object> match() {
+    Map<String, Object> match() {
         Map<String, Object> properties = new HashMap<>();
         matchConditions.remove(MatchCondition.DO_NOT_MATCH);
         try {
@@ -97,7 +97,7 @@ public class HttpResponseMatcher extends AbstractMatcher<HttpResponseWrapper> {
                 if (matchConditions.contains(MatchCondition.DO_NOT_MATCH_HTTP_RESPONSE_BY_BODY)) {
                     boolean error = false;
                     try {
-                        ObjectMatcher.match(message, expectedEntity, actual.getEntity(), matchConditions);
+                        new ObjectMatcher().match(message, expectedEntity, actual.getEntity(), matchConditions);
                     } catch (AssertionError ignored) {
                         error = true;
                     }
@@ -105,7 +105,7 @@ public class HttpResponseMatcher extends AbstractMatcher<HttpResponseWrapper> {
                         fail(negativeMatchMessage);
                     }
                 } else {
-                    properties.putAll(ObjectMatcher.match(message, expectedEntity, actual.getEntity(), matchConditions));
+                    properties.putAll(new ObjectMatcher().match(message, expectedEntity, actual.getEntity(), matchConditions));
                 }
             }
         } catch (InvalidTypeException e) {

@@ -17,16 +17,16 @@ import java.util.stream.Collectors;
 
 import static org.junit.Assert.fail;
 
-public class JsonMatcher extends AbstractMatcher<JsonNode> {
+class JsonMatcher extends AbstractObjectMatcher<JsonNode> {
     private final CustomJsonComparator comparator;
 
-    public JsonMatcher(String message, Object expected, Object actual, Set<MatchCondition> matchConditions) throws InvalidTypeException {
+    JsonMatcher(String message, Object expected, Object actual, Set<MatchCondition> matchConditions) throws InvalidTypeException {
         super(message, expected, actual, matchConditions);
         this.comparator = new CustomJsonComparator(matchConditions);
     }
 
     @Override
-    protected JsonNode convert(Object value) throws InvalidTypeException {
+    JsonNode convert(Object value) throws InvalidTypeException {
         ObjectMapper mapper = new ObjectMapper().enable(DeserializationFeature.FAIL_ON_TRAILING_TOKENS);
         try {
             JsonNode jsonNode = value instanceof String ? mapper.readTree((String) value) : mapper.convertValue(value, JsonNode.class);
@@ -41,7 +41,7 @@ public class JsonMatcher extends AbstractMatcher<JsonNode> {
     }
 
     @Override
-    public Map<String, Object> match() {
+    Map<String, Object> match() {
         if (matchConditions.contains(MatchCondition.DO_NOT_MATCH)) {
             matchConditions.remove(MatchCondition.DO_NOT_MATCH);
             try {

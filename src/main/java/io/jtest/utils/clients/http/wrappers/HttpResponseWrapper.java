@@ -3,7 +3,6 @@ package io.jtest.utils.clients.http.wrappers;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.jtest.utils.exceptions.InvalidHttpResponseFormatException;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;

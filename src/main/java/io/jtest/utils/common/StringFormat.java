@@ -1,6 +1,5 @@
 package io.jtest.utils.common;
 
-import com.cucumber.utils.context.props.internal.ScenarioPropsSubstitutor;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.StringSubstitutor;
 
@@ -8,8 +7,15 @@ import java.util.*;
 
 public class StringFormat {
 
+    public static final String REPLACE_PREFIX = "#[";
+    public static final String REPLACE_SUFFIX = "]";
+
     public static <V> String replaceProps(Object source, Map<String, V> values) {
-        return StringSubstitutor.replace(source, values, ScenarioPropsSubstitutor.PREFIX, ScenarioPropsSubstitutor.SUFFIX);
+        return StringSubstitutor.replace(source, values, REPLACE_PREFIX, REPLACE_SUFFIX);
+    }
+
+    public static <V> String replaceProps(Object source, Map<String, V> values, String prefix, String suffix) {
+        return StringSubstitutor.replace(source, values, prefix, suffix);
     }
 
     /**
