@@ -132,7 +132,7 @@
     <scm>
         <connection>scm:git:ssh://git@github.com/fslev/jtest-utils.git</connection>
         <developerConnection>scm:git:ssh://git@github.com/fslev/jtest-utils.git</developerConnection>
-        <url>https://github.com/fslev/jtest-utils/tree/master</url>
+        <url>https://github.com/fslev/jtest-utils/tree/main</url>
         <tag>HEAD</tag>
     </scm>
 
