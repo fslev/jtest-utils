@@ -8,7 +8,7 @@ import java.util.*;
 
 import static org.junit.Assert.*;
 
-public class ObjectMatcherTests {
+public class FlowMatcherTests {
 
     @Test
     public void compareNulls() {
