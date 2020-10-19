@@ -25,7 +25,7 @@ public class ObjectMatcher {
     }
 
     /**
-     * Compares objects as Json, Xml or String in that order
+     * Compares objects as Json, Xml or String in that order<br>
      * Expected is compared against a supplier value until values match or timeout is reached
      *
      * @return properties captured after the match
@@ -79,7 +79,7 @@ public class ObjectMatcher {
     }
 
     /**
-     * Compares an expected object with a supplier value as strings until matching passes or timeout is reached<br>
+     * Compares an expected object with a supplier value as strings until matching is successful or timeout is reached<br>
      *
      * @return properties captured after the match
      * Expected object can contain placeholders for capturing values from the actual object: ~[placeholder_name]
@@ -89,6 +89,21 @@ public class ObjectMatcher {
         return pollAndMatch(actual -> matchString(message, expected, actual, matchConditions), actualObjectSupplier, pollDurationInSeconds, pollIntervalInMillis, exponentialBackOff);
     }
 
+    /**
+     * Compares two objects representing a HTTP response<br>
+     *
+     * @param expected must be a String or JSON with the following JSON format<br>
+     *                 <p>
+     *                 {"status": <number> | "<text>", <br>
+     *                 "body": {<jsonObject>} | [<jsonArray>] | "<text>", <br>
+     *                 "headers": {<jsonObject>}, <br>
+     *                 "reason": "<text>" <br>
+     *                 } <br>
+     *                 All fields are optional <br>
+     * @param actual   must extend org.apache.http.HttpResponse
+     * @return properties captured after the match
+     * Expected object can contain placeholders for capturing values from the actual object: ~[placeholder_name]
+     */
     public static <T extends HttpResponse> Map<String, Object> matchHttpResponse(String message, Object expected, T actual, MatchCondition... matchConditions) {
         try {
             return new HttpResponseMatcher(message, expected, actual, new HashSet<>(Arrays.asList(matchConditions))).match();
@@ -97,6 +112,12 @@ public class ObjectMatcher {
         }
     }
 
+    /**
+     * Compares two objects representing HTTP responses until matching is successful or timeout is reached<br>
+     *
+     * @return properties captured after the match
+     * Expected object can contain placeholders for capturing values from the actual object: ~[placeholder_name]
+     */
     public static <T extends HttpResponse> Map<String, Object> pollAndMatchHttpResponse(String message, Object expected, Supplier<T> actualObjectSupplier, Integer pollDurationInSeconds,
                                                                                         Long pollIntervalInMillis, Double exponentialBackOff, MatchCondition... matchConditions) {
         return pollAndMatch(actual -> matchHttpResponse(message, expected, actual, matchConditions), actualObjectSupplier, pollDurationInSeconds, pollIntervalInMillis, exponentialBackOff);
