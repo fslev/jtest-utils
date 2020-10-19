@@ -62,6 +62,14 @@ public class ObjectMatcher {
         return pollAndMatch(actual -> matchXml(message, expected, actual, matchConditions), actualObjectSupplier, pollDurationInSeconds, pollIntervalInMillis, exponentialBackOff);
     }
 
+    /**
+     * Compares two objects as strings<br>
+     * Expected could contain regular expressions.<br>
+     * If expected contains special regex characters and you want to match them as simple characters, just quote the expression using \Q and \E.
+     *
+     * @return properties captured after the match
+     * Expected object can contain placeholders for capturing values from the actual object: ~[placeholder_name]
+     */
     public static Map<String, Object> matchString(String message, Object expected, Object actual, MatchCondition... matchConditions) {
         try {
             return new StringMatcher(message, expected, actual, new HashSet<>(Arrays.asList(matchConditions))).match();
@@ -70,6 +78,12 @@ public class ObjectMatcher {
         }
     }
 
+    /**
+     * Compares an expected object with a supplier value as strings until matching passes or timeout is reached<br>
+     *
+     * @return properties captured after the match
+     * Expected object can contain placeholders for capturing values from the actual object: ~[placeholder_name]
+     */
     public static Map<String, Object> pollAndMatchString(String message, Object expected, Supplier<Object> actualObjectSupplier, Integer pollDurationInSeconds,
                                                          Long pollIntervalInMillis, Double exponentialBackOff, MatchCondition... matchConditions) {
         return pollAndMatch(actual -> matchString(message, expected, actual, matchConditions), actualObjectSupplier, pollDurationInSeconds, pollIntervalInMillis, exponentialBackOff);
