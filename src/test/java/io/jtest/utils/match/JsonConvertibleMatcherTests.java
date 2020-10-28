@@ -1,5 +1,6 @@
 package io.jtest.utils.match;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.jtest.utils.exceptions.InvalidTypeException;
 import io.jtest.utils.matcher.JsonMatcher;
 import io.jtest.utils.matcher.condition.MatchCondition;
@@ -7,7 +8,7 @@ import org.junit.Test;
 
 import java.util.*;
 
-public class JsonConvertibleCompareTests {
+public class JsonConvertibleMatcherTests {
 
     @Test(expected = InvalidTypeException.class)
     public void compareObjectsWithNoJsonRepresentation() throws InvalidTypeException {
@@ -21,6 +22,22 @@ public class JsonConvertibleCompareTests {
         List<String> expected = Arrays.asList("a", "b", "c", "c");
         List<String> actual = Arrays.asList("c", "a", "c", "b");
         JsonMatcher matcher = new JsonMatcher(null, expected, actual, null);
+        matcher.match();
+    }
+
+    private static class A {
+        @JsonProperty
+        String firstName = "David";
+        @JsonProperty
+        String lastName = "Jones";
+    }
+
+    @Test
+    public void compareCustomObjects() throws InvalidTypeException {
+        String expected = "{\"firstName\":\"Davi.*\"}";
+        JsonMatcher matcher = new JsonMatcher(null, expected, new A(), null);
+        matcher.match();
+        matcher = new JsonMatcher(null, new A(), new A(), null);
         matcher.match();
     }
 
