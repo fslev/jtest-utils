@@ -35,7 +35,7 @@ public class JsonMatcher extends AbstractObjectMatcher<JsonNode> {
             }
             return jsonNode;
         } catch (Exception e) {
-            throw new InvalidTypeException("Invalid JSON NODE");
+            throw new InvalidTypeException("Invalid JSON NODE", e);
         }
 
     }
