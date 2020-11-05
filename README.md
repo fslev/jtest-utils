@@ -1,4 +1,9 @@
 # JTest-Utils
+
+![Build status](https://github.com/fslev/jtest-utils/workflows/Java%20CI%20with%20Maven/badge.svg?branch=main)
+[![Coverage Status](https://coveralls.io/repos/github/fslev/jtest-utils/badge.svg?branch=main)](https://coveralls.io/github/fslev/jtest-utils?branch=main)
+
+
 Java Utilities for testing
 
 # Summary
