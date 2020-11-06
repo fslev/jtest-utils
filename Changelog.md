@@ -2,6 +2,7 @@
 
 ### 1.2-SNAPSHOT
 Refactored error handling    
+Upgrade dependencies  
 
 ### 1.1
 Upgrade dependencies  
