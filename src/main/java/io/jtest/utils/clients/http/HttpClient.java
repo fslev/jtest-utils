@@ -54,7 +54,7 @@ public class HttpClient {
         this.proxyHost = builder.proxyHost;
         this.timeout = builder.timeout;
         try {
-            this.uri = new URIBuilder(builder.address + (builder.uriBuilder.isPathEmpty() ? "" : builder.uriBuilder.build().toString())).build().toString();
+            this.uri = new URIBuilder(builder.address + builder.uriBuilder.build().toString()).build().toString();
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
@@ -291,6 +291,10 @@ public class HttpClient {
             return this;
         }
 
+        public Builder addNonEmptyHeader(String name, String value) {
+            return value != null && !value.isEmpty() ? addHeader(name, value) : this;
+        }
+
         public Builder addHeaders(Map<String, String> headers) {
             this.headers.putAll(headers);
             return this;
@@ -307,9 +311,17 @@ public class HttpClient {
             return this;
         }
 
+        public Builder addNonEmptyQueryParam(String name, String value) {
+            return value != null && !value.isEmpty() ? addQueryParam(name, value) : this;
+        }
+
         public Builder setQueryParam(String name, String value) {
             this.uriBuilder.setParameter(name, value);
             return this;
+        }
+
+        public Builder setNonEmptyQueryParam(String name, String value) {
+            return value != null && !value.isEmpty() ? setQueryParam(name, value) : this;
         }
 
         public Builder setQueryParams(Map<String, String> queryParams) {

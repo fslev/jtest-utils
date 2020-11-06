@@ -1,8 +1,12 @@
 # Changelog
 
-### 1.2-SNAPSHOT
-Refactored error handling    
+### 1.3-SNAPSHOT
+
+### 1.2
+Refactored error handling      
 Upgrade dependencies  
+Refactor HTTP client  
+Add support for non empty headers and query params    
 
 ### 1.1
 Upgrade dependencies  
