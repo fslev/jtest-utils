@@ -1,6 +1,7 @@
 # Changelog
 
 ### 1.3-SNAPSHOT
+Refactor HttpClient  
 
 ### 1.2
 Refactored error handling      

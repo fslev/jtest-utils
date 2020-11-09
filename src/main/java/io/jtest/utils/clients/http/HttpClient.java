@@ -262,7 +262,7 @@ public class HttpClient {
         private HttpClientBuilder clientBuilder = HttpClients.custom();
         private CookieStore cookieStore;
 
-        public Builder useProxy(String proxyHost, int proxyPort, String proxyScheme) {
+        public Builder proxy(String proxyHost, int proxyPort, String proxyScheme) {
             this.proxyHost = new HttpHost(proxyHost, proxyPort, proxyScheme);
             return this;
         }
@@ -286,48 +286,33 @@ public class HttpClient {
             return this;
         }
 
-        public Builder addHeader(String name, String value) {
+        public Builder header(String name, String value) {
             this.headers.put(name, value);
             return this;
         }
 
-        public Builder addNonEmptyHeader(String name, String value) {
-            return value != null && !value.isEmpty() ? addHeader(name, value) : this;
+        public Builder nonEmptyHeader(String name, String value) {
+            return value != null && !value.isEmpty() ? header(name, value) : this;
         }
 
-        public Builder addHeaders(Map<String, String> headers) {
+        public Builder headers(Map<String, String> headers) {
             this.headers.putAll(headers);
             return this;
         }
 
-        public Builder setHeaders(Map<String, String> headers) {
-            this.headers.clear();
-            this.headers.putAll(headers);
-            return this;
-        }
-
-        public Builder addQueryParam(String name, String value) {
+        public Builder queryParam(String name, String value) {
             this.uriBuilder.addParameter(name, value);
             return this;
         }
 
-        public Builder addNonEmptyQueryParam(String name, String value) {
-            return value != null && !value.isEmpty() ? addQueryParam(name, value) : this;
+        public Builder nonEmptyQueryParam(String name, String value) {
+            return value != null && !value.isEmpty() ? queryParam(name, value) : this;
         }
 
-        public Builder setQueryParam(String name, String value) {
-            this.uriBuilder.setParameter(name, value);
-            return this;
-        }
-
-        public Builder setNonEmptyQueryParam(String name, String value) {
-            return value != null && !value.isEmpty() ? setQueryParam(name, value) : this;
-        }
-
-        public Builder setQueryParams(Map<String, String> queryParams) {
+        public Builder queryParams(Map<String, String> queryParams) {
             List<NameValuePair> paramsList = new ArrayList<>();
             queryParams.forEach((k, v) -> paramsList.add(new BasicNameValuePair(k, v)));
-            this.uriBuilder.setParameters(paramsList);
+            this.uriBuilder.addParameters(paramsList);
             return this;
         }
 

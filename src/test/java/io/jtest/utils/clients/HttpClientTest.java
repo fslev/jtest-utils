@@ -25,7 +25,7 @@ public class HttpClientTest {
         HttpClient.Builder builder = new HttpClient.Builder()
                 .address("http://www.google.com")
                 .method(Method.GET)
-                .addHeader("some header", "test")
+                .header("some header", "test")
                 .serviceUnavailableRetryStrategy(new ServiceUnavailableRetryStrategy() {
                     @Override
                     public boolean retryRequest(HttpResponse response, int executionCount, HttpContext context) {
