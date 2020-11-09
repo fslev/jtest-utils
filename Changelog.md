@@ -1,6 +1,11 @@
 # Changelog
 
-### 1.3-SNAPSHOT
+### 1.5-SNAPSHOT
+
+### 1.4
+Refactor HttpClient - check for nulls    
+
+### 1.3
 Refactor HttpClient  
 
 ### 1.2

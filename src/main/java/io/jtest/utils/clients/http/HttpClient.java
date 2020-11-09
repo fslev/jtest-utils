@@ -296,7 +296,9 @@ public class HttpClient {
         }
 
         public Builder headers(Map<String, String> headers) {
-            this.headers.putAll(headers);
+            if (headers != null) {
+                this.headers.putAll(headers);
+            }
             return this;
         }
 
@@ -310,9 +312,11 @@ public class HttpClient {
         }
 
         public Builder queryParams(Map<String, String> queryParams) {
-            List<NameValuePair> paramsList = new ArrayList<>();
-            queryParams.forEach((k, v) -> paramsList.add(new BasicNameValuePair(k, v)));
-            this.uriBuilder.addParameters(paramsList);
+            if (queryParams != null) {
+                List<NameValuePair> paramsList = new ArrayList<>();
+                queryParams.forEach((k, v) -> paramsList.add(new BasicNameValuePair(k, v)));
+                this.uriBuilder.addParameters(paramsList);
+            }
             return this;
         }
 

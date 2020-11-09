@@ -32,4 +32,13 @@ public class HttpClientTest {
         assertFalse(builder.build().getUri().contains("test5"));
         assertFalse(builder.build().getUri().contains("test6"));
     }
+
+    @Test
+    public void testNullQueryParamsAndNullHeaders() {
+        HttpClient.Builder builder = new HttpClient.Builder().address("test").method(Method.GET);
+        builder.queryParams(null);
+        builder.headers(null);
+        assertTrue(builder.build().getHeaders().isEmpty());
+        assertFalse(builder.build().getUri().contains("?"));
+    }
 }
