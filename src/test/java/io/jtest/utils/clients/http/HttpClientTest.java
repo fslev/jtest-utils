@@ -22,9 +22,9 @@ public class HttpClientTest {
         builder.queryParam("test1", "1");
         builder.nonEmptyQueryParam("test2", "");
         builder.nonEmptyQueryParam("test3", null);
-        builder.setNonEmptyQueryParam("test4", "1");
-        builder.setNonEmptyQueryParam("test5", "");
-        builder.setNonEmptyQueryParam("test6", null);
+        builder.nonEmptyQueryParam("test4", "1");
+        builder.nonEmptyQueryParam("test5", "");
+        builder.nonEmptyQueryParam("test6", null);
         assertTrue(builder.build().getUri().contains("test1=1"));
         assertFalse(builder.build().getUri().contains("test2"));
         assertFalse(builder.build().getUri().contains("test3"));
