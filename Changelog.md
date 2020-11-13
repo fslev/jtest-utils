@@ -1,6 +1,7 @@
 # Changelog
 
 ### 1.5-SNAPSHOT
+Upgrade dependencies    
 
 ### 1.4
 Refactor HttpClient - check for nulls    
