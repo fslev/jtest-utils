@@ -1,7 +1,10 @@
 # Changelog
 
-### 1.5-SNAPSHOT
-Upgrade dependencies    
+### 1.6-SNAPSHOT
+
+### 1.5
+Upgrade dependencies  
+Refactor HTTP client headers    
 
 ### 1.4
 Refactor HttpClient - check for nulls    

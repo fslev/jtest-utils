@@ -1,5 +1,6 @@
 package io.jtest.utils.clients.http;
 
+import org.apache.http.Header;
 import org.apache.http.HttpHost;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.CookieStore;
@@ -14,6 +15,7 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.http.message.BasicHeader;
 import org.apache.http.message.BasicNameValuePair;
 
 import javax.net.ssl.*;
@@ -25,16 +27,13 @@ import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class HttpClient {
     private final Integer timeout;
     private final HttpHost proxyHost;
     private final String uri;
-    private final Map<String, String> headers;
+    private final Set<Header> headerList;
     private final String requestEntity;
     private final Method method;
     private final SSLContext sslContext;
@@ -58,7 +57,7 @@ public class HttpClient {
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
-        this.headers = builder.headers;
+        this.headerList = builder.headerList;
         this.requestEntity = builder.requestEntity;
         this.method = builder.method;
         this.sslContext = builder.sslContext;
@@ -180,7 +179,7 @@ public class HttpClient {
             default:
                 throw new IllegalStateException("Invalid HTTP method");
         }
-        setHeaders(request);
+        addHeaders(request);
         return request;
     }
 
@@ -208,12 +207,12 @@ public class HttpClient {
         return this.uri;
     }
 
-    public Map<String, String> getHeaders() {
-        return headers;
+    public Set<Header> getHeaders() {
+        return headerList;
     }
 
-    private void setHeaders(HttpRequestBase request) {
-        headers.forEach(request::setHeader);
+    private void addHeaders(HttpRequestBase request) {
+        headerList.forEach(request::addHeader);
     }
 
     public String getRequestEntity() {
@@ -243,7 +242,7 @@ public class HttpClient {
     @Override
     public String toString() {
         return "HttpClient{" + "timeout=" + timeout + ", proxyHost=" + proxyHost + ", uri='"
-                + uri + ", headers=" + headers + ", requestEntity='"
+                + uri + ", headers=" + headerList + ", requestEntity='"
                 + requestEntity + '\'' + ", method=" + method + '}';
     }
 
@@ -252,7 +251,7 @@ public class HttpClient {
         private HttpHost proxyHost;
         private String address;
         private final URIBuilder uriBuilder = new URIBuilder();
-        private final Map<String, String> headers = new HashMap<>();
+        private final Set<Header> headerList = new HashSet<>();
         private String requestEntity;
         private Method method;
         private SSLContext sslContext;
@@ -287,7 +286,7 @@ public class HttpClient {
         }
 
         public Builder header(String name, String value) {
-            this.headers.put(name, value);
+            this.headerList.add(new BasicHeader(name, value));
             return this;
         }
 
@@ -297,7 +296,7 @@ public class HttpClient {
 
         public Builder headers(Map<String, String> headers) {
             if (headers != null) {
-                this.headers.putAll(headers);
+                headers.forEach((k, v) -> headerList.add(new BasicHeader(k, v)));
             }
             return this;
         }

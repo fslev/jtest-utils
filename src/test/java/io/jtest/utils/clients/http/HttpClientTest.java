@@ -11,9 +11,29 @@ public class HttpClientTest {
         builder.nonEmptyHeader("test1", "1");
         builder.nonEmptyHeader("test2", "");
         builder.nonEmptyHeader("test3", null);
-        assertEquals("1", builder.build().getHeaders().get("test1"));
-        assertFalse(builder.build().getHeaders().containsKey("test2"));
-        assertFalse(builder.build().getHeaders().containsKey("test3"));
+        HttpClient client = builder.build();
+        assertEquals(1, client.getHeaders().size());
+        builder.build().getHeaders().forEach(header -> {
+            assertEquals("test1", header.getName());
+            assertEquals("1", header.getValue());
+        });
+    }
+
+    @Test
+    public void testDuplicatedHeaders() {
+        HttpClient.Builder builder = new HttpClient.Builder().address("test").method(Method.GET);
+        builder.nonEmptyHeader("test1", "1");
+        builder.header("test1", "2");
+        HttpClient client = builder.build();
+        assertEquals(2, client.getHeaders().size());
+        builder.build().getHeaders().forEach(header -> {
+            assertEquals("test1", header.getName());
+            try {
+                assertEquals("1", header.getValue());
+            } catch (AssertionError e) {
+                assertEquals("2", header.getValue());
+            }
+        });
     }
 
     @Test
