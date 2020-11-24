@@ -33,7 +33,7 @@ public class HttpClient {
     private final Integer timeout;
     private final HttpHost proxyHost;
     private final String uri;
-    private final Set<Header> headerList;
+    private final Set<Header> headers;
     private final String requestEntity;
     private final Method method;
     private final SSLContext sslContext;
@@ -57,7 +57,7 @@ public class HttpClient {
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
-        this.headerList = builder.headerList;
+        this.headers = builder.headers;
         this.requestEntity = builder.requestEntity;
         this.method = builder.method;
         this.sslContext = builder.sslContext;
@@ -208,11 +208,11 @@ public class HttpClient {
     }
 
     public Set<Header> getHeaders() {
-        return headerList;
+        return headers;
     }
 
     private void addHeaders(HttpRequestBase request) {
-        headerList.forEach(request::addHeader);
+        headers.forEach(request::addHeader);
     }
 
     public String getRequestEntity() {
@@ -242,7 +242,7 @@ public class HttpClient {
     @Override
     public String toString() {
         return "HttpClient{" + "timeout=" + timeout + ", proxyHost=" + proxyHost + ", uri='"
-                + uri + ", headers=" + headerList + ", requestEntity='"
+                + uri + ", headers=" + headers + ", requestEntity='"
                 + requestEntity + '\'' + ", method=" + method + '}';
     }
 
@@ -251,7 +251,7 @@ public class HttpClient {
         private HttpHost proxyHost;
         private String address;
         private final URIBuilder uriBuilder = new URIBuilder();
-        private final Set<Header> headerList = new HashSet<>();
+        private final Set<Header> headers = new HashSet<>();
         private String requestEntity;
         private Method method;
         private SSLContext sslContext;
@@ -286,7 +286,7 @@ public class HttpClient {
         }
 
         public Builder header(String name, String value) {
-            this.headerList.add(new BasicHeader(name, value));
+            this.headers.add(new BasicHeader(name, value));
             return this;
         }
 
@@ -296,7 +296,7 @@ public class HttpClient {
 
         public Builder headers(Map<String, String> headers) {
             if (headers != null) {
-                headers.forEach((k, v) -> headerList.add(new BasicHeader(k, v)));
+                headers.forEach((k, v) -> this.headers.add(new BasicHeader(k, v)));
             }
             return this;
         }
