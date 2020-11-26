@@ -8,7 +8,7 @@ public class InvalidHttpResponseFormatException extends InvalidTypeException {
     private final static String EXPECTED_FORMAT = "{\n" +
             "  \"status\": <number> | \"<text>\",\n" +
             "  \"body\": {<jsonObject>} | [<jsonArray>] | \"<text>\",\n" +
-            "  \"headers\": {<jsonObject>},\n" +
+            "  \"headers\": [{\"<name>\":<value>}, ...],\n" +
             "  \"reason\": \"<text>\"\n" +
             "}";
 

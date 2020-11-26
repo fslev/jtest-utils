@@ -15,7 +15,7 @@ public class HttpResponseMatcher extends AbstractObjectMatcher<HttpResponseWrapp
 
     private final String expectedStatus;
     private final String expectedReason;
-    private final Map<String, String> expectedHeaders;
+    private final Set<Map.Entry<String, String>> expectedHeaders;
     private final Object expectedEntity;
 
     public HttpResponseMatcher(String message, Object expected, Object actual, Set<MatchCondition> matchConditions) throws InvalidTypeException {

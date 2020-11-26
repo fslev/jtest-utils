@@ -13,9 +13,7 @@ import org.apache.http.protocol.BasicHttpContext;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import static org.junit.Assert.assertTrue;
 
@@ -98,9 +96,9 @@ public class HttpResponseWrapperTest {
         Assert.assertEquals("200", wrapper.getStatus());
         Assert.assertEquals("some reason", wrapper.getReasonPhrase());
         Assert.assertEquals("{\"a\":100}", wrapper.getEntity());
-        Map<String, Object> expectedMap = new HashMap<>();
-        expectedMap.put("Content-Type", "application/json");
-        expectedMap.put("Accept", "application/json");
-        Assert.assertEquals(expectedMap, wrapper.getHeaders());
+        Set<Map.Entry<String, Object>> entrySet = new HashSet<>();
+        entrySet.add(new AbstractMap.SimpleEntry<>("Content-Type", "application/json"));
+        entrySet.add(new AbstractMap.SimpleEntry<>("Accept", "application/json"));
+        Assert.assertEquals(entrySet, wrapper.getHeaders());
     }
 }

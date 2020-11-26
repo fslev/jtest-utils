@@ -10,8 +10,10 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
-import java.util.HashMap;
+import java.util.AbstractMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 public class HttpResponseWrapper {
 
@@ -22,7 +24,7 @@ public class HttpResponseWrapper {
     @JsonProperty(value = "reason")
     private String reasonPhrase;
     @JsonProperty(value = "headers")
-    private Map<String, String> headers;
+    private Set<Map.Entry<String, String>> headers;
 
     public HttpResponseWrapper() {
     }
@@ -72,10 +74,10 @@ public class HttpResponseWrapper {
         }
     }
 
-    private Map<String, String> getHeaders(HttpResponse response) {
-        Map<String, String> headers = new HashMap<>();
+    private Set<Map.Entry<String, String>> getHeaders(HttpResponse response) {
+        Set<Map.Entry<String, String>> headers = new HashSet<>();
         for (Header h : response.getAllHeaders()) {
-            headers.put(h.getName(), h.getValue());
+            headers.add(new AbstractMap.SimpleEntry<>(h.getName(), h.getValue()));
         }
         return headers;
     }
@@ -92,7 +94,7 @@ public class HttpResponseWrapper {
         return reasonPhrase;
     }
 
-    public Map<String, String> getHeaders() {
+    public Set<Map.Entry<String, String>> getHeaders() {
         return headers;
     }
 
