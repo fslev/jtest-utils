@@ -1,8 +1,9 @@
 # Changelog
 
-### 1.6-SNAPSHOT
-Refactor headers  
+### 1.7-SNAPSHOT
 
+### 1.6
+Refactor headers  
 
 ### 1.5
 Upgrade dependencies  
