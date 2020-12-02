@@ -96,7 +96,7 @@
                         <configuration>
                             <serverId>ossrh</serverId>
                             <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-in                            <stagingProgressTimeoutMinutes>10</stagingProgressTimeoutMinutes>
+                            <stagingProgressTimeoutMinutes>10</stagingProgressTimeoutMinutes>
                             <autoReleaseAfterClose>true</autoReleaseAfterClose>
                         </configuration>
                     </plugin>
