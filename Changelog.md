@@ -1,6 +1,7 @@
 # Changelog
 
-### 1.9-SNAPSHOT
+### 1.9
+Upgrade json-compare  
 
 ### 1.8
 Refactor assertion error message  
