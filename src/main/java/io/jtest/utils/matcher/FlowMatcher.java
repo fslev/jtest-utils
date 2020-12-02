@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Matches Objects with Strings
+ * Matches JSONs, XMLs and Strings in that particular order
  */
 public class FlowMatcher {
 
