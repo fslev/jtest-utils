@@ -1,6 +1,9 @@
 # Changelog
 
-### 1.8-SNAPSHOT
+### 1.9-SNAPSHOT
+
+### 1.8
+Refactor assertion error message  
 
 ### 1.7
 Update doc  
