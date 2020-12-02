@@ -1,6 +1,8 @@
 # Changelog
 
-### 1.7-SNAPSHOT
+### 1.8-SNAPSHOT
+
+### 1.7
 Update doc  
 Upgrade dependencies  
 
