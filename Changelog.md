@@ -1,6 +1,8 @@
 # Changelog
 
 ### 1.7-SNAPSHOT
+Update doc  
+Upgrade dependencies  
 
 ### 1.6
 Refactor headers  
