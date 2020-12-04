@@ -11,7 +11,7 @@ import java.util.Set;
 /**
  * Matches JSONs, XMLs and Strings in that particular order
  */
-public class FlowMatcher {
+class FlowMatcher {
 
     protected static final Logger LOG = LogManager.getLogger();
 

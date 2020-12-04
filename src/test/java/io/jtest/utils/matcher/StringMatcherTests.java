@@ -1,7 +1,6 @@
-package io.jtest.utils.match;
+package io.jtest.utils.matcher;
 
 import io.jtest.utils.exceptions.InvalidTypeException;
-import io.jtest.utils.matcher.StringMatcher;
 import org.junit.Test;
 
 import java.util.ArrayList;

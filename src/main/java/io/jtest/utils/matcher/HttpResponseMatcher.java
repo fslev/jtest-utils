@@ -11,7 +11,7 @@ import java.util.Set;
 
 import static org.junit.Assert.fail;
 
-public class HttpResponseMatcher extends AbstractObjectMatcher<HttpResponseWrapper> {
+class HttpResponseMatcher extends AbstractObjectMatcher<HttpResponseWrapper> {
 
     private final String expectedStatus;
     private final String expectedReason;

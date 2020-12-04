@@ -1,4 +1,4 @@
-package io.jtest.utils.match;
+package io.jtest.utils.matcher;
 
 import io.jtest.utils.common.XmlUtils;
 import org.junit.Test;

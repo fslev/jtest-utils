@@ -1,8 +1,7 @@
-package io.jtest.utils.match;
+package io.jtest.utils.matcher;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.jtest.utils.exceptions.InvalidTypeException;
-import io.jtest.utils.matcher.JsonMatcher;
 import io.jtest.utils.matcher.condition.MatchCondition;
 import org.junit.Test;
 
