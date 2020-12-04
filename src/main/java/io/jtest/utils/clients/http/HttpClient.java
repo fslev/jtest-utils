@@ -373,15 +373,6 @@ class HttpDeleteWithBody extends HttpEntityEnclosingRequestBase {
         setURI(URI.create(uri));
     }
 
-    public HttpDeleteWithBody(final URI uri) {
-        super();
-        setURI(uri);
-    }
-
-    public HttpDeleteWithBody() {
-        super();
-    }
-
     public String getMethod() {
         return METHOD_NAME;
     }
