@@ -96,7 +96,7 @@ public class ObjectMatcher {
      *                 <p>
      *                 {"status": <number> | "<text>", <br>
      *                 "body": {<jsonObject>} | [<jsonArray>] | "<text>", <br>
-     *                 "headers": {<jsonObject>}, <br>
+     *                 "headers": [{"name":"value"}, ...], <br>
      *                 "reason": "<text>" <br>
      *                 } <br>
      *                 All fields are optional <br>
