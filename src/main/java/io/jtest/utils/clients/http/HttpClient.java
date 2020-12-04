@@ -195,6 +195,10 @@ public class HttpClient {
         }
     }
 
+    private void addHeaders(HttpRequestBase request) {
+        headers.forEach(request::addHeader);
+    }
+
     public Integer getTimeout() {
         return timeout;
     }
@@ -209,10 +213,6 @@ public class HttpClient {
 
     public Set<Header> getHeaders() {
         return headers;
-    }
-
-    private void addHeaders(HttpRequestBase request) {
-        headers.forEach(request::addHeader);
     }
 
     public String getRequestEntity() {

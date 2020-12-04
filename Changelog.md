@@ -1,5 +1,9 @@
 # Changelog
 
+### 1.10-SNAPSHOT
+Refactoring  
+
+
 ### 1.9
 Upgrade json-compare  
 
