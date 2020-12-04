@@ -1,7 +1,6 @@
 # Changelog
 
 ### 1.11-SNAPSHOT
-Refactoring
 
 ### 1.10
 Refactoring  
