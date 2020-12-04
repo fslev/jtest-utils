@@ -78,6 +78,46 @@ public class HttpClient {
         }
     }
 
+    public Integer getTimeout() {
+        return timeout;
+    }
+
+    public HttpHost getProxyHost() {
+        return proxyHost;
+    }
+
+    public String getUri() {
+        return this.uri;
+    }
+
+    public Set<Header> getHeaders() {
+        return headers;
+    }
+
+    public String getRequestEntity() {
+        return requestEntity;
+    }
+
+    public Method getMethod() {
+        return method;
+    }
+
+    public SSLContext getSslContext() {
+        return sslContext;
+    }
+
+    public HostnameVerifier getHostnameVerifier() {
+        return hostnameVerifier;
+    }
+
+    public HttpRequestRetryHandler getRequestRetryHandler() {
+        return requestRetryHandler;
+    }
+
+    public ServiceUnavailableRetryStrategy getServiceUnavailableRetryStrategy() {
+        return serviceUnavailableRetryStrategy;
+    }
+
     public void close() throws IOException {
         this.client.close();
     }
@@ -197,46 +237,6 @@ public class HttpClient {
 
     private void addHeaders(HttpRequestBase request) {
         headers.forEach(request::addHeader);
-    }
-
-    public Integer getTimeout() {
-        return timeout;
-    }
-
-    public HttpHost getProxyHost() {
-        return proxyHost;
-    }
-
-    public String getUri() {
-        return this.uri;
-    }
-
-    public Set<Header> getHeaders() {
-        return headers;
-    }
-
-    public String getRequestEntity() {
-        return requestEntity;
-    }
-
-    public Method getMethod() {
-        return method;
-    }
-
-    public SSLContext getSslContext() {
-        return sslContext;
-    }
-
-    public HostnameVerifier getHostnameVerifier() {
-        return hostnameVerifier;
-    }
-
-    public HttpRequestRetryHandler getRequestRetryHandler() {
-        return requestRetryHandler;
-    }
-
-    public ServiceUnavailableRetryStrategy getServiceUnavailableRetryStrategy() {
-        return serviceUnavailableRetryStrategy;
     }
 
     @Override
