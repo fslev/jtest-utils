@@ -30,7 +30,7 @@ Refactor HttpClient
 Refactored error handling      
 Upgrade dependencies  
 Refactor HTTP client  
-Add support for non empty headers and query params    
+Add support for nonempty headers and query params    
 
 ### 1.1
 Upgrade dependencies  
