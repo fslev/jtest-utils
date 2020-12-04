@@ -51,16 +51,14 @@ class Xml {
     }
 
     private static String getNodePath(Node node, String parentPath) {
-        switch (node.getNodeType()) {
-            case Node.ELEMENT_NODE:
-                if (isListElement(node)) {
-                    return parentPath + "/" + node.getNodeName() + "[" + findNodePositionAmongListElements(node) + "]";
-                } else {
-                    return parentPath + "/" + node.getNodeName();
-                }
-            default:
-                return parentPath;
+        if (node.getNodeType() == Node.ELEMENT_NODE) {
+            if (isListElement(node)) {
+                return parentPath + "/" + node.getNodeName() + "[" + findNodePositionAmongListElements(node) + "]";
+            } else {
+                return parentPath + "/" + node.getNodeName();
+            }
         }
+        return parentPath;
     }
 
     private static boolean isListElement(Node node) {
