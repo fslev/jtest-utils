@@ -1,6 +1,8 @@
 # Changelog
 
-### 1.11-SNAPSHOT
+### 1.12-SNAPSHOT
+
+### 1.11
 Add SpEL parser support  
 
 ### 1.10
