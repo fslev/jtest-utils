@@ -1,6 +1,7 @@
 # Changelog
 
 ### 1.11-SNAPSHOT
+Add SpEL parser support  
 
 ### 1.10
 Refactoring  
