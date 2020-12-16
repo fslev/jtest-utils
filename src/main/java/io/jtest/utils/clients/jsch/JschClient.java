@@ -9,9 +9,8 @@ import java.io.InputStream;
 import java.util.Properties;
 
 public class JschClient {
-
+    private static final Logger LOG = LogManager.getLogger();
     private static final int TIMEOUT_SECONDS = 60000;
-    private final Logger log = LogManager.getLogger();
     private final String host;
     private final int port;
     private final String user;
@@ -39,9 +38,9 @@ public class JschClient {
 
     public void connect() {
         try {
-            log.info("Connecting over SSH to \"{}:{}\" with user \"{}\" and privateKey \"{}\"", host, port, user, privateKey);
+            LOG.info("Connecting over SSH to \"{}:{}\" with user \"{}\" and privateKey \"{}\"", host, port, user, privateKey);
             this.session.connect();
-            log.info("Connected");
+            LOG.info("Connected");
         } catch (JSchException e) {
             throw new RuntimeException(e);
         }
@@ -49,7 +48,7 @@ public class JschClient {
 
     public String sendCommand(String cmd) {
         try {
-            log.info("Execute command over SSH: \"{}\"", cmd);
+            LOG.info("Execute command over SSH: \"{}\"", cmd);
             Channel channel = this.session.openChannel("exec");
             ((ChannelExec) channel).setCommand(cmd);
             InputStream commandOutput = channel.getInputStream();
@@ -67,7 +66,7 @@ public class JschClient {
                 readByte = commandErrOutput.read();
             }
             channel.disconnect();
-            log.debug("Output over SSH: {}", outputBuffer.toString());
+            LOG.debug("Output over SSH: {}", outputBuffer.toString());
             return outputBuffer.toString();
         } catch (JSchException | IOException e) {
             throw new RuntimeException(e);
@@ -76,6 +75,6 @@ public class JschClient {
 
     public void disconnect() {
         this.session.disconnect();
-        log.debug("SSH connection closed");
+        LOG.debug("SSH connection closed");
     }
 }

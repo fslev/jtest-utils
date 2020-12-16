@@ -14,14 +14,14 @@ import java.util.Arrays;
 
 public class HttpResponseLoggerInterceptor implements HttpResponseInterceptor {
 
-    private final Logger log = LogManager.getLogger();
+    private static final Logger LOG = LogManager.getLogger();
 
     @Override
     public void process(HttpResponse response, HttpContext context) {
-        log.debug("--- HTTP RESPONSE ---");
-        log.debug("Response STATUS: {}", response.getStatusLine());
-        log.debug("Response HEADERS: {}", Arrays.asList(response.getAllHeaders()));
-        log.debug("Response BODY:{}{}", System::lineSeparator, () -> {
+        LOG.debug("--- HTTP RESPONSE ---");
+        LOG.debug("Response STATUS: {}", response.getStatusLine());
+        LOG.debug("Response HEADERS: {}", Arrays.asList(response.getAllHeaders()));
+        LOG.debug("Response BODY:{}{}", System::lineSeparator, () -> {
             HttpEntity entity = response.getEntity();
             if (entity == null) {
                 return null;
@@ -39,10 +39,10 @@ public class HttpResponseLoggerInterceptor implements HttpResponseInterceptor {
                         response.setEntity(new StringEntity(content));
                     }
                 } catch (IOException e) {
-                    log.error(e);
+                    LOG.error(e);
                 }
             }
         });
-        log.debug("---------------------");
+        LOG.debug("---------------------");
     }
 }

@@ -1,6 +1,7 @@
 # Changelog
 
 ### 1.12-SNAPSHOT
+Logger is static  
 
 ### 1.11
 Add SpEL parser support  

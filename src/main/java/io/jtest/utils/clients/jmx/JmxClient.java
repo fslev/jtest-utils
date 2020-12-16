@@ -16,7 +16,7 @@ import java.util.Map;
 
 public class JmxClient {
 
-    private final Logger log = LogManager.getLogger();
+    private static final Logger LOG = LogManager.getLogger();
 
     private final JMXConnector jmxConnector;
     private final MBeanServerConnection mbsConnection;
@@ -31,7 +31,7 @@ public class JmxClient {
                 this.jmxConnector = JMXConnectorFactory.connect(new JMXServiceURL(url));
             }
             this.mbsConnection = jmxConnector.getMBeanServerConnection();
-            log.info("Initialised JMX Connection to {}", url);
+            LOG.info("Initialised JMX Connection to {}", url);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -50,7 +50,7 @@ public class JmxClient {
         try {
             this.jmxConnector.close();
         } catch (IOException e) {
-            log.error(e);
+            LOG.error(e);
         }
     }
 }

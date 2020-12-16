@@ -10,8 +10,8 @@ import java.util.List;
 import java.util.Map;
 
 public class SqlClient {
+    private static final Logger LOG = LogManager.getLogger();
     private static final int MAX_ROWS = 100;
-    private final Logger log = LogManager.getLogger();
     private final String url;
     private final String user;
     private final String pwd;
@@ -35,9 +35,9 @@ public class SqlClient {
 
     public void connect() throws SQLException {
         conn = DriverManager.getConnection(url, user, pwd);
-        log.debug("---- DB SETUP ----");
-        log.debug("Driver: {}", driverClassName);
-        log.debug("Database url: {}", url);
+        LOG.debug("---- DB SETUP ----");
+        LOG.debug("Driver: {}", driverClassName);
+        LOG.debug("Database url: {}", url);
     }
 
     public PreparedStatement prepareStatement(String sql) throws SQLException {
@@ -63,8 +63,8 @@ public class SqlClient {
     }
 
     public List<Map<String, Object>> executeQueryAndGetRsAsList() {
-        log.debug("---- SQL QUERY REQUEST ----");
-        log.debug("SQL query: {}", sql);
+        LOG.debug("---- SQL QUERY REQUEST ----");
+        LOG.debug("SQL query: {}", sql);
         List<Map<String, Object>> tableData = new ArrayList<>();
         ResultSet rs = null;
         try {
@@ -86,8 +86,8 @@ public class SqlClient {
                 if (rs != null) {
                     rs.close();
                 }
-                log.debug("SQL result: {}", tableData);
-                log.debug("-----------------------");
+                LOG.debug("SQL result: {}", tableData);
+                LOG.debug("-----------------------");
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -95,21 +95,21 @@ public class SqlClient {
     }
 
     public ResultSet executeQuery() throws SQLException {
-        log.debug("---- SQL QUERY REQUEST ----");
-        log.debug("SQL query: {}", sql);
+        LOG.debug("---- SQL QUERY REQUEST ----");
+        LOG.debug("SQL query: {}", sql);
         return pst.executeQuery();
     }
 
     public int executeUpdate() throws SQLException {
-        log.debug("---- SQL UPDATE REQUEST ----");
-        log.debug("SQL update: {}", sql);
+        LOG.debug("---- SQL UPDATE REQUEST ----");
+        LOG.debug("SQL update: {}", sql);
         int affected = 0;
         try {
             affected = pst.executeUpdate();
             return affected;
         } finally {
-            log.debug("SQL affected rows: {}", affected);
-            log.debug("-----------------------");
+            LOG.debug("SQL affected rows: {}", affected);
+            LOG.debug("-----------------------");
         }
     }
 }

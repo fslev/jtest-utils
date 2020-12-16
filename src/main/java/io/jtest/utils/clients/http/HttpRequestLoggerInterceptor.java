@@ -14,20 +14,20 @@ import java.util.Arrays;
 
 public class HttpRequestLoggerInterceptor implements HttpRequestInterceptor {
 
-    private final Logger log = LogManager.getLogger();
+    private static final Logger LOG = LogManager.getLogger();
 
     @Override
     public void process(HttpRequest request, HttpContext context) {
-        log.debug("---- HTTP REQUEST ----");
-        log.debug("{}: {}{}", request.getRequestLine().getMethod(), HttpClientContext.adapt(context).getTargetHost().toURI(),
+        LOG.debug("---- HTTP REQUEST ----");
+        LOG.debug("{}: {}{}", request.getRequestLine().getMethod(), HttpClientContext.adapt(context).getTargetHost().toURI(),
                 request.getRequestLine().getUri());
-        log.debug("PROXY host: {}", () -> {
+        LOG.debug("PROXY host: {}", () -> {
             RequestConfig config = HttpClientContext.adapt(context).getRequestConfig();
             HttpHost proxy = config.getProxy();
             return proxy != null ? proxy.toURI() : "N/A";
         });
-        log.debug("Request HEADERS: {}", Arrays.asList(request.getAllHeaders()));
-        log.debug("Request BODY:{}{}", System::lineSeparator, () -> {
+        LOG.debug("Request HEADERS: {}", Arrays.asList(request.getAllHeaders()));
+        LOG.debug("Request BODY:{}{}", System::lineSeparator, () -> {
             String content = null;
             HttpEntityEnclosingRequest entityEnclosingRequest;
             if (request instanceof HttpEntityEnclosingRequest) {
@@ -36,7 +36,7 @@ public class HttpRequestLoggerInterceptor implements HttpRequestInterceptor {
                 try {
                     content = EntityUtils.toString(entity);
                 } catch (IOException e) {
-                    log.error(e);
+                    LOG.error(e);
                 } finally {
                     try {
                         EntityUtils.consume(entity);
@@ -44,12 +44,12 @@ public class HttpRequestLoggerInterceptor implements HttpRequestInterceptor {
                             entityEnclosingRequest.setEntity(new StringEntity(content));
                         }
                     } catch (IOException e) {
-                        log.error(e);
+                        LOG.error(e);
                     }
                 }
             }
             return content != null ? content : "N/A";
         });
-        log.debug("----------------------");
+        LOG.debug("----------------------");
     }
 }

@@ -8,7 +8,7 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 public class MethodPoller<T> {
-    private final Logger log = LogManager.getLogger();
+    private static final Logger LOG = LogManager.getLogger();
 
     private Duration pollDurationSec = Duration.ofSeconds(30);
     private Long pollIntervalMillis = 3000L;
@@ -53,7 +53,7 @@ public class MethodPoller<T> {
     }
 
     public T poll() {
-        log.debug("Polling for result...");
+        LOG.debug("Polling for result...");
         boolean pollSucceeded = false;
         boolean pollTimeout = false;
         T result = null;
@@ -63,7 +63,7 @@ public class MethodPoller<T> {
             pollSucceeded = pollResultPredicate.test(result);
             if (!pollSucceeded) {
                 try {
-                    log.debug("Poll failed, I'll take another shot after {}ms", pollIntervalMillis);
+                    LOG.debug("Poll failed, I'll take another shot after {}ms", pollIntervalMillis);
                     Thread.sleep(pollIntervalMillis);
                     pollIntervalMillis = (long) (pollIntervalMillis * exponentialBackOff);
                     long elapsed = System.currentTimeMillis() - start;
@@ -76,7 +76,7 @@ public class MethodPoller<T> {
                 }
             }
         }
-        log.debug(!pollTimeout ? "Found correct result" : "Poll timeout");
+        LOG.debug(!pollTimeout ? "Found correct result" : "Poll timeout");
         return result;
     }
 }

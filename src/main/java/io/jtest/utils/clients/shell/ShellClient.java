@@ -9,7 +9,7 @@ import java.util.Arrays;
 
 public class ShellClient {
 
-    private final Logger log = LogManager.getLogger();
+    private static final Logger LOG = LogManager.getLogger();
 
     private final ProcessBuilder processBuilder;
 
@@ -18,7 +18,7 @@ public class ShellClient {
     }
 
     public String command(String... command) {
-        log.info("Executing shell command \"{}\"", Arrays.toString(command));
+        LOG.info("Executing shell command \"{}\"", Arrays.toString(command));
         this.processBuilder.command(command);
         StringBuilder outputBuffer = new StringBuilder();
         try {
@@ -41,7 +41,7 @@ public class ShellClient {
         } catch (IOException | InterruptedException e) {
             throw new RuntimeException(e);
         }
-        log.debug("Shell output: {}", outputBuffer.toString());
+        LOG.debug("Shell output: {}", outputBuffer.toString());
         return outputBuffer.toString();
     }
 }
