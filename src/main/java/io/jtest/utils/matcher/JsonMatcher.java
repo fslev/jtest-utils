@@ -95,25 +95,24 @@ public class JsonMatcher extends AbstractObjectMatcher<JsonNode> {
     }
 
     private static void debugIfJsonContainsUnintentionalRegexChars(String json) {
-        if (!LOG.isDebugEnabled()) {
-            return;
-        }
-        try {
-            Map<String, List<String>> specialRegexChars = JsonUtils.walkJsonAndProcessNodes(json, nodeValue -> {
-                List<String> regexChars = RegexUtils.getRegexCharsFromString(nodeValue);
-                return regexChars.isEmpty() ? null : regexChars;
-            });
-            if (!specialRegexChars.isEmpty()) {
-                String prettyResult = specialRegexChars.entrySet().stream().map(e -> e.getKey() + " contains: " + e.getValue().toString())
-                        .collect(Collectors.joining("\n"));
-                LOG.debug(" \n\n Comparison mechanism failed while comparing JSONs." +
-                                " \n One reason for this, might be that Json may have unintentional regex special characters. " +
-                                "\n If so, try to quote them by using \\Q and \\E or simply \\" +
-                                "\n Found the following list of special regex characters inside expected:\n\n{}\n\nExpected:\n{}\n",
-                        prettyResult, json);
+        if (LOG.isDebugEnabled()) {
+            try {
+                Map<String, List<String>> specialRegexChars = JsonUtils.walkJsonAndProcessNodes(json, nodeValue -> {
+                    List<String> regexChars = RegexUtils.getRegexCharsFromString(nodeValue);
+                    return regexChars.isEmpty() ? null : regexChars;
+                });
+                if (!specialRegexChars.isEmpty()) {
+                    String prettyResult = specialRegexChars.entrySet().stream().map(e -> e.getKey() + " contains: " + e.getValue().toString())
+                            .collect(Collectors.joining("\n"));
+                    LOG.debug(" \n\n Comparison mechanism failed while comparing JSONs." +
+                                    " \n One reason for this, might be that Json may have unintentional regex special characters. " +
+                                    "\n If so, try to quote them by using \\Q and \\E or simply \\" +
+                                    "\n Found the following list of special regex characters inside expected:\n\n{}\n\nExpected:\n{}\n",
+                            prettyResult, json);
+                }
+            } catch (Exception e) {
+                LOG.debug("Cannot extract special regex characters from json", e);
             }
-        } catch (Exception e) {
-            LOG.debug("Cannot extract special regex characters from json", e);
         }
     }
 }

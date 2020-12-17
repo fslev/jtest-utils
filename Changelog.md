@@ -1,6 +1,7 @@
 # Changelog
 
 ### 1.13-SNAPSHOT
+Refactoring    
 
 ### 1.12
 Logger is static  

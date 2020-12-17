@@ -89,25 +89,24 @@ public class XmlMatcher extends AbstractObjectMatcher<String> {
     }
 
     private static void debugIfXmlContainsUnintentionalRegexChars(String xml) {
-        if (!LOG.isDebugEnabled()) {
-            return;
-        }
-        try {
-            Map<String, List<String>> specialRegexChars = XmlUtils.walkXmlAndProcessNodes(xml, nodeValue -> {
-                List<String> regexChars = RegexUtils.getRegexCharsFromString(nodeValue);
-                return regexChars.isEmpty() ? null : regexChars;
-            });
-            if (!specialRegexChars.isEmpty()) {
-                String prettyResult = specialRegexChars.entrySet().stream().map(e -> e.getKey() + " contains: " + e.getValue().toString())
-                        .collect(Collectors.joining("\n"));
-                LOG.debug(" \n\n Comparison mechanism failed while comparing XMLs." +
-                                " \n One reason for this, might be that XML may have unintentional regex special characters. " +
-                                "\n If so, try to quote them by using \\Q and \\E or simply \\" +
-                                "\n Found the following list of special regex characters inside expected:\n\n{}\n\nExpected:\n{}\n",
-                        prettyResult, xml);
+        if (LOG.isDebugEnabled()) {
+            try {
+                Map<String, List<String>> specialRegexChars = XmlUtils.walkXmlAndProcessNodes(xml, nodeValue -> {
+                    List<String> regexChars = RegexUtils.getRegexCharsFromString(nodeValue);
+                    return regexChars.isEmpty() ? null : regexChars;
+                });
+                if (!specialRegexChars.isEmpty()) {
+                    String prettyResult = specialRegexChars.entrySet().stream().map(e -> e.getKey() + " contains: " + e.getValue().toString())
+                            .collect(Collectors.joining("\n"));
+                    LOG.debug(" \n\n Comparison mechanism failed while comparing XMLs." +
+                                    " \n One reason for this, might be that XML may have unintentional regex special characters. " +
+                                    "\n If so, try to quote them by using \\Q and \\E or simply \\" +
+                                    "\n Found the following list of special regex characters inside expected:\n\n{}\n\nExpected:\n{}\n",
+                            prettyResult, xml);
+                }
+            } catch (Exception e) {
+                LOG.debug("Cannot extract special regex characters from xml");
             }
-        } catch (Exception e) {
-            LOG.debug("Cannot extract special regex characters from xml");
         }
     }
 }
