@@ -17,12 +17,14 @@ public class ShellClient {
         this.processBuilder = new ProcessBuilder();
     }
 
-    public String command(String... command) {
-        LOG.info("Executing shell command \"{}\"", Arrays.toString(command));
-        this.processBuilder.command(command);
+    public ProcessBuilder getProcessBuilder() {
+        return processBuilder;
+    }
+
+    public String execute(String... command) {
         StringBuilder outputBuffer = new StringBuilder();
         try {
-            Process p = processBuilder.start();
+            Process p = process(command);
             InputStream stdInput = p.getInputStream();
             InputStream stdError = p.getErrorStream();
 
@@ -41,7 +43,17 @@ public class ShellClient {
         } catch (IOException | InterruptedException e) {
             throw new RuntimeException(e);
         }
-        LOG.debug("Shell output: {}", outputBuffer.toString());
+        LOG.debug("Process output: {}", outputBuffer.toString());
         return outputBuffer.toString();
+    }
+
+    public Process process(String... command) {
+        LOG.info("Executing process command \"{}\"", Arrays.toString(command));
+        this.processBuilder.command(command);
+        try {
+            return processBuilder.start();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

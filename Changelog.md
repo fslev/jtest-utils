@@ -1,7 +1,10 @@
 # Changelog
 
-### 1.12-SNAPSHOT
+### 1.13-SNAPSHOT
+
+### 1.12
 Logger is static  
+Refactor & enhance ShellClient  
 
 ### 1.11
 Add SpEL parser support  
