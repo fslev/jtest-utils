@@ -54,14 +54,14 @@ public class Polling<T> {
 
     public T get() {
         LOG.debug("Polling for result...");
-        boolean pollSucceeded = false;
-        boolean pollTimeout = false;
+        boolean success = false;
+        boolean timeout = false;
         T result = null;
-        while (!pollSucceeded && !pollTimeout) {
+        while (!success && !timeout) {
             long start = System.currentTimeMillis();
             result = supplier.get();
-            pollSucceeded = predicate.test(result);
-            if (!pollSucceeded) {
+            success = predicate.test(result);
+            if (!success) {
                 try {
                     LOG.debug("Polling failed, I'll take another shot after {}ms", pollingIntervalMillis);
                     Thread.sleep(pollingIntervalMillis);
@@ -69,14 +69,14 @@ public class Polling<T> {
                     long elapsed = System.currentTimeMillis() - start;
                     pollingDurationSec = pollingDurationSec.minusMillis(elapsed);
                     if (pollingDurationSec.isZero() || pollingDurationSec.isNegative()) {
-                        pollTimeout = true;
+                        timeout = true;
                     }
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
             }
         }
-        LOG.debug(!pollTimeout ? "Found correct result" : "Polling timeout");
+        LOG.debug(!timeout ? "Found correct result" : "Polling timeout");
         return result;
     }
 }
