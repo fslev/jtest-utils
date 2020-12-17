@@ -2,7 +2,7 @@ package io.jtest.utils.matcher;
 
 import io.jtest.utils.exceptions.InvalidTypeException;
 import io.jtest.utils.matcher.condition.MatchCondition;
-import io.jtest.utils.poller.MethodPoller;
+import io.jtest.utils.polling.Polling;
 import org.apache.http.HttpResponse;
 
 import java.util.Arrays;
@@ -15,7 +15,7 @@ import java.util.function.Supplier;
 
 public class ObjectMatcher {
     /**
-     * Compares objects as Json, Xml or String in that order
+     * Matches objects as Json, Xml or String in that order
      *
      * @return properties captured after the match
      * Expected object can contain placeholders for capturing values from the actual object: ~[placeholder_name]
@@ -25,15 +25,15 @@ public class ObjectMatcher {
     }
 
     /**
-     * Compares objects as Json, Xml or String in that order<br>
+     * Matches objects as Json, Xml or String in that order<br>
      * Expected is compared against a supplier value until values match or timeout is reached
      *
      * @return properties captured after the match
      * Expected object can contain placeholders for capturing values from the actual object: ~[placeholder_name]
      */
-    public static Map<String, Object> pollAndMatch(String message, Object expected, Supplier<Object> actualObjectSupplier, Integer pollDurationInSeconds,
-                                                   Long pollIntervalInMillis, Double exponentialBackOff, MatchCondition... matchConditions) {
-        return pollAndMatch(actual -> match(message, expected, actual, matchConditions), actualObjectSupplier, pollDurationInSeconds, pollIntervalInMillis, exponentialBackOff);
+    public static Map<String, Object> match(String message, Object expected, Supplier<Object> actualObjectSupplier, Integer pollingDurationSeconds,
+                                            Long pollingIntervalMillis, Double exponentialBackOff, MatchCondition... matchConditions) {
+        return match(actual -> match(message, expected, actual, matchConditions), actualObjectSupplier, pollingDurationSeconds, pollingIntervalMillis, exponentialBackOff);
     }
 
     public static Map<String, Object> matchJson(String message, Object expected, Object actual, MatchCondition... matchConditions) {
@@ -44,9 +44,9 @@ public class ObjectMatcher {
         }
     }
 
-    public static Map<String, Object> pollAndMatchJson(String message, Object expected, Supplier<Object> actualObjectSupplier, Integer pollDurationInSeconds,
-                                                       Long pollIntervalInMillis, Double exponentialBackOff, MatchCondition... matchConditions) {
-        return pollAndMatch(actual -> matchJson(message, expected, actual, matchConditions), actualObjectSupplier, pollDurationInSeconds, pollIntervalInMillis, exponentialBackOff);
+    public static Map<String, Object> matchJson(String message, Object expected, Supplier<Object> actualObjectSupplier, Integer pollingDurationSeconds,
+                                                Long pollingIntervalMillis, Double exponentialBackOff, MatchCondition... matchConditions) {
+        return match(actual -> matchJson(message, expected, actual, matchConditions), actualObjectSupplier, pollingDurationSeconds, pollingIntervalMillis, exponentialBackOff);
     }
 
     public static Map<String, Object> matchXml(String message, Object expected, Object actual, MatchCondition... matchConditions) {
@@ -57,13 +57,13 @@ public class ObjectMatcher {
         }
     }
 
-    public static Map<String, Object> pollAndMatchXml(String message, Object expected, Supplier<Object> actualObjectSupplier, Integer pollDurationInSeconds,
-                                                      Long pollIntervalInMillis, Double exponentialBackOff, MatchCondition... matchConditions) {
-        return pollAndMatch(actual -> matchXml(message, expected, actual, matchConditions), actualObjectSupplier, pollDurationInSeconds, pollIntervalInMillis, exponentialBackOff);
+    public static Map<String, Object> matchXml(String message, Object expected, Supplier<Object> actualObjectSupplier, Integer pollingDurationSeconds,
+                                               Long pollingIntervalMillis, Double exponentialBackOff, MatchCondition... matchConditions) {
+        return match(actual -> matchXml(message, expected, actual, matchConditions), actualObjectSupplier, pollingDurationSeconds, pollingIntervalMillis, exponentialBackOff);
     }
 
     /**
-     * Compares two objects as strings<br>
+     * Matches two objects as strings<br>
      * Expected could contain regular expressions.<br>
      * If expected contains special regex characters and you want to match them as simple characters, just quote the expression using \Q and \E.
      *
@@ -79,14 +79,14 @@ public class ObjectMatcher {
     }
 
     /**
-     * Compares an expected object with a supplier value as strings until matching is successful or timeout is reached<br>
+     * Matches an expected object with a supplier value as strings until matching is successful or timeout is reached<br>
      *
      * @return properties captured after the match
      * Expected object can contain placeholders for capturing values from the actual object: ~[placeholder_name]
      */
-    public static Map<String, Object> pollAndMatchString(String message, Object expected, Supplier<Object> actualObjectSupplier, Integer pollDurationInSeconds,
-                                                         Long pollIntervalInMillis, Double exponentialBackOff, MatchCondition... matchConditions) {
-        return pollAndMatch(actual -> matchString(message, expected, actual, matchConditions), actualObjectSupplier, pollDurationInSeconds, pollIntervalInMillis, exponentialBackOff);
+    public static Map<String, Object> matchString(String message, Object expected, Supplier<Object> actualObjectSupplier, Integer pollingDurationSeconds,
+                                                  Long pollingIntervalMillis, Double exponentialBackOff, MatchCondition... matchConditions) {
+        return match(actual -> matchString(message, expected, actual, matchConditions), actualObjectSupplier, pollingDurationSeconds, pollingIntervalMillis, exponentialBackOff);
     }
 
     /**
@@ -113,24 +113,24 @@ public class ObjectMatcher {
     }
 
     /**
-     * Compares two objects representing HTTP responses until matching is successful or timeout is reached<br>
+     * Matches two objects representing HTTP responses until matching is successful or timeout is reached<br>
      *
      * @return properties captured after the match
      * Expected object can contain placeholders for capturing values from the actual object: ~[placeholder_name]
      */
-    public static <T extends HttpResponse> Map<String, Object> pollAndMatchHttpResponse(String message, Object expected, Supplier<T> actualObjectSupplier, Integer pollDurationInSeconds,
-                                                                                        Long pollIntervalInMillis, Double exponentialBackOff, MatchCondition... matchConditions) {
-        return pollAndMatch(actual -> matchHttpResponse(message, expected, actual, matchConditions), actualObjectSupplier, pollDurationInSeconds, pollIntervalInMillis, exponentialBackOff);
+    public static <T extends HttpResponse> Map<String, Object> matchHttpResponse(String message, Object expected, Supplier<T> actualObjectSupplier, Integer pollingDurationSeconds,
+                                                                                 Long pollingIntervalMillis, Double exponentialBackOff, MatchCondition... matchConditions) {
+        return match(actual -> matchHttpResponse(message, expected, actual, matchConditions), actualObjectSupplier, pollingDurationSeconds, pollingIntervalMillis, exponentialBackOff);
     }
 
-    private static <T> Map<String, Object> pollAndMatch(Function<T, Map<String, Object>> matchFunction, Supplier<T> actualObjectSupplier, Integer pollDurationInSeconds,
-                                                        Long pollIntervalInMillis, Double exponentialBackOff) {
+    private static <T> Map<String, Object> match(Function<T, Map<String, Object>> matchFunction, Supplier<T> actualObjectSupplier, Integer pollingDurationSeconds,
+                                                 Long pollingIntervalMillis, Double exponentialBackOff) {
         Map<String, Object> props = new HashMap<>();
         AtomicReference<AssertionError> error = new AtomicReference<>();
-        new MethodPoller<T>()
-                .duration(pollDurationInSeconds, pollIntervalInMillis)
+        new Polling<T>()
+                .duration(pollingDurationSeconds, pollingIntervalMillis)
                 .exponentialBackOff(exponentialBackOff)
-                .method(actualObjectSupplier)
+                .supplier(actualObjectSupplier)
                 .until(p -> {
                     try {
                         props.putAll(matchFunction.apply(p));
@@ -140,7 +140,7 @@ public class ObjectMatcher {
                         error.set(e);
                         return false;
                     }
-                }).poll();
+                }).get();
         if (error.get() != null) {
             throw error.get();
         }

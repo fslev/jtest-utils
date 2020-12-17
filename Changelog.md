@@ -1,6 +1,10 @@
 # Changelog
 
-### 1.14-SNAPSHOT
+### 1.15-SNAPSHOT
+
+
+### 1.14
+Refactor polling mechanism  
 
 ### 1.13
 Refactoring    

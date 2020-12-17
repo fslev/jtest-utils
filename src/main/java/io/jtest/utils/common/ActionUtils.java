@@ -1,6 +1,6 @@
 package io.jtest.utils.common;
 
-import io.jtest.utils.poller.MethodPoller;
+import io.jtest.utils.polling.Polling;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -20,7 +20,7 @@ public class ActionUtils {
     }
 
     public static <T extends Throwable> void retryIfThrowsUp(Runnable runnable, Class<T> throwableType, int timeoutSeconds, long intervalMillis) {
-        Throwable throwable = new MethodPoller<Throwable>().method(() -> {
+        Throwable throwable = new Polling<Throwable>().supplier(() -> {
             try {
                 runnable.run();
                 return null;
@@ -32,7 +32,7 @@ public class ActionUtils {
                     throw e;
                 }
             }
-        }).until(Objects::isNull).duration(timeoutSeconds, intervalMillis).poll();
+        }).until(Objects::isNull).duration(timeoutSeconds, intervalMillis).get();
         if (throwable != null) {
             throw new RuntimeException("Polling for action without incidents failed", throwable);
         }
@@ -40,7 +40,7 @@ public class ActionUtils {
 
     public static <E, T extends Throwable> E retryIfThrowsUp(Supplier<E> supplier, Class<T> throwableType, int timeoutSeconds, long intervalMillis) {
         final AtomicReference<E> result = new AtomicReference<>();
-        Throwable throwable = new MethodPoller<Throwable>().method(() -> {
+        Throwable throwable = new Polling<Throwable>().supplier(() -> {
             try {
                 result.set(supplier.get());
                 return null;
@@ -52,7 +52,7 @@ public class ActionUtils {
                     throw e;
                 }
             }
-        }).until(Objects::isNull).duration(timeoutSeconds, intervalMillis).poll();
+        }).until(Objects::isNull).duration(timeoutSeconds, intervalMillis).get();
         if (throwable != null) {
             throw new RuntimeException("Polling for action without incidents failed", throwable);
         }
