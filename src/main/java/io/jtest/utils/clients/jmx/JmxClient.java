@@ -37,20 +37,12 @@ public class JmxClient {
         }
     }
 
-    public <T> T getMBeanProxy(String objectName, Class<T> clazz) {
-        try {
-            return MBeanServerInvocationHandler
-                    .newProxyInstance(mbsConnection, new ObjectName(objectName), clazz, true);
-        } catch (MalformedObjectNameException e) {
-            throw new RuntimeException(e);
-        }
+    public <T> T getMBeanProxy(String objectName, Class<T> clazz) throws MalformedObjectNameException {
+        return MBeanServerInvocationHandler
+                .newProxyInstance(mbsConnection, new ObjectName(objectName), clazz, true);
     }
 
-    public void close() {
-        try {
-            this.jmxConnector.close();
-        } catch (IOException e) {
-            LOG.error(e);
-        }
+    public void close() throws IOException {
+        this.jmxConnector.close();
     }
 }

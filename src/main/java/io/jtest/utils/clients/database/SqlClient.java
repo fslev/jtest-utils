@@ -34,10 +34,10 @@ public class SqlClient {
     }
 
     public void connect() throws SQLException {
-        conn = DriverManager.getConnection(url, user, pwd);
         LOG.debug("---- DB SETUP ----");
         LOG.debug("Driver: {}", driverClassName);
         LOG.debug("Database url: {}", url);
+        conn = DriverManager.getConnection(url, user, pwd);
     }
 
     public PreparedStatement prepareStatement(String sql) throws SQLException {
@@ -62,7 +62,7 @@ public class SqlClient {
         }
     }
 
-    public List<Map<String, Object>> executeQueryAndGetRsAsList() {
+    public List<Map<String, Object>> executeQueryAndGetRsAsList() throws SQLException {
         LOG.debug("---- SQL QUERY REQUEST ----");
         LOG.debug("SQL query: {}", sql);
         List<Map<String, Object>> tableData = new ArrayList<>();
@@ -79,8 +79,6 @@ public class SqlClient {
                 tableData.add(rowData);
             }
             return tableData;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
         } finally {
             try {
                 if (rs != null) {

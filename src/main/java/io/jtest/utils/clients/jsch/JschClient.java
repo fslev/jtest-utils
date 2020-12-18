@@ -36,41 +36,33 @@ public class JschClient {
         }
     }
 
-    public void connect() {
-        try {
-            LOG.info("Connecting over SSH to \"{}:{}\" with user \"{}\" and privateKey \"{}\"", host, port, user, privateKey);
-            this.session.connect();
-            LOG.info("Connected");
-        } catch (JSchException e) {
-            throw new RuntimeException(e);
-        }
+    public void connect() throws JSchException {
+        LOG.info("Connecting over SSH to \"{}:{}\" with user \"{}\" and privateKey \"{}\"", host, port, user, privateKey);
+        this.session.connect();
+        LOG.info("Connected");
     }
 
-    public String sendCommand(String cmd) {
-        try {
-            LOG.info("Execute command over SSH: \"{}\"", cmd);
-            Channel channel = this.session.openChannel("exec");
-            ((ChannelExec) channel).setCommand(cmd);
-            InputStream commandOutput = channel.getInputStream();
-            InputStream commandErrOutput = ((ChannelExec) channel).getErrStream();
-            channel.connect();
-            StringBuilder outputBuffer = new StringBuilder();
-            int readByte = commandOutput.read();
-            while (readByte != 0xffffffff) {
-                outputBuffer.append((char) readByte);
-                readByte = commandOutput.read();
-            }
-            readByte = commandErrOutput.read();
-            while (readByte != 0xffffffff) {
-                outputBuffer.append((char) readByte);
-                readByte = commandErrOutput.read();
-            }
-            channel.disconnect();
-            LOG.debug("Output over SSH: {}", outputBuffer.toString());
-            return outputBuffer.toString();
-        } catch (JSchException | IOException e) {
-            throw new RuntimeException(e);
+    public String sendCommand(String cmd) throws IOException, JSchException {
+        LOG.info("Execute command over SSH: \"{}\"", cmd);
+        Channel channel = this.session.openChannel("exec");
+        ((ChannelExec) channel).setCommand(cmd);
+        InputStream commandOutput = channel.getInputStream();
+        InputStream commandErrOutput = ((ChannelExec) channel).getErrStream();
+        channel.connect();
+        StringBuilder outputBuffer = new StringBuilder();
+        int readByte = commandOutput.read();
+        while (readByte != 0xffffffff) {
+            outputBuffer.append((char) readByte);
+            readByte = commandOutput.read();
         }
+        readByte = commandErrOutput.read();
+        while (readByte != 0xffffffff) {
+            outputBuffer.append((char) readByte);
+            readByte = commandErrOutput.read();
+        }
+        channel.disconnect();
+        LOG.debug("Output over SSH: {}", outputBuffer.toString());
+        return outputBuffer.toString();
     }
 
     public void disconnect() {

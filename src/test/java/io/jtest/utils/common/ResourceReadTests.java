@@ -27,13 +27,13 @@ public class ResourceReadTests {
     }
 
     @Test
-    public void testPropertiesReadFromFile() {
+    public void testPropertiesReadFromFile() throws IOException {
         assertEquals("some values with white spaces and new lines \n ",
                 ResourceUtils.readProps("foobar/foo.properties").get("IAmAProperty"));
     }
 
     @Test
-    public void testPropertiesReadFromFileWithoutExtension() {
+    public void testPropertiesReadFromFileWithoutExtension() throws IOException {
         assertEquals("some values with white spaces and new lines \n ",
                 ResourceUtils.readProps("foobar/dir/foo/foo").get("IAmAProperty"));
     }

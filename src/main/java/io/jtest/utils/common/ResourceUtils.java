@@ -22,13 +22,9 @@ public class ResourceUtils {
         return readFromPath(filePath);
     }
 
-    public static Properties readProps(String filePath) {
+    public static Properties readProps(String filePath) throws IOException {
         Properties props = new Properties();
-        try {
-            props.load(new StringReader(read(filePath)));
-        } catch (IOException e) {
-            throw new RuntimeException(e.getMessage(), e);
-        }
+        props.load(new StringReader(read(filePath)));
         return props;
     }
 

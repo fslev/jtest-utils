@@ -17,14 +17,14 @@ public class ShellClient {
         this.processBuilder = new ProcessBuilder();
     }
 
-    public ProcessBuilder getProcessBuilder() {
-        return processBuilder;
+    public ShellClient(ProcessBuilder processBuilder) {
+        this.processBuilder = processBuilder;
     }
 
     public String execute(String... command) {
         StringBuilder outputBuffer = new StringBuilder();
         try {
-            Process p = process(command);
+            Process p = startProcess(command);
             InputStream stdInput = p.getInputStream();
             InputStream stdError = p.getErrorStream();
 
@@ -47,7 +47,7 @@ public class ShellClient {
         return outputBuffer.toString();
     }
 
-    public Process process(String... command) {
+    public Process startProcess(String... command) {
         LOG.info("Executing process command \"{}\"", Arrays.toString(command));
         this.processBuilder.command(command);
         try {
