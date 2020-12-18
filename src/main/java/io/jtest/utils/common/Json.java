@@ -9,7 +9,6 @@ import java.util.function.Function;
 
 public class Json {
 
-
     static <R> void walkAndProcessJson(JsonNode jsonNode, Function<String, R> processFunction, String parentPath, Map<String, R> results) {
         String pathPrefix = parentPath.isEmpty() ? "" : parentPath + "/";
         if (jsonNode.isObject()) {

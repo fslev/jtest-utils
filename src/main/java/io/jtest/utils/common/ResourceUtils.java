@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 
 public class ResourceUtils {
 
-    private static final Logger log = LogManager.getLogger();
+    private static final Logger LOG = LogManager.getLogger();
 
     public static String read(String filePath) throws IOException {
         return readFromPath(filePath);
@@ -72,7 +72,7 @@ public class ResourceUtils {
                     .contains(path.getFileName().toString().substring(path.getFileName().toString().lastIndexOf("."))))) {
                 return true;
             }
-            log.warn("Ignore file '{}'.\nIt has none of the following extensions: {}", path.getFileName().toString(), fileExtensionPatterns);
+            LOG.warn("Ignore file '{}'.\nIt has none of the following extensions: {}", path.getFileName().toString(), fileExtensionPatterns);
             return false;
         }).map(path -> dirPath + (!dirPath.isEmpty() ? File.separator : "") + rootPath.relativize(path).toString())
                 .collect(Collectors.toSet());
