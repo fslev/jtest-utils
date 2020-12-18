@@ -9,7 +9,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Supplier;
 
 /**
- * Polling for supplier result until no exception is thrown or timeout is reached
+ * Polling for supplier result until no Throwable is thrown or timeout is reached
  */
 public class SupplierUtils {
     private static final Logger LOG = LogManager.getLogger();
