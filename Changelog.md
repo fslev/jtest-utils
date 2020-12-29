@@ -2,6 +2,8 @@
 
 ### 1.16-SNAPSHOT
 Refactoring  
+Java 8 support  
+Upgrade dependencies  
 
 ### 1.15
 Refactoring  
