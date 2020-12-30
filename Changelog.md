@@ -1,6 +1,11 @@
 # Changelog
 
-### 1.16-SNAPSHOT
+### 1.18-SNAPSHOT
+
+### 1.17
+Use Java 8 as base Java version for release  
+
+### 1.16
 Refactoring  
 Java 8 support  
 Upgrade dependencies  

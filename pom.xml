@@ -21,12 +21,11 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <httpclient.version>4.5.13</httpclient.version>
-        <jsoncompare.version>2.17</jsoncompare.version>
+        <jsoncompare.version>2.18</jsoncompare.version>
         <xmlunit.version>2.8.2</xmlunit.version>
         <surefire.version>2.22.2</surefire.version>
         <jackson.version>2.12.0</jackson.version>
         <spring-expression-version>5.3.2</spring-expression-version>
-        <java.release.version>11</java.release.version>
     </properties>
 
     <dependencies>
@@ -125,12 +124,6 @@
     </dependencies>
 
     <profiles>
-        <profile>
-            <id>java8</id>
-            <properties>
-                <java.release.version>8</java.release.version>
-            </properties>
-        </profile>
         <profile>
             <id>nexus-upload</id>
             <activation>
@@ -276,7 +269,7 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.1</version>
                 <configuration>
-                    <release>${java.release.version}</release>
+                    <release>8</release>
                     <testRelease>11</testRelease>
                 </configuration>
             </plugin>
