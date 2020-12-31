@@ -18,9 +18,19 @@ public class JsonUtilsTest {
     };
 
     @Test
-    public void testBigJsonBeautification() throws IOException {
+    public void testBigJsonPrettyPrint() throws IOException {
         String json = ResourceUtils.read("props/bigJsons/actualLargeJson.json");
         assertNotNull(JsonUtils.prettyPrint(json));
+    }
+
+    @Test
+    public void testEmptyJsonPrettyPrint() throws IOException {
+        assertEquals("{ }", JsonUtils.prettyPrint("{}"));
+        assertEquals("[ ]", JsonUtils.prettyPrint("[]"));
+        assertEquals("null", JsonUtils.prettyPrint("null"));
+        assertNull(JsonUtils.prettyPrint(null));
+        assertEquals("invalid", JsonUtils.prettyPrint("invalid"));
+        assertEquals("", JsonUtils.prettyPrint(""));
     }
 
     @Test

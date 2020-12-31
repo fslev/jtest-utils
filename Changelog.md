@@ -1,7 +1,9 @@
 # Changelog
 
-### 1.18-SNAPSHOT
+### 1.19-SNAPSHOT
 
+### 1.18
+Fix JsonUtils pretty print  
 
 ### 1.17
 Use Java 8 as base Java version for release  
