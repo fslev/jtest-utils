@@ -48,7 +48,7 @@ public class ShellClient {
     }
 
     public Process startProcess(String... command) {
-        LOG.info("Executing process command \"{}\"", Arrays.toString(command));
+        LOG.info("Execute command \"{}\"", Arrays.toString(command));
         this.processBuilder.command(command);
         try {
             return processBuilder.start();

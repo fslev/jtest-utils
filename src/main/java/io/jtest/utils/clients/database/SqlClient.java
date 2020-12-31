@@ -34,9 +34,7 @@ public class SqlClient {
     }
 
     public void connect() throws SQLException {
-        LOG.debug("---- DB SETUP ----");
-        LOG.debug("Driver: {}", driverClassName);
-        LOG.debug("Database url: {}", url);
+        LOG.debug("---- DB SETUP ----\nDriver: {}\nDatabase url: {}", driverClassName, url);
         conn = DriverManager.getConnection(url, user, pwd);
     }
 
@@ -63,8 +61,7 @@ public class SqlClient {
     }
 
     public List<Map<String, Object>> executeQueryAndGetRsAsList() throws SQLException {
-        LOG.debug("---- SQL QUERY REQUEST ----");
-        LOG.debug("SQL query: {}", sql);
+        LOG.debug("SQL query: '{}'", sql);
         List<Map<String, Object>> tableData = new ArrayList<>();
         ResultSet rs = null;
         try {
@@ -93,14 +90,12 @@ public class SqlClient {
     }
 
     public ResultSet executeQuery() throws SQLException {
-        LOG.debug("---- SQL QUERY REQUEST ----");
-        LOG.debug("SQL query: {}", sql);
+        LOG.debug("SQL query: '{}'", sql);
         return pst.executeQuery();
     }
 
     public int executeUpdate() throws SQLException {
-        LOG.debug("---- SQL UPDATE REQUEST ----");
-        LOG.debug("SQL update: {}", sql);
+        LOG.debug("SQL update: '{}'", sql);
         int affected = 0;
         try {
             affected = pst.executeUpdate();

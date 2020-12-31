@@ -36,7 +36,6 @@ public class StringParser {
         if (source == null || source.isEmpty()) {
             return source;
         }
-
         if (placeholderNames.size() == 1 && source.equals(prefix + placeholderNames.get(0) + suffix)) {
             String standalonePlaceholder = placeholderNames.get(0);
             if (!placeholderHasValue.test(standalonePlaceholder)) {
@@ -44,7 +43,6 @@ public class StringParser {
             }
             return placeholderValue.apply(standalonePlaceholder);
         }
-
         String str = source;
         for (String placeholderName : placeholderNames) {
             if (!placeholderHasValue.test(placeholderName)) {

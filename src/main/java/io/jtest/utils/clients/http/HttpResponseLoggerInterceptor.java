@@ -18,31 +18,28 @@ public class HttpResponseLoggerInterceptor implements HttpResponseInterceptor {
 
     @Override
     public void process(HttpResponse response, HttpContext context) {
-        LOG.debug("--- HTTP RESPONSE ---");
-        LOG.debug("Response STATUS: {}", response.getStatusLine());
-        LOG.debug("Response HEADERS: {}", Arrays.asList(response.getAllHeaders()));
-        LOG.debug("Response BODY:{}{}", System::lineSeparator, () -> {
-            HttpEntity entity = response.getEntity();
-            if (entity == null) {
-                return null;
-            }
-            String content = null;
-            try {
-                content = EntityUtils.toString(entity);
-                return content;
-            } catch (IOException e) {
-                return "Cannot consume HTTP response: " + e.getMessage();
-            } finally {
-                try {
-                    EntityUtils.consume(entity);
-                    if (content != null) {
-                        response.setEntity(new StringEntity(content));
+        LOG.debug("\n--- HTTP RESPONSE ---\nResponse STATUS: {}\nResponse HEADERS: {}\nResponse BODY:\n{}\n",
+                response::getStatusLine, () -> Arrays.asList(response.getAllHeaders()), () -> {
+                    HttpEntity entity = response.getEntity();
+                    if (entity == null) {
+                        return null;
                     }
-                } catch (IOException e) {
-                    LOG.error(e);
-                }
-            }
-        });
-        LOG.debug("---------------------");
+                    String content = null;
+                    try {
+                        content = EntityUtils.toString(entity);
+                        return content;
+                    } catch (IOException e) {
+                        return "Cannot consume HTTP response: " + e.getMessage();
+                    } finally {
+                        try {
+                            EntityUtils.consume(entity);
+                            if (content != null) {
+                                response.setEntity(new StringEntity(content));
+                            }
+                        } catch (IOException e) {
+                            LOG.error(e);
+                        }
+                    }
+                });
     }
 }

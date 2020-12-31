@@ -46,10 +46,8 @@ public class HttpClient {
     private final HttpRequestBase request;
 
     protected HttpClient(Builder builder) {
-
         validateMethod(builder);
         validateAddress(builder);
-
         this.proxyHost = builder.proxyHost;
         this.timeout = builder.timeout;
         try {
