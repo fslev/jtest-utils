@@ -91,7 +91,7 @@ public class ObjectMatcher {
 
     /**
      * Compares two objects representing a HTTP response<br>
-     * MatchCondition.DO_NOT_MATCH is ambiguous in this case. Use MatchCondition.DO_NOT_MATCH_HTTP_RESPONSE_BY_STATUS, ...BY_BODY etc
+     * MatchCondition.DO_NOT_MATCH is ambiguous in this case. Use MatchCondition.DO_NOT_MATCH_HTTP_RESPONSE_BY_STATUS, ...BY_BODY, etc<br>
      * @param expected must be a String or JSON with the following JSON format<br>
      *                 <p>
      *                 {"status": <number> | "<text>", <br>
@@ -101,7 +101,7 @@ public class ObjectMatcher {
      *                 } <br>
      *                 All fields are optional <br>
      * @param actual   must extend org.apache.http.HttpResponse
-     * @return properties captured after the match
+     * @return properties captured after the match <br>
      * Expected object can contain placeholders for capturing values from the actual object: ~[placeholder_name]
      */
     public static <T extends HttpResponse> Map<String, Object> matchHttpResponse(String message, Object expected, T actual, MatchCondition... matchConditions) {
