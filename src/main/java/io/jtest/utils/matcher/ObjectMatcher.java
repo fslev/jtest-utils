@@ -91,7 +91,7 @@ public class ObjectMatcher {
 
     /**
      * Compares two objects representing a HTTP response<br>
-     * MatchCondition.DO_NOT_MATCH is ambiguous in this case. Use MatchCondition.DO_NOT_MATCH_BY_STATUS, ...BY_BODY etc
+     * MatchCondition.DO_NOT_MATCH is ambiguous in this case. Use MatchCondition.DO_NOT_MATCH_HTTP_RESPONSE_BY_STATUS, ...BY_BODY etc
      * @param expected must be a String or JSON with the following JSON format<br>
      *                 <p>
      *                 {"status": <number> | "<text>", <br>
