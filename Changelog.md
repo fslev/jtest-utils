@@ -1,6 +1,7 @@
 # Changelog
 
 ### 1.21-SNAPSHOT
+Enhance documentation  
 
 ### 1.20
 Upgrade dependencies  
