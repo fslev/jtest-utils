@@ -1,7 +1,10 @@
 # Changelog
 
-### 1.21-SNAPSHOT
-Enhance documentation  
+### 1.22-SNAPSHOT
+
+### 1.21
+Enhance documentation    
+Upgrade dependencies  
 
 ### 1.20
 Upgrade dependencies  
