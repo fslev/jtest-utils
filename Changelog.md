@@ -2,6 +2,7 @@
 
 ### 1.22-SNAPSHOT
 Small refactoring of SQL client  
+Upgrade dependencies  
 
 ### 1.21
 Enhance documentation    
