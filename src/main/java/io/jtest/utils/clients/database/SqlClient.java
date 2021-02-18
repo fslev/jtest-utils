@@ -51,15 +51,6 @@ public class SqlClient {
         return pst;
     }
 
-    public void close() throws SQLException {
-        if (pst != null) {
-            pst.close();
-        }
-        if (conn != null) {
-            conn.close();
-        }
-    }
-
     public List<Map<String, Object>> executeQueryAndGetRsAsList() throws SQLException {
         LOG.debug("SQL query: '{}'", sql);
         List<Map<String, Object>> tableData = new ArrayList<>();
@@ -103,6 +94,19 @@ public class SqlClient {
         } finally {
             LOG.debug("SQL affected rows: {}", affected);
             LOG.debug("-----------------------");
+        }
+    }
+
+    public Connection getConnection() {
+        return conn;
+    }
+
+    public void close() throws SQLException {
+        if (pst != null) {
+            pst.close();
+        }
+        if (conn != null) {
+            conn.close();
         }
     }
 }
