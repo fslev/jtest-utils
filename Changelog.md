@@ -1,6 +1,7 @@
 # Changelog
 
 ### 1.22-SNAPSHOT
+Small refactoring of SQL client  
 
 ### 1.21
 Enhance documentation    
