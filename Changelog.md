@@ -1,6 +1,8 @@
 # Changelog
 
-### 1.22-SNAPSHOT
+### 1.23-SNAPSHOT
+
+### 1.22
 Small refactoring of SQL client  
 Upgrade dependencies  
 Enhance error messages while matching HTTP responses    
