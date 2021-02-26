@@ -3,6 +3,7 @@
 ### 1.22-SNAPSHOT
 Small refactoring of SQL client  
 Upgrade dependencies  
+Enhance error messages while matching HTTP responses    
 
 ### 1.21
 Enhance documentation    

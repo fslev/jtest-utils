@@ -24,7 +24,7 @@ class HttpResponseMatcher extends AbstractObjectMatcher<HttpResponseWrapper> {
         this.expectedReason = this.expected.getReasonPhrase();
         this.expectedHeaders = this.expected.getHeaders();
         this.expectedEntity = this.expected.getEntity();
-        String defaultMessage = "\nEXPECTED HTTP Response:\n" + expected + "\nBUT GOT HTTP Response:\n" + actual + "\n";
+        String defaultMessage = "\nEXPECTED HTTP Response:\n" + this.expected + "\nBUT GOT HTTP Response:\n" + this.actual + "\n";
         this.message = this.message != null ? this.message + defaultMessage : defaultMessage;
     }
 
@@ -46,7 +46,7 @@ class HttpResponseMatcher extends AbstractObjectMatcher<HttpResponseWrapper> {
                 if (matchConditions.contains(MatchCondition.DO_NOT_MATCH_HTTP_RESPONSE_BY_STATUS)) {
                     boolean error = false;
                     try {
-                        properties.putAll(new StringMatcher(message, expectedStatus, actual.getStatus(), matchConditions).match());
+                        properties.putAll(new StringMatcher(null, expectedStatus, actual.getStatus(), matchConditions).match());
                     } catch (AssertionError e) {
                         error = true;
                     }
@@ -54,7 +54,8 @@ class HttpResponseMatcher extends AbstractObjectMatcher<HttpResponseWrapper> {
                         fail(negativeMatchMessage);
                     }
                 } else {
-                    properties.putAll(new StringMatcher(message, expectedStatus, actual.getStatus(), matchConditions).match());
+                    properties.putAll(new StringMatcher("\nHTTP Response statuses do not match!\n" + message,
+                            expectedStatus, actual.getStatus(), matchConditions).match());
                 }
             }
 
@@ -62,7 +63,7 @@ class HttpResponseMatcher extends AbstractObjectMatcher<HttpResponseWrapper> {
                 if (matchConditions.contains(MatchCondition.DO_NOT_MATCH_HTTP_RESPONSE_BY_REASON)) {
                     boolean error = false;
                     try {
-                        new StringMatcher(message, expectedReason, actual.getReasonPhrase(), matchConditions).match();
+                        new StringMatcher(null, expectedReason, actual.getReasonPhrase(), matchConditions).match();
                     } catch (AssertionError e) {
                         error = true;
                     }
@@ -70,7 +71,8 @@ class HttpResponseMatcher extends AbstractObjectMatcher<HttpResponseWrapper> {
                         fail(negativeMatchMessage);
                     }
                 } else {
-                    properties.putAll(new StringMatcher(message, expectedReason, actual.getReasonPhrase(), matchConditions).match());
+                    properties.putAll(new StringMatcher("\nHTTP Response reasons do not match!\n" + message,
+                            expectedReason, actual.getReasonPhrase(), matchConditions).match());
                 }
             }
 
@@ -81,7 +83,7 @@ class HttpResponseMatcher extends AbstractObjectMatcher<HttpResponseWrapper> {
                 if (matchConditions.contains(MatchCondition.DO_NOT_MATCH_HTTP_RESPONSE_BY_HEADERS)) {
                     boolean error = false;
                     try {
-                        new JsonMatcher(message, expectedHeaders, actual.getHeaders(), headersMatchConditions).match();
+                        new JsonMatcher(null, expectedHeaders, actual.getHeaders(), headersMatchConditions).match();
                     } catch (AssertionError e) {
                         error = true;
                     }
@@ -89,7 +91,8 @@ class HttpResponseMatcher extends AbstractObjectMatcher<HttpResponseWrapper> {
                         fail(negativeMatchMessage);
                     }
                 } else {
-                    properties.putAll(new JsonMatcher(message, expectedHeaders, actual.getHeaders(), headersMatchConditions).match());
+                    properties.putAll(new JsonMatcher("\nHTTP Response headers do not match!\n" + message,
+                            expectedHeaders, actual.getHeaders(), headersMatchConditions).match());
                 }
             }
 
@@ -97,7 +100,7 @@ class HttpResponseMatcher extends AbstractObjectMatcher<HttpResponseWrapper> {
                 if (matchConditions.contains(MatchCondition.DO_NOT_MATCH_HTTP_RESPONSE_BY_BODY)) {
                     boolean error = false;
                     try {
-                        new FlowMatcher().match(message, expectedEntity, actual.getEntity(), matchConditions);
+                        new FlowMatcher().match(null, expectedEntity, actual.getEntity(), matchConditions);
                     } catch (AssertionError ignored) {
                         error = true;
                     }
@@ -105,7 +108,8 @@ class HttpResponseMatcher extends AbstractObjectMatcher<HttpResponseWrapper> {
                         fail(negativeMatchMessage);
                     }
                 } else {
-                    properties.putAll(new FlowMatcher().match(message, expectedEntity, actual.getEntity(), matchConditions));
+                    properties.putAll(new FlowMatcher().match("\nHTTP Response bodies do not match!\n" + message,
+                            expectedEntity, actual.getEntity(), matchConditions));
                 }
             }
         } catch (InvalidTypeException e) {

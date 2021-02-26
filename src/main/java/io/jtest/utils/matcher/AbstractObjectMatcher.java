@@ -26,7 +26,7 @@ abstract class AbstractObjectMatcher<T> {
         this.actual = convert(actual);
         this.matchConditions = matchConditions != null ? matchConditions : new HashSet<>();
         this.message = message;
-        String defaultNegativeMessage = "\nObjects match!\nEXPECTED:\n" + expected + "\nACTUAL:\n" + actual + "\n";
+        String defaultNegativeMessage = "\nObjects match!\nEXPECTED:\n" + this.expected + "\nACTUAL:\n" + this.actual + "\n";
         this.negativeMatchMessage = message == null ? defaultNegativeMessage : message + "\n" + defaultNegativeMessage;
     }
 
