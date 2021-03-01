@@ -2,6 +2,7 @@
 
 ### 1.23-SNAPSHOT
 Refactor error messages  
+Upgrade dependencies  
 
 ### 1.22
 Small refactoring of SQL client  
