@@ -232,7 +232,7 @@ public class StringMatcherTests {
             new StringMatcher(null, expected, actual, null).match();
         } catch (AssertionError | InvalidTypeException e) {
             assertEquals("\nEXPECTED:\n" +
-                    ".* is regex ~[regex] [0-9]*\n" +
+                    ".* is regex ~[regex] [0-9]*\n\n" +
                     "BUT GOT:\n" +
                     "This is regex a|b|c|d [0-9]*\n", e.getMessage());
             return;
@@ -249,7 +249,7 @@ public class StringMatcherTests {
         } catch (AssertionError | InvalidTypeException e) {
             assertEquals("\n" +
                     "EXPECTED:\n" +
-                    ".* is regex ~[regex]lorem\n" +
+                    ".* is regex ~[regex]lorem\n\n" +
                     "BUT GOT:\n" +
                     "This is regex a|b|c|d\n", e.getMessage());
             return;

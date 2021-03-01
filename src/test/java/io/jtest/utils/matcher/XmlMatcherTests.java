@@ -82,7 +82,7 @@ public class XmlMatcherTests {
         try {
             new XmlMatcher(null, expected, actual, new HashSet<>(Arrays.asList(MatchCondition.DO_NOT_MATCH))).match();
         } catch (AssertionError e) {
-            assertEquals("\nObjects match!\nEXPECTED:\n" + expected + "\nACTUAL:\n" + actual + "\n", e.getMessage());
+            assertEquals("\nObjects match!\nEXPECTED:\n" + expected + "\n\nACTUAL:\n" + actual + "\n", e.getMessage());
             return;
         }
         fail("Negative test failed");
@@ -97,7 +97,7 @@ public class XmlMatcherTests {
         try {
             new XmlMatcher("Should not match", expected, actual, new HashSet<>(Arrays.asList(MatchCondition.DO_NOT_MATCH))).match();
         } catch (AssertionError e) {
-            assertEquals("Should not match\n\nObjects match!\nEXPECTED:\n" + expected + "\nACTUAL:\n" + actual + "\n", e.getMessage());
+            assertEquals("Should not match\n\nObjects match!\nEXPECTED:\n" + expected + "\n\nACTUAL:\n" + actual + "\n", e.getMessage());
             return;
         }
         fail("Negative test failed");
