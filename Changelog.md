@@ -1,6 +1,7 @@
 # Changelog
 
 ### 1.23-SNAPSHOT
+Refactor error messages  
 
 ### 1.22
 Small refactoring of SQL client  

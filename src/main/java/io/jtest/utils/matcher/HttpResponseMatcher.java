@@ -24,7 +24,7 @@ class HttpResponseMatcher extends AbstractObjectMatcher<HttpResponseWrapper> {
         this.expectedReason = this.expected.getReasonPhrase();
         this.expectedHeaders = this.expected.getHeaders();
         this.expectedEntity = this.expected.getEntity();
-        String defaultMessage = "\nEXPECTED HTTP Response:\n" + this.expected + "\nBUT GOT HTTP Response:\n" + this.actual + "\n";
+        String defaultMessage = "\nEXPECTED HTTP Response:\n" + this.expected + "\n\nBUT GOT HTTP Response:\n" + this.actual + "\n";
         this.message = this.message != null ? this.message + defaultMessage : defaultMessage;
     }
 

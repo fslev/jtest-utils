@@ -27,7 +27,7 @@ public class StringMatcher extends AbstractObjectMatcher<Object> {
 
     public StringMatcher(String message, Object expected, Object actual, Set<MatchCondition> matchConditions) throws InvalidTypeException {
         super(message, expected, actual, matchConditions);
-        String defaultMessage = "\nEXPECTED:\n" + this.expected + "\nBUT GOT:\n" + this.actual + "\n";
+        String defaultMessage = "\nEXPECTED:\n" + this.expected + "\n\nBUT GOT:\n" + this.actual + "\n";
         this.message = this.message != null ? defaultMessage + this.message : defaultMessage;
     }
 
