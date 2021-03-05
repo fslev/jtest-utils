@@ -1,6 +1,8 @@
 # Changelog
 
-### 1.23-SNAPSHOT
+### 1.24-SNAPSHOT
+
+### 1.23
 Refactor error messages  
 Upgrade dependencies  
 
