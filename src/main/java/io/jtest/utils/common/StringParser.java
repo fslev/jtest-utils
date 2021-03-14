@@ -45,12 +45,10 @@ public class StringParser {
         }
         String str = source;
         for (String placeholderName : placeholderNames) {
-            if (!placeholderHasValue.test(placeholderName)) {
-                continue;
+            if (placeholderHasValue.test(placeholderName)) {
+                Object val = placeholderValue.apply(placeholderName);
+                str = str.replaceFirst(Pattern.quote(prefix + placeholderName + suffix), val != null ? Matcher.quoteReplacement(val.toString()) : "null");
             }
-            Object val = placeholderValue.apply(placeholderName);
-            str = str.replaceFirst(Pattern.quote(prefix + placeholderName + suffix), val != null ? Matcher.quoteReplacement(val.toString()) : "null");
-
         }
         return str;
     }

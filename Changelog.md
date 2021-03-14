@@ -1,7 +1,10 @@
 # Changelog
 
-### 1.24-SNAPSHOT
-Bump up dependency versions    
+### 1.25-SNAPSHOT
+
+### 1.24
+Bump up dependency versions  
+Refactor StringParser  
 
 ### 1.23
 Refactor error messages  
