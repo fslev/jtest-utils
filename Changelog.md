@@ -1,6 +1,7 @@
 # Changelog
 
 ### 1.24-SNAPSHOT
+Bump up dependency versions    
 
 ### 1.23
 Refactor error messages  
