@@ -1,6 +1,9 @@
 # Changelog
 
-### 1.25-SNAPSHOT
+### 1.26-SNAPSHOT
+
+### 1.25
+Update dependencies  
 
 ### 1.24
 Bump up dependency versions  
