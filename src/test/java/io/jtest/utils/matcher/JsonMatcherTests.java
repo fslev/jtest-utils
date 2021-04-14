@@ -355,4 +355,59 @@ public class JsonMatcherTests {
         new JsonMatcher(null, expected, actual, new HashSet<>(Arrays.asList(MatchCondition.JSON_STRICT_ORDER_ARRAY,
                 MatchCondition.JSON_NON_EXTENSIBLE_OBJECT, MatchCondition.JSON_NON_EXTENSIBLE_ARRAY, MatchCondition.DO_NOT_MATCH))).match();
     }
+
+    @Test
+    public void matchHttpResponsesInJsonFormat() throws InvalidTypeException {
+        String expected = "{\n" +
+                "  \"status\": 202,\n" +
+                "  \"body\": {\n" +
+                "    \"id\": \"~[ipBlockId]\",\n" +
+                "    \"properties\": {\n" +
+                "      \"ips\": [\n" +
+                "        \"~[ipAddress1]\",\n" +
+                "        \"~[ipAddress2]\"\n" +
+                "      ]\n" +
+                "    }\n" +
+                "  },\n" +
+                "  \"headers\": {\n" +
+                "    \"Location\": \".*requests/~[requestId]/status.*\"\n" +
+                "  }\n" +
+                "}";
+        String actual = "{\n" +
+                "  \"status\": 202,\n" +
+                "  \"body\": {\n" +
+                "    \"id\": \"ef0698ab-28d4-47b7-bc39-3f07a3452671\",\n" +
+                "    \"type\": \"ipblock\",\n" +
+                "    \"href\": \"https://api-stage42.k8s.stg.profitbricks.net/cloudapi/v6/ipblocks/ef0698ab-28d4-47b7-bc39-3f07a3452671\",\n" +
+                "    \"metadata\": {\n" +
+                "      \"etag\": \"46ec48c011c4e48ffe3c1f9e78bdd30f\",\n" +
+                "      \"createdDate\": \"2021-04-14T08:20:55Z\",\n" +
+                "      \"createdBy\": \"test.executor@profitbricks.com\",\n" +
+                "      \"createdByUserId\": \"a5e7e4e2-d788-4a23-861a-63f144518063\",\n" +
+                "      \"lastModifiedDate\": \"2021-04-14T08:20:55Z\",\n" +
+                "      \"lastModifiedBy\": \"test.executor@profitbricks.com\",\n" +
+                "      \"lastModifiedByUserId\": \"a5e7e4e2-d788-4a23-861a-63f144518063\",\n" +
+                "      \"state\": \"BUSY\"\n" +
+                "    },\n" +
+                "    \"properties\": {\n" +
+                "      \"ips\": [\n" +
+                "        \"87.106.0.246\",\n" +
+                "        \"87.106.0.247\"\n" +
+                "      ],\n" +
+                "      \"location\": \"de/fkb\",\n" +
+                "      \"size\": 2,\n" +
+                "      \"name\": \"IP Block Cucumber\",\n" +
+                "      \"ipConsumers\": []\n" +
+                "    }\n" +
+                "  },\n" +
+                "  \"headers\": {\n" +
+                "    \"Location\": \".*requests/someRequestId1000/status.*\"\n" +
+                "  }\n" +
+                "}";
+        Map<String, Object> props = new JsonMatcher(null, expected, actual, null).match();
+        assertEquals("ef0698ab-28d4-47b7-bc39-3f07a3452671", props.get("ipBlockId"));
+        assertEquals("87.106.0.246", props.get("ipAddress1"));
+        assertEquals("87.106.0.247", props.get("ipAddress2"));
+        assertEquals("someRequestId1000", props.get("requestId"));
+    }
 }
