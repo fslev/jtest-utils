@@ -23,8 +23,8 @@
         <jsoncompare.version>2.22</jsoncompare.version>
         <xmlunit.version>2.8.2</xmlunit.version>
         <surefire.version>2.22.2</surefire.version>
-        <jackson.version>2.12.2</jackson.version>
-        <spring-expression-version>5.3.5</spring-expression-version>
+        <jackson.version>2.12.3</jackson.version>
+        <spring-expression-version>5.3.6</spring-expression-version>
     </properties>
 
     <dependencies>
