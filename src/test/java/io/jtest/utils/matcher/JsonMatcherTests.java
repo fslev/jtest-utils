@@ -378,14 +378,10 @@ public class JsonMatcherTests {
                 "  \"body\": {\n" +
                 "    \"id\": \"ef0698ab-28d4-47b7-bc39-3f07a3452671\",\n" +
                 "    \"type\": \"ipblock\",\n" +
-                "    \"href\": \"https://api-stage42.k8s.stg.profitbricks.net/cloudapi/v6/ipblocks/ef0698ab-28d4-47b7-bc39-3f07a3452671\",\n" +
                 "    \"metadata\": {\n" +
                 "      \"etag\": \"46ec48c011c4e48ffe3c1f9e78bdd30f\",\n" +
                 "      \"createdDate\": \"2021-04-14T08:20:55Z\",\n" +
-                "      \"createdBy\": \"test.executor@profitbricks.com\",\n" +
-                "      \"createdByUserId\": \"a5e7e4e2-d788-4a23-861a-63f144518063\",\n" +
                 "      \"lastModifiedDate\": \"2021-04-14T08:20:55Z\",\n" +
-                "      \"lastModifiedBy\": \"test.executor@profitbricks.com\",\n" +
                 "      \"lastModifiedByUserId\": \"a5e7e4e2-d788-4a23-861a-63f144518063\",\n" +
                 "      \"state\": \"BUSY\"\n" +
                 "    },\n" +
