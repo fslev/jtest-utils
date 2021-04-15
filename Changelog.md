@@ -1,6 +1,9 @@
 # Changelog
 
-### 1.28-SNAPSHOT
+### 1.29-SNAPSHOT
+
+### 1.28
+Update dependencies  
 
 ### 1.27
 Update dependencies  
