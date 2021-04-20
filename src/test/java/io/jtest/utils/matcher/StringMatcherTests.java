@@ -488,7 +488,7 @@ public class StringMatcherTests {
 
     @Test(expected = AssertionError.class)
     public void compareRegexWithPositiveAndNegativeLookAhead_negative1() throws InvalidTypeException {
-        String expected = "(?=.*(lorem|ipsum x))(?!.*(zzz\n|ipsum l)).*";
+        String expected = "(?=.*(lorem|ipsum x))\n(?!.*(zzz\n|ipsum l)).*";
         String actual = "some\n ipsum lorem and\n more";
         new StringMatcher(null, expected, actual, null).match();
     }
