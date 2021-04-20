@@ -444,4 +444,31 @@ public class StringMatcherTests {
         assertEquals("na \nSo", props.get("var4"));
     }
 
+    @Test
+    public void compareRegexWithPositiveLookAhead() throws InvalidTypeException {
+        String expected = "(?=.*(zzz\n|ipsum l)).*";
+        String actual = "some\n ipsum lorem and\n more";
+        new StringMatcher(null, expected, actual, null).match();
+    }
+
+    @Test(expected = AssertionError.class)
+    public void compareRegexWithPositiveLookAhead_negative() throws InvalidTypeException {
+        String expected = "(?=.*(zzz\n|ipsum a)).*";
+        String actual = "some\n ipsum lorem and\n more";
+        new StringMatcher(null, expected, actual, null).match();
+    }
+
+    @Test
+    public void compareRegexWithNegativeLookAhead() throws InvalidTypeException {
+        String expected = "(?!.*(zzz\n|ipsum x)).*";
+        String actual = "some\n ipsum lorem and\n more";
+        new StringMatcher(null, expected, actual, null).match();
+    }
+
+    @Test(expected = AssertionError.class)
+    public void compareRegexWithNegativeLookAhead_negative() throws InvalidTypeException {
+        String expected = "(?!.*(zzz\n|ipsum l)).*";
+        String actual = "some\n ipsum lorem and\n more";
+        new StringMatcher(null, expected, actual, null).match();
+    }
 }
