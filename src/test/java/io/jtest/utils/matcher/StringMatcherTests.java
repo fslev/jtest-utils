@@ -449,7 +449,7 @@ public class StringMatcherTests {
         String expected = "(?=.*(zzz\n|ipsum l)).*";
         String actual = "some\n ipsum lorem and\n more";
         new StringMatcher(null, expected, actual, null).match();
-        expected = "(?=.*lorem)(?=.*ipsum l).*";
+        expected = "(?=.*lorem).*\n(?=.*ipsum l).*";
         new StringMatcher(null, expected, actual, null).match();
 
     }
