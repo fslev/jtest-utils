@@ -447,9 +447,9 @@ public class StringMatcherTests {
     @Test
     public void compareRegexWithPositiveLookAhead() throws InvalidTypeException {
         String expected = "(?=.*(zzz\n|ipsum l)).*";
-        String actual = "some\n ipsum lorem and\n more";
+        String actual = "some ipsum lorem and\n more";
         new StringMatcher(null, expected, actual, null).match();
-        expected = "(?=.*lorem).*\n(?=.*ipsum l).*";
+        expected = "(?=.*lorem.*\n)(?=.*ipsum l).*";
         new StringMatcher(null, expected, actual, null).match();
 
     }
