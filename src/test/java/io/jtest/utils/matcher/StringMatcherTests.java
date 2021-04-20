@@ -471,4 +471,25 @@ public class StringMatcherTests {
         String actual = "some\n ipsum lorem and\n more";
         new StringMatcher(null, expected, actual, null).match();
     }
+
+    @Test
+    public void compareRegexWithPositiveAndNegativeLookAhead() throws InvalidTypeException {
+        String expected = "(?=.*(lorem|ipsum x))(?!.*(zzz\n|ipsum x)).*";
+        String actual = "some\n ipsum lorem and\n more";
+        new StringMatcher(null, expected, actual, null).match();
+    }
+
+    @Test(expected = AssertionError.class)
+    public void compareRegexWithPositiveAndNegativeLookAhead_negative() throws InvalidTypeException {
+        String expected = "(?=.*(lorems|ipsum x))(?!.*(zzz\n|ipsum x)).*";
+        String actual = "some\n ipsum lorem and\n more";
+        new StringMatcher(null, expected, actual, null).match();
+    }
+
+    @Test(expected = AssertionError.class)
+    public void compareRegexWithPositiveAndNegativeLookAhead_negative1() throws InvalidTypeException {
+        String expected = "(?=.*(lorem|ipsum x))(?!.*(zzz\n|ipsum l)).*";
+        String actual = "some\n ipsum lorem and\n more";
+        new StringMatcher(null, expected, actual, null).match();
+    }
 }
