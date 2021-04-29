@@ -1,6 +1,6 @@
 # Changelog
 
-### 1.230-SNAPSHOT
+### 1.30-SNAPSHOT
 
 ### 1.29
 Ignore error if entity cannot be consumed  
