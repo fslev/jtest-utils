@@ -66,9 +66,12 @@ public class HttpResponseWrapper {
             } catch (Exception e) {
                 throw new IOException("Cannot extract entity from HTTP Response", e);
             } finally {
-                EntityUtils.consume(entity);
-                if (content != null) {
-                    response.setEntity(new StringEntity(content));
+                try {
+                    EntityUtils.consume(entity);
+                    if (content != null) {
+                        response.setEntity(new StringEntity(content));
+                    }
+                } catch (Exception ignored) {
                 }
             }
         }

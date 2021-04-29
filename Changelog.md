@@ -1,6 +1,9 @@
 # Changelog
 
-### 1.29-SNAPSHOT
+### 1.230-SNAPSHOT
+
+### 1.29
+Ignore error if entity cannot be consumed  
 
 ### 1.28
 Update dependencies  
