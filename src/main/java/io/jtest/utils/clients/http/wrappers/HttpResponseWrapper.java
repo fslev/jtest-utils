@@ -68,10 +68,10 @@ public class HttpResponseWrapper {
             } finally {
                 try {
                     EntityUtils.consume(entity);
-                    if (content != null) {
-                        response.setEntity(new StringEntity(content));
-                    }
                 } catch (Exception ignored) {
+                }
+                if (content != null) {
+                    response.setEntity(new StringEntity(content));
                 }
             }
         }

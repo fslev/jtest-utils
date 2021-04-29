@@ -10,6 +10,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 
 public class HttpRequestLoggerInterceptor implements HttpRequestInterceptor {
@@ -33,17 +34,21 @@ public class HttpRequestLoggerInterceptor implements HttpRequestInterceptor {
                         entityEnclosingRequest = (HttpEntityEnclosingRequest) request;
                         HttpEntity entity = entityEnclosingRequest.getEntity();
                         try {
-                            content = EntityUtils.toString(entity);
+                            content = entity != null ? EntityUtils.toString(entity) : null;
                         } catch (IOException e) {
                             LOG.error(e);
                         } finally {
                             try {
                                 EntityUtils.consume(entity);
-                                if (content != null) {
-                                    entityEnclosingRequest.setEntity(new StringEntity(content));
-                                }
-                            } catch (IOException e) {
+                            } catch (Exception e) {
                                 LOG.error(e);
+                            }
+                            if (content != null) {
+                                try {
+                                    entityEnclosingRequest.setEntity(new StringEntity(content));
+                                } catch (UnsupportedEncodingException e) {
+                                    LOG.error(e);
+                                }
                             }
                         }
                     }
