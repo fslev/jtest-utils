@@ -1,6 +1,7 @@
 # Changelog
 
 ### 1.31-SNAPSHOT
+Refactoring  
 
 ### 1.30
 Bug fix  
