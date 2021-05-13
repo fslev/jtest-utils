@@ -24,7 +24,7 @@
         <xmlunit.version>2.8.2</xmlunit.version>
         <surefire.version>2.22.2</surefire.version>
         <jackson.version>2.12.3</jackson.version>
-        <spring-expression-version>5.3.6</spring-expression-version>
+        <spring-expression-version>5.3.7</spring-expression-version>
     </properties>
 
     <dependencies>
@@ -43,7 +43,7 @@
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>8.0.24</version>
+            <version>8.0.25</version>
         </dependency>
         <dependency>
             <groupId>org.postgresql</groupId>
