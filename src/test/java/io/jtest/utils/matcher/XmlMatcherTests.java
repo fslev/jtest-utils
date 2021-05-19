@@ -238,4 +238,12 @@ public class XmlMatcherTests {
         String actual = "<struct><boolean>false</boolean><int a=\"2\" b=\"3\">3da</int></struct>";
         new XmlMatcher("", expected, actual, new HashSet<>(Collections.singleton(MatchCondition.XML_ELEMENT_NUM_ATTRIBUTES))).match();
     }
+
+    @Test
+    public void matchWithNameSpaces() throws InvalidTypeException {
+        String expected = "<struct><int a=\"[0-9]*\">3da</int><boolean>.*</boolean></struct>";
+        String actual = "<?xml version=\"1.0\"?>\n" +
+                "<struct xmlns:opt=\"http://test.net/test.optional.xml\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"http://www.test/config.xml\" xsi:schemaLocation=\"http://www.test/config.xml file:///usr/test/java/test/schema/config.xsd\"><boolean>false</boolean><int a=\"2\" b=\"3\">3da</int></struct>";
+        new XmlMatcher("", expected, actual, null).match();
+    }
 }

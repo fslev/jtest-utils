@@ -48,6 +48,9 @@ public class CustomXmlComparator implements DifferenceEvaluator {
                 || comparisonType == ComparisonType.XML_VERSION
                 || comparisonType == ComparisonType.XML_STANDALONE
                 || comparisonType == ComparisonType.NO_NAMESPACE_SCHEMA_LOCATION
+                || comparisonType == ComparisonType.NAMESPACE_URI
+                || comparisonType == ComparisonType.NAMESPACE_PREFIX
+                || comparisonType == ComparisonType.SCHEMA_LOCATION
                 || comparison.getControlDetails().getTarget() == null) {
             return ComparisonResult.SIMILAR;
         }
@@ -70,7 +73,6 @@ public class CustomXmlComparator implements DifferenceEvaluator {
         if (comparisonType.equals(ComparisonType.ATTR_NAME_LOOKUP)) {
             return compare(Nodes.getAttributes(expectedNode), Nodes.getAttributes(actualNode));
         }
-
         return comparisonResult;
     }
 
@@ -119,5 +121,4 @@ public class CustomXmlComparator implements DifferenceEvaluator {
     public Map<String, Object> getGeneratedProperties() {
         return generatedProperties;
     }
-
 }

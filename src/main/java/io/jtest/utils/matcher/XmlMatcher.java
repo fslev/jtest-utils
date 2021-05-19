@@ -75,7 +75,7 @@ public class XmlMatcher extends AbstractObjectMatcher<String> {
 
         @Override
         public boolean canBeCompared(Element controlElement, Element testElement) {
-            if (controlElement == null || testElement == null || !Nodes.getQName(controlElement).equals(Nodes.getQName(testElement))) {
+            if (controlElement == null || testElement == null || !controlElement.getNodeName().equals(testElement.getNodeName())) {
                 return false;
             }
             try {
