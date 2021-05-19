@@ -1,7 +1,10 @@
 # Changelog
 
-### 1.31-SNAPSHOT
+### 1.32-SNAPSHOT
+
+### 1.31
 Refactoring  
+Ignore XML namespaces match  
 
 ### 1.30
 Bug fix  
