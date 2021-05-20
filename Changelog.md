@@ -1,6 +1,9 @@
 # Changelog
 
-### 1.33-SNAPSHOT
+### 1.34-SNAPSHOT
+
+### 1.33
+Handle XML parsing errors  
 
 ### 1.32
 XMLMatcher - Bug fix  
