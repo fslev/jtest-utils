@@ -1,8 +1,11 @@
 package io.jtest.utils.common;
 
 import org.w3c.dom.Node;
+import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
 
+import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.OutputKeys;
@@ -40,8 +43,21 @@ public class XmlUtils {
      */
     public static Node toNode(Object xml) throws ParserConfigurationException, IOException, SAXException {
         if (!(xml instanceof Node)) {
-            return DocumentBuilderFactory.newInstance().newDocumentBuilder()
-                    .parse(new ByteArrayInputStream(xml.toString().getBytes())).getDocumentElement();
+            DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+            builder.setErrorHandler(new ErrorHandler() {
+                @Override
+                public void warning(SAXParseException e) throws SAXException {
+                }
+
+                @Override
+                public void error(SAXParseException e) throws SAXException {
+                }
+
+                @Override
+                public void fatalError(SAXParseException e) throws SAXException {
+                }
+            });
+            return builder.parse(new ByteArrayInputStream(xml.toString().getBytes())).getDocumentElement();
         }
         return (Node) xml;
     }
