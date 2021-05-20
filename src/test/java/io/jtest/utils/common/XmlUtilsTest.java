@@ -37,7 +37,7 @@ public class XmlUtilsTest {
 
     @Test
     public void testXmlSpecialRegexChars() throws IOException, SAXException, ParserConfigurationException {
-        Map<String, List<String>> result = XmlUtils.walkXmlAndProcessNodes(ResourceUtils.read("xml/regex_chars/test1.xml"),
+        Map<String, List<String>> result = XmlUtils.walkXmlAndProcessNodes(XmlUtils.toNode(ResourceUtils.read("xml/regex_chars/test1.xml")),
                 extractSpecialRegexCharsFct);
         assertEquals(Arrays.asList("."), result.get("/cata.log"));
         assertEquals(Arrays.asList("."), result.get("/cata.log/product/catalog_item[1]/item_num.ber"));
@@ -53,7 +53,7 @@ public class XmlUtilsTest {
 
     @Test
     public void testXmlSpecialRegexChars_fromXmlWithNone() throws IOException, SAXException, ParserConfigurationException {
-        Map<String, List<String>> result = XmlUtils.walkXmlAndProcessNodes("<a><b>lorem ips'um</b></a>", extractSpecialRegexCharsFct);
+        Map<String, List<String>> result = XmlUtils.walkXmlAndProcessNodes(XmlUtils.toNode("<a><b>lorem ips'um</b></a>"), extractSpecialRegexCharsFct);
         assertTrue(result.isEmpty());
     }
 }

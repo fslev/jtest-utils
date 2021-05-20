@@ -3,45 +3,53 @@ package io.jtest.utils.matcher;
 import io.jtest.utils.common.RegexUtils;
 import io.jtest.utils.common.XmlUtils;
 import io.jtest.utils.exceptions.InvalidTypeException;
-import io.jtest.utils.matcher.comparators.xml.CustomXmlComparator;
-import io.jtest.utils.matcher.comparators.xml.XmlMatchException;
+import io.jtest.utils.matcher.comparators.xml.CustomXmlDiffEvaluator;
 import io.jtest.utils.matcher.condition.MatchCondition;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.xmlunit.diff.DefaultNodeMatcher;
 import org.xmlunit.diff.DifferenceEvaluators;
 import org.xmlunit.diff.ElementSelector;
-import org.xmlunit.util.Nodes;
+import ro.skyah.util.MessageUtil;
 
+import javax.xml.transform.TransformerException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static io.jtest.utils.common.XmlUtils.isValid;
+import static io.jtest.utils.common.XmlUtils.toNode;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.fail;
 import static org.xmlunit.matchers.CompareMatcher.isSimilarTo;
 
-public class XmlMatcher extends AbstractObjectMatcher<String> {
+public class XmlMatcher extends AbstractObjectMatcher<Node> {
 
-    private final CustomXmlComparator comparator;
+    private final CustomXmlDiffEvaluator diffEvaluator;
 
     public XmlMatcher(String message, Object expected, Object actual, Set<MatchCondition> matchConditions) throws InvalidTypeException {
         super(message, expected, actual, matchConditions);
-        this.comparator = new CustomXmlComparator(this.matchConditions);
+        this.message += "\n\nEXPECTED:\n" + toString(this.expected) + "\n\nBUT GOT ACTUAL:\n" + toString(this.actual) + "\n";
+        this.diffEvaluator = new CustomXmlDiffEvaluator(this.matchConditions);
     }
 
     @Override
-    String convert(Object value) throws InvalidTypeException {
-        if (value == null) {
+    protected String toString(Node value) {
+        try {
+            return MessageUtil.cropXL(XmlUtils.toString(value));
+        } catch (TransformerException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    Node convert(Object value) throws InvalidTypeException {
+        try {
+            return toNode(value);
+        } catch (Exception e) {
             throw new InvalidTypeException("Invalid XML");
         }
-        String stringXML = value.toString();
-        if (!isValid(stringXML)) {
-            throw new InvalidTypeException("Invalid XML");
-        }
-        return stringXML;
     }
 
     @Override
@@ -61,34 +69,46 @@ public class XmlMatcher extends AbstractObjectMatcher<String> {
     private Map<String, Object> positiveMatch() {
         try {
             assertThat(message, actual, isSimilarTo(expected).ignoreWhitespace()
-                    .withNodeMatcher(new DefaultNodeMatcher(new ByNameAttrAndTextSelector()))
+                    .withNodeMatcher(new DefaultNodeMatcher(new ByNameAndSiblingOfSameNameAndTypeSelector()))
                     .withDifferenceEvaluator(
-                            DifferenceEvaluators.chain(comparator)));
+                            DifferenceEvaluators.chain(diffEvaluator)));
         } catch (AssertionError e) {
             debugIfXmlContainsUnintentionalRegexChars(expected);
             throw e;
         }
-        return comparator.getGeneratedProperties();
+        return diffEvaluator.getGeneratedProperties();
     }
 
-    class ByNameAttrAndTextSelector implements ElementSelector {
-
+    private class ByNameAndSiblingOfSameNameAndTypeSelector implements ElementSelector {
         @Override
         public boolean canBeCompared(Element controlElement, Element testElement) {
             if (controlElement == null || testElement == null || !controlElement.getNodeName().equals(testElement.getNodeName())) {
                 return false;
             }
-            try {
-                comparator.match(Nodes.getAttributes(controlElement), Nodes.getAttributes(testElement));
-                comparator.match(Nodes.getMergedNestedText(controlElement), Nodes.getMergedNestedText(testElement));
-                return true;
-            } catch (XmlMatchException e) {
-                return false;
+            if (hasSiblingsWithSameNameAndType(testElement)) {
+                try {
+                    new XmlMatcher(message, controlElement, testElement, matchConditions).match();
+                } catch (AssertionError | InvalidTypeException e) {
+                    return false;
+                }
             }
+            return true;
         }
     }
 
-    private static void debugIfXmlContainsUnintentionalRegexChars(String xml) {
+    private static boolean hasSiblingsWithSameNameAndType(Element element) {
+        Node sibling = element.getNextSibling();
+        while (sibling != null) {
+            if (element.getNodeType() == sibling.getNodeType() &&
+                    element.getNodeName().equals(sibling.getNodeName())) {
+                return true;
+            }
+            sibling = sibling.getNextSibling();
+        }
+        return false;
+    }
+
+    private static void debugIfXmlContainsUnintentionalRegexChars(Node xml) {
         if (LOG.isDebugEnabled()) {
             try {
                 Map<String, List<String>> specialRegexChars = XmlUtils.walkXmlAndProcessNodes(xml, nodeValue -> {

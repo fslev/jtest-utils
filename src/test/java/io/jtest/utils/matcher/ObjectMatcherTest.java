@@ -11,7 +11,6 @@ import static org.junit.Assert.assertTrue;
 
 public class ObjectMatcherTest {
 
-
     @Test
     public void compareNulls() {
         Map<String, Object> symbols = ObjectMatcher.match(null, null, null);

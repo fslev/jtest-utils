@@ -82,7 +82,13 @@ public class XmlMatcherTests {
         try {
             new XmlMatcher(null, expected, actual, new HashSet<>(Arrays.asList(MatchCondition.DO_NOT_MATCH))).match();
         } catch (AssertionError e) {
-            assertEquals("\nObjects match!\nEXPECTED:\n" + expected + "\n\nACTUAL:\n" + actual + "\n", e.getMessage());
+            assertEquals("\nObjects match!\nEXPECTED:\n" + "<struct>\n" +
+                    "    <int>test</int>\n" +
+                    "    <boolean>false</boolean>\n" +
+                    "</struct>" + "\n\n\nACTUAL:\n" + "<struct>\n" +
+                    "    <boolean>false</boolean>\n" +
+                    "    <int>test</int>\n" +
+                    "</struct>" + "\n\n", e.getMessage());
             return;
         }
         fail("Negative test failed");
@@ -97,7 +103,13 @@ public class XmlMatcherTests {
         try {
             new XmlMatcher("Should not match", expected, actual, new HashSet<>(Arrays.asList(MatchCondition.DO_NOT_MATCH))).match();
         } catch (AssertionError e) {
-            assertEquals("Should not match\n\nObjects match!\nEXPECTED:\n" + expected + "\n\nACTUAL:\n" + actual + "\n", e.getMessage());
+            assertEquals("Should not match\n\nObjects match!\nEXPECTED:\n" + "<struct>\n" +
+                    "    <int>test</int>\n" +
+                    "    <boolean>false</boolean>\n" +
+                    "</struct>" + "\n\n\nACTUAL:\n" + "<struct>\n" +
+                    "    <boolean>false</boolean>\n" +
+                    "    <int>test</int>\n" +
+                    "</struct>" + "\n\n", e.getMessage());
             return;
         }
         fail("Negative test failed");
@@ -219,6 +231,13 @@ public class XmlMatcherTests {
     }
 
     @Test
+    public void compareXmlAttributesFromSiblings() throws InvalidTypeException {
+        String expected = "<struct><a attr1=\"x\">lorem</a></struct>";
+        String actual = "<struct><a attr1=\"y\">ipsum</a><a attr1=\"x\">lorem</a></struct>";
+        new XmlMatcher("", expected, actual, new HashSet<>(Collections.singleton(MatchCondition.XML_ELEMENT_NUM_ATTRIBUTES))).match();
+    }
+
+    @Test
     public void doNotMatchXmlAttributesWithLength() throws InvalidTypeException {
         String expected = "<struct><int a=\"[0-9]*\">3da</int><boolean>.*</boolean></struct>";
         String actual = "<struct><boolean>false</boolean><int a=\"2\" b=\"3\">3da</int></struct>";
@@ -245,5 +264,30 @@ public class XmlMatcherTests {
         String actual = "<?xml version=\"1.0\"?>\n" +
                 "<struct xmlns:opt=\"http://test.net/test.optional.xml\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"http://www.test/config.xml\" xsi:schemaLocation=\"http://www.test/config.xml file:///usr/test/java/test/schema/config.xsd\"><boolean>false</boolean><int a=\"2\" b=\"3\">3da</int></struct>";
         new XmlMatcher("", expected, actual, null).match();
+    }
+
+    @Test
+    public void matchInnerLists() throws InvalidTypeException {
+        String expected = "<config>\n" +
+                "    <protocols>\n" +
+                "      <ldp>" +
+                "           <a>1</a>" +
+                "      </ldp>\n" +
+                "    </protocols>\n" +
+                "</config>";
+        String actual = "<config>\n" +
+                "   <protocols>\n" +
+                "       <ldp>" +
+                "           <a>2</a>" +
+                "       </ldp>" +
+                "       <ldp>" +
+                "           <a>1</a>" +
+                "       </ldp>\n" +
+                "       <ldp>" +
+                "           <a>3</a>" +
+                "       </ldp>\n" +
+                "   </protocols>\n" +
+                "</config>\n";
+        new XmlMatcher("Failed", expected, actual, null).match();
     }
 }

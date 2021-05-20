@@ -1,6 +1,9 @@
 # Changelog
 
-### 1.32-SNAPSHOT
+### 1.33-SNAPSHOT
+
+### 1.32
+XMLMatcher - Bug fix  
 
 ### 1.31
 Refactoring  

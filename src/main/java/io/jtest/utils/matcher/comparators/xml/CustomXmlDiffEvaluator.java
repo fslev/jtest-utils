@@ -17,12 +17,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-public class CustomXmlComparator implements DifferenceEvaluator {
+public class CustomXmlDiffEvaluator implements DifferenceEvaluator {
 
     private final Map<String, Object> generatedProperties = new HashMap<>();
     private final Set<MatchCondition> matchConditions;
 
-    public CustomXmlComparator(Set<MatchCondition> matchConditions) {
+    public CustomXmlDiffEvaluator(Set<MatchCondition> matchConditions) {
         this.matchConditions = matchConditions;
     }
 

@@ -16,7 +16,7 @@ abstract class AbstractObjectMatcher<T> {
     protected static final Logger LOG = LogManager.getLogger();
 
     protected String message;
-    protected final String negativeMatchMessage;
+    protected String negativeMatchMessage;
     protected T expected;
     protected T actual;
     protected Set<MatchCondition> matchConditions;
@@ -26,8 +26,12 @@ abstract class AbstractObjectMatcher<T> {
         this.actual = convert(actual);
         this.matchConditions = matchConditions != null ? matchConditions : new HashSet<>();
         this.message = message;
-        String defaultNegativeMessage = "\nObjects match!\nEXPECTED:\n" + this.expected + "\n\nACTUAL:\n" + this.actual + "\n";
+        String defaultNegativeMessage = "\nObjects match!\nEXPECTED:\n" + toString(this.expected) + "\n\nACTUAL:\n" + toString(this.actual) + "\n";
         this.negativeMatchMessage = message == null ? defaultNegativeMessage : message + "\n" + defaultNegativeMessage;
+    }
+
+    protected String toString(T value) {
+        return value != null ? value.toString() : null;
     }
 
     abstract T convert(Object value) throws InvalidTypeException;
