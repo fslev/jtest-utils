@@ -4,6 +4,7 @@ import io.jtest.utils.exceptions.InvalidTypeException;
 import io.jtest.utils.matcher.condition.MatchCondition;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import ro.skyah.util.MessageUtil;
 
 import java.util.HashSet;
 import java.util.Map;
@@ -26,8 +27,12 @@ abstract class AbstractObjectMatcher<T> {
         this.actual = convert(actual);
         this.matchConditions = matchConditions != null ? matchConditions : new HashSet<>();
         this.message = message;
-        String defaultNegativeMessage = "\nObjects match!\nEXPECTED:\n" + toString(this.expected) + "\n\nACTUAL:\n" + toString(this.actual) + "\n";
-        this.negativeMatchMessage = message == null ? defaultNegativeMessage : message + "\n" + defaultNegativeMessage;
+        this.negativeMatchMessage = message == null ? negativeMatchMessage() : message + "\n" + negativeMatchMessage();
+    }
+
+    private String negativeMatchMessage() {
+        return "\nObjects match!\nEXPECTED:\n" + MessageUtil.cropXXL(toString(this.expected))
+                + "\n\nACTUAL:\n" + MessageUtil.cropXXL(toString(this.actual)) + "\n";
     }
 
     protected String toString(T value) {

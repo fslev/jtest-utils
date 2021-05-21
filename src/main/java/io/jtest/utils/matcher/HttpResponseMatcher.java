@@ -4,6 +4,7 @@ package io.jtest.utils.matcher;
 import io.jtest.utils.clients.http.wrappers.HttpResponseWrapper;
 import io.jtest.utils.exceptions.InvalidTypeException;
 import io.jtest.utils.matcher.condition.MatchCondition;
+import ro.skyah.util.MessageUtil;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,7 +25,8 @@ class HttpResponseMatcher extends AbstractObjectMatcher<HttpResponseWrapper> {
         this.expectedReason = this.expected.getReasonPhrase();
         this.expectedHeaders = this.expected.getHeaders();
         this.expectedEntity = this.expected.getEntity();
-        String defaultMessage = "\nEXPECTED HTTP Response:\n" + this.expected + "\n\nBUT GOT HTTP Response:\n" + this.actual + "\n";
+        String defaultMessage = "\nEXPECTED HTTP Response:\n" + MessageUtil.cropXXL(toString(this.expected))
+                + "\n\nBUT GOT HTTP Response:\n" + MessageUtil.cropXXL(toString(this.actual)) + "\n";
         this.message = this.message != null ? this.message + defaultMessage : defaultMessage;
     }
 

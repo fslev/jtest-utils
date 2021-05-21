@@ -1,6 +1,9 @@
 # Changelog
 
-### 1.34-SNAPSHOT
+### 1.35-SNAPSHOT
+
+### 1.34
+Crop long messages  
 
 ### 1.33
 Handle XML parsing errors  
