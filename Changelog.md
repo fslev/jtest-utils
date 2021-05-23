@@ -1,6 +1,9 @@
 # Changelog
 
-### 1.35-SNAPSHOT
+### 1.36-SNAPSHOT
+
+### 1.35
+Update json-compare      
 
 ### 1.34
 Crop long messages  
