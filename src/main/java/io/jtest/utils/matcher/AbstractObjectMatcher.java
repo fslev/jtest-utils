@@ -31,8 +31,8 @@ abstract class AbstractObjectMatcher<T> {
     }
 
     private String negativeMatchMessage() {
-        return "\nObjects match!\nEXPECTED:\n" + MessageUtil.cropXXL(toString(this.expected))
-                + "\n\nACTUAL:\n" + MessageUtil.cropXXL(toString(this.actual)) + "\n";
+        return "\nObjects match!\nEXPECTED:\n" + MessageUtil.cropL(toString(this.expected))
+                + "\n\nACTUAL:\n" + MessageUtil.cropL(toString(this.actual)) + "\n";
     }
 
     protected String toString(T value) {

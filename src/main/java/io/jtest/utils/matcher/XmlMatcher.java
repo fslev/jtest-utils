@@ -31,8 +31,8 @@ public class XmlMatcher extends AbstractObjectMatcher<Node> {
 
     public XmlMatcher(String message, Object expected, Object actual, Set<MatchCondition> matchConditions) throws InvalidTypeException {
         super(message, expected, actual, matchConditions);
-        this.message += "\n\nEXPECTED:\n" + MessageUtil.cropXXL(toString(this.expected))
-                + "\n\nBUT GOT ACTUAL:\n" + MessageUtil.cropXXL(toString(this.actual)) + "\n";
+        this.message += "\n\nEXPECTED:\n" + MessageUtil.cropL(toString(this.expected))
+                + "\n\nBUT GOT ACTUAL:\n" + MessageUtil.cropL(toString(this.actual)) + "\n";
         this.diffEvaluator = new CustomXmlDiffEvaluator(this.matchConditions);
     }
 
