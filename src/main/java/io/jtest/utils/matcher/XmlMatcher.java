@@ -10,6 +10,7 @@ import org.w3c.dom.Node;
 import org.xmlunit.diff.DefaultNodeMatcher;
 import org.xmlunit.diff.DifferenceEvaluators;
 import org.xmlunit.diff.ElementSelector;
+import org.xmlunit.diff.XPathContext;
 import ro.skyah.util.MessageUtil;
 
 import javax.xml.transform.TransformerException;
@@ -86,18 +87,28 @@ public class XmlMatcher extends AbstractObjectMatcher<Node> {
             if (controlElement == null || testElement == null || !controlElement.getNodeName().equals(testElement.getNodeName())) {
                 return false;
             }
-            if (hasSiblingsWithSameNameAndType(testElement)) {
+            if (hasNextSiblingWithSameNameAndType(testElement)) {
                 try {
                     new XmlMatcher(message, controlElement, testElement, matchConditions).match();
+                    return true;
                 } catch (AssertionError | InvalidTypeException e) {
                     return false;
+                }
+            } else {
+                if (hasPreviousSiblingWithSameNameAndType(testElement)) {
+                    try {
+                        new XmlMatcher(message, controlElement, testElement, matchConditions).match();
+                        return true;
+                    } catch (AssertionError | InvalidTypeException e) {
+                        throw new AssertionError("Expected element " + new XPathContext(controlElement).getXPath() + " doesn't match any actual element");
+                    }
                 }
             }
             return true;
         }
     }
 
-    private static boolean hasSiblingsWithSameNameAndType(Element element) {
+    private static boolean hasNextSiblingWithSameNameAndType(Element element) {
         Node sibling = element.getNextSibling();
         while (sibling != null) {
             if (element.getNodeType() == sibling.getNodeType() &&
@@ -105,6 +116,18 @@ public class XmlMatcher extends AbstractObjectMatcher<Node> {
                 return true;
             }
             sibling = sibling.getNextSibling();
+        }
+        return false;
+    }
+
+    private static boolean hasPreviousSiblingWithSameNameAndType(Element element) {
+        Node sibling = element.getPreviousSibling();
+        while (sibling != null) {
+            if (element.getNodeType() == sibling.getNodeType() &&
+                    element.getNodeName().equals(sibling.getNodeName())) {
+                return true;
+            }
+            sibling = sibling.getPreviousSibling();
         }
         return false;
     }

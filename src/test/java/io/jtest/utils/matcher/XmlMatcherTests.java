@@ -290,4 +290,34 @@ public class XmlMatcherTests {
                 "</config>\n";
         new XmlMatcher("Failed", expected, actual, null).match();
     }
+
+    @Test
+    public void matchInnerLists_negative() throws InvalidTypeException {
+        try {
+            String expected = "<config>\n" +
+                    "    <protocols>\n" +
+                    "      <ldp>" +
+                    "           <a attr1=\"test\">1</a>" +
+                    "      </ldp>\n" +
+                    "    </protocols>\n" +
+                    "</config>";
+            String actual = "<config>\n" +
+                    "   <protocols>\n" +
+                    "       <ldp>" +
+                    "           <a>2</a>" +
+                    "       </ldp>" +
+                    "       <ldp>" +
+                    "           <a attr1=\"test\">01</a>" +
+                    "       </ldp>\n" +
+                    "       <ldp>" +
+                    "           <a attr2=\"test\" attr1=\"test\">3</a>" +
+                    "       </ldp>\n" +
+                    "   </protocols>\n" +
+                    "</config>\n";
+            new XmlMatcher("Failed", expected, actual, null).match();
+            fail("XMLs match");
+        } catch (AssertionError e) {
+            assertTrue(e.getMessage().contains("doesn't match any actual element"));
+        }
+    }
 }

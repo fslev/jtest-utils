@@ -1,6 +1,10 @@
 # Changelog
 
-### 1.36-SNAPSHOT
+### 1.37-SNAPSHOT
+
+### 1.36
+XML matcher bug fix  
+Update json-compare
 
 ### 1.35
 Update json-compare      
