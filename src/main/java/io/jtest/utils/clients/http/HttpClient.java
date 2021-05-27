@@ -119,6 +119,10 @@ public class HttpClient {
         return serviceUnavailableRetryStrategy;
     }
 
+    public HttpContext getContext() {
+        return context;
+    }
+
     public void close() throws IOException {
         this.client.close();
     }
