@@ -17,6 +17,7 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.protocol.HttpContext;
 
 import javax.net.ssl.*;
 import java.io.IOException;
@@ -44,6 +45,7 @@ public class HttpClient {
     private final CookieStore cookieStore;
     private final CloseableHttpClient client;
     private final HttpRequestBase request;
+    private final HttpContext context;
 
     protected HttpClient(Builder builder) {
         validateMethod(builder);
@@ -64,13 +66,14 @@ public class HttpClient {
         this.serviceUnavailableRetryStrategy = builder.serviceUnavailableRetryStrategy;
         this.clientBuilder = builder.clientBuilder;
         this.cookieStore = builder.cookieStore;
+        this.context = builder.context;
         this.client = getClient();
         this.request = getRequest();
     }
 
     public CloseableHttpResponse execute() {
         try {
-            return client.execute(request);
+            return client.execute(request, context);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -258,6 +261,7 @@ public class HttpClient {
         private ServiceUnavailableRetryStrategy serviceUnavailableRetryStrategy;
         private HttpClientBuilder clientBuilder = HttpClients.custom();
         private CookieStore cookieStore;
+        private HttpContext context;
 
         public Builder proxy(String proxyHost, int proxyPort, String proxyScheme) {
             this.proxyHost = new HttpHost(proxyHost, proxyPort, proxyScheme);
@@ -354,6 +358,11 @@ public class HttpClient {
 
         public Builder cookieStore(CookieStore cookieStore) {
             this.cookieStore = cookieStore;
+            return this;
+        }
+
+        public Builder context(HttpContext context) {
+            this.context = context;
             return this;
         }
 

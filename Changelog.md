@@ -1,7 +1,7 @@
 # Changelog
 
 ### 1.39-SNAPSHOT
-
+Enhance HTTP client with context  
 
 ### 1.38
 Update json-compare  
