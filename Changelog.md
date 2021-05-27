@@ -1,7 +1,11 @@
 # Changelog
 
-### 1.39-SNAPSHOT
+### 1.40-SNAPSHOT
+
+### 1.39
 Enhance HTTP client with context  
+Refactor Http response matching mechanism  
+Remove StringFormat.toColumns() method  
 
 ### 1.38
 Update json-compare  

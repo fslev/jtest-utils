@@ -74,7 +74,7 @@ public class ResourceUtils {
             }
             LOG.warn("Ignore file '{}'.\nIt has none of the following extensions: {}", path.getFileName().toString(), fileExtensionPatterns);
             return false;
-        }).map(path -> dirPath + (!dirPath.isEmpty() ? File.separator : "") + rootPath.relativize(path).toString())
+        }).map(path -> dirPath + (!dirPath.isEmpty() ? File.separator : "") + rootPath.relativize(path))
                 .collect(Collectors.toSet());
     }
 

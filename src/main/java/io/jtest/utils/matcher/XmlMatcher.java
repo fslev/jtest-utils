@@ -47,11 +47,16 @@ public class XmlMatcher extends AbstractObjectMatcher<Node> {
 
     @Override
     Node convert(Object value) throws InvalidTypeException {
-        try {
-            return toNode(value);
-        } catch (Exception e) {
-            throw new InvalidTypeException("Invalid XML");
+        if (value instanceof String) {
+            try {
+                return toNode(value.toString());
+            } catch (Exception e) {
+                throw new InvalidTypeException("Invalid XML String format", e);
+            }
+        } else if (!(value instanceof Node)) {
+            throw new InvalidTypeException("XML object must be of type String or org.w3c.dom.Node");
         }
+        return (Node) value;
     }
 
     @Override

@@ -67,7 +67,7 @@ public class HttpResponseWrapperTest {
         try {
             new HttpResponseWrapper(content);
         } catch (Exception e) {
-            assertTrue(e.getMessage(), e.getMessage().contains("Invalid HTTP Response Type"));
+            assertTrue(e.getMessage(), e.getMessage().contains("Cannot obtain HttpResponseWrapper from object"));
         }
     }
 
@@ -82,6 +82,19 @@ public class HttpResponseWrapperTest {
         Assert.assertEquals("some reason", wrapper.getReasonPhrase());
         Assert.assertEquals(Arrays.asList(2, 3, 4), wrapper.getEntity());
         Assert.assertNull(wrapper.getHeaders());
+    }
+
+    @Test
+    public void testWrapperInitFromHttpResponseWrapper() throws Exception {
+        HttpResponseWrapper wrapper = new HttpResponseWrapper();
+        wrapper.setHeaders(null);
+        wrapper.setEntity("test");
+        wrapper.setStatus("200");
+        HttpResponseWrapper wrapper1 = new HttpResponseWrapper(wrapper);
+        Assert.assertEquals("200", wrapper1.getStatus());
+        Assert.assertNull(wrapper1.getReasonPhrase());
+        Assert.assertEquals("test", wrapper1.getEntity());
+        Assert.assertNull(wrapper1.getHeaders());
     }
 
     @Test

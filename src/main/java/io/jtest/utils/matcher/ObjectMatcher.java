@@ -3,7 +3,6 @@ package io.jtest.utils.matcher;
 import io.jtest.utils.exceptions.InvalidTypeException;
 import io.jtest.utils.matcher.condition.MatchCondition;
 import io.jtest.utils.polling.Polling;
-import org.apache.http.HttpResponse;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -90,10 +89,10 @@ public class ObjectMatcher {
     }
 
     /**
-     * Compares two objects representing a HTTP response<br>
+     * Matches two objects representing HTTP responses<br>
      * MatchCondition.DO_NOT_MATCH is ambiguous in this case. Use MatchCondition.DO_NOT_MATCH_HTTP_RESPONSE_BY_STATUS, ...BY_BODY, etc<br>
      *
-     * @param expected must be a String or JSON with the following JSON format<br>
+     * @param expected a String or a HTTPResponseWrapper convertible object with the following JSON format<br>
      *                 <p>
      *                 {"status": <number> | "<text>", <br>
      *                 "body": {<jsonObject>} | [<jsonArray>] | "<text>", <br>
@@ -101,11 +100,11 @@ public class ObjectMatcher {
      *                 "reason": "<text>" <br>
      *                 } <br>
      *                 All fields are optional <br>
-     * @param actual   must extend org.apache.http.HttpResponse
+     * @param actual   a String or a HTTPResponseWrapper convertible object
      * @return properties captured after the match <br>
      * Expected object can contain placeholders for capturing values from the actual object: ~[placeholder_name]
      */
-    public static <T extends HttpResponse> Map<String, Object> matchHttpResponse(String message, Object expected, T actual, MatchCondition... matchConditions) {
+    public static Map<String, Object> matchHttpResponse(String message, Object expected, Object actual, MatchCondition... matchConditions) {
         try {
             return new HttpResponseMatcher(message, expected, actual, new HashSet<>(Arrays.asList(matchConditions))).match();
         } catch (InvalidTypeException e) {
@@ -119,9 +118,9 @@ public class ObjectMatcher {
      * @return properties captured after the match
      * Expected object can contain placeholders for capturing values from the actual object: ~[placeholder_name]
      */
-    public static <T extends HttpResponse> Map<String, Object> matchHttpResponse(String message, Object expected, Supplier<T> actualObjectSupplier, Integer pollingDurationSeconds,
-                                                                                 Long pollingIntervalMillis, Double exponentialBackOff, MatchCondition... matchConditions) {
-        return match(actual -> matchHttpResponse(message, expected, actual, matchConditions), actualObjectSupplier, pollingDurationSeconds, pollingIntervalMillis, exponentialBackOff);
+    public static Map<String, Object> matchHttpResponse(String message, Object expected, Supplier<Object> actualSupplier, Integer pollingDurationSeconds,
+                                                        Long pollingIntervalMillis, Double exponentialBackOff, MatchCondition... matchConditions) {
+        return match(actual -> matchHttpResponse(message, expected, actual, matchConditions), actualSupplier, pollingDurationSeconds, pollingIntervalMillis, exponentialBackOff);
     }
 
     private static <T> Map<String, Object> match(Function<T, Map<String, Object>> matchFunction, Supplier<T> actualObjectSupplier, Integer pollingDurationSeconds,

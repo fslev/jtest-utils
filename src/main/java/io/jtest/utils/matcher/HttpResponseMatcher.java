@@ -32,11 +32,14 @@ class HttpResponseMatcher extends AbstractObjectMatcher<HttpResponseWrapper> {
 
     @Override
     HttpResponseWrapper convert(Object value) throws InvalidTypeException {
-        try {
-            return new HttpResponseWrapper(value);
-        } catch (Exception e) {
-            throw new InvalidTypeException("Cannot convert HTTP Response", e);
+        if (!(value instanceof HttpResponseWrapper)) {
+            try {
+                return new HttpResponseWrapper(value);
+            } catch (Exception e) {
+                throw new InvalidTypeException("Cannot convert HTTP Response", e);
+            }
         }
+        return (HttpResponseWrapper) value;
     }
 
     @Override

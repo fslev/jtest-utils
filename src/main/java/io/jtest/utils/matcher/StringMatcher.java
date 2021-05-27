@@ -16,7 +16,7 @@ import java.util.regex.PatternSyntaxException;
 import static org.junit.Assert.fail;
 
 /**
- * Matches Objects with Strings
+ * Matches Objects as Strings
  */
 public class StringMatcher extends AbstractObjectMatcher<Object> {
 

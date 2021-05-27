@@ -8,6 +8,7 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.util.EntityUtils;
+import ro.skyah.util.MessageUtil;
 
 import java.io.IOException;
 import java.util.AbstractMap;
@@ -29,27 +30,67 @@ public class HttpResponseWrapper {
     public HttpResponseWrapper() {
     }
 
-    public HttpResponseWrapper(Object object) throws Exception {
+    public HttpResponseWrapper(Object object) throws HttpResponseParseException {
         if (object instanceof HttpResponse) {
-            fromHttpResponse((HttpResponse) object);
+            try {
+                fromHttpResponse((HttpResponse) object);
+            } catch (IOException e) {
+                throw new HttpResponseParseException("Cannot parse org.apache.http.HttpPResponse", e);
+            }
         } else {
             fromObject(object);
         }
     }
 
-    private void fromObject(Object content) throws InvalidHttpResponseFormatException {
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public Object getEntity() {
+        return entity;
+    }
+
+    public void setEntity(Object entity) {
+        this.entity = entity;
+    }
+
+    public String getReasonPhrase() {
+        return reasonPhrase;
+    }
+
+    public void setReasonPhrase(String reasonPhrase) {
+        this.reasonPhrase = reasonPhrase;
+    }
+
+    public Set<Map.Entry<String, String>> getHeaders() {
+        return headers;
+    }
+
+    public void setHeaders(Set<Map.Entry<String, String>> headers) {
+        this.headers = headers;
+    }
+
+    private void fromObject(Object content) throws HttpResponseParseException {
         ObjectMapper mapper = new ObjectMapper();
         mapper.enable(DeserializationFeature.FAIL_ON_TRAILING_TOKENS);
         try {
             HttpResponseWrapper wrapper = content instanceof String ?
                     mapper.readValue((String) content, HttpResponseWrapper.class) :
-                    mapper.convertValue(content, HttpResponseWrapper.class);
+                    content instanceof HttpResponseWrapper ? (HttpResponseWrapper) content :
+                            mapper.convertValue(content, HttpResponseWrapper.class);
             this.status = wrapper.status;
             this.entity = wrapper.entity;
             this.reasonPhrase = wrapper.reasonPhrase;
             this.headers = wrapper.headers;
         } catch (Exception e) {
-            throw new InvalidHttpResponseFormatException(content.toString());
+            throw new HttpResponseParseException("Cannot obtain HttpResponseWrapper from object:\n" + MessageUtil.cropS(content.toString()) +
+                    "\n\nObject should be a String with the following JSON format:\n"
+                    + HttpResponseParseException.EXPECTED_FORMAT + "\n, or object should be convertible to HttpResponseWrapper type, " +
+                    "such as java.util.Map, JsonNode, etc, having the properties from above\n", e);
         }
     }
 
@@ -79,22 +120,6 @@ public class HttpResponseWrapper {
         for (Header h : response.getAllHeaders()) {
             headers.add(new AbstractMap.SimpleEntry<>(h.getName(), h.getValue()));
         }
-        return headers;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public Object getEntity() {
-        return entity;
-    }
-
-    public String getReasonPhrase() {
-        return reasonPhrase;
-    }
-
-    public Set<Map.Entry<String, String>> getHeaders() {
         return headers;
     }
 
