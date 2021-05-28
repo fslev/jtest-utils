@@ -1,6 +1,9 @@
 # Changelog
 
-### 1.40-SNAPSHOT
+### 1.41-SNAPSHOT
+
+### 1.40
+Refactoring  
 
 ### 1.39
 Enhance HTTP client with context  

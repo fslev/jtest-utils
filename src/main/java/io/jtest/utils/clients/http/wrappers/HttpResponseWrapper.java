@@ -1,6 +1,7 @@
 package io.jtest.utils.clients.http.wrappers;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.http.Header;
@@ -38,7 +39,13 @@ public class HttpResponseWrapper {
                 throw new HttpResponseParseException("Cannot parse org.apache.http.HttpPResponse", e);
             }
         } else {
-            fromObject(object);
+            try {
+                fromObject(object);
+            } catch (Exception e) {
+                throw new HttpResponseParseException("Cannot parse object:\n" + MessageUtil.cropS(object.toString()) +
+                        "\n\nObject should be convertible to HttpResponseWrapper type, such as org.apache.http.HttpPResponse\nor a String, Map or JsonNode" +
+                        " with the following JSON format:\n" + HttpResponseParseException.EXPECTED_FORMAT + "\n", e);
+            }
         }
     }
 
@@ -74,24 +81,17 @@ public class HttpResponseWrapper {
         this.headers = headers;
     }
 
-    private void fromObject(Object content) throws HttpResponseParseException {
+    private void fromObject(Object content) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         mapper.enable(DeserializationFeature.FAIL_ON_TRAILING_TOKENS);
-        try {
-            HttpResponseWrapper wrapper = content instanceof String ?
-                    mapper.readValue((String) content, HttpResponseWrapper.class) :
-                    content instanceof HttpResponseWrapper ? (HttpResponseWrapper) content :
-                            mapper.convertValue(content, HttpResponseWrapper.class);
-            this.status = wrapper.status;
-            this.entity = wrapper.entity;
-            this.reasonPhrase = wrapper.reasonPhrase;
-            this.headers = wrapper.headers;
-        } catch (Exception e) {
-            throw new HttpResponseParseException("Cannot obtain HttpResponseWrapper from object:\n" + MessageUtil.cropS(content.toString()) +
-                    "\n\nObject should be a String with the following JSON format:\n"
-                    + HttpResponseParseException.EXPECTED_FORMAT + "\n, or object should be convertible to HttpResponseWrapper type, " +
-                    "such as java.util.Map, JsonNode, etc, having the properties from above\n", e);
-        }
+        HttpResponseWrapper wrapper = content instanceof String ?
+                mapper.readValue((String) content, HttpResponseWrapper.class) :
+                content instanceof HttpResponseWrapper ? (HttpResponseWrapper) content :
+                        mapper.convertValue(content, HttpResponseWrapper.class);
+        this.status = wrapper.status;
+        this.entity = wrapper.entity;
+        this.reasonPhrase = wrapper.reasonPhrase;
+        this.headers = wrapper.headers;
     }
 
     private void fromHttpResponse(HttpResponse response) throws IOException {

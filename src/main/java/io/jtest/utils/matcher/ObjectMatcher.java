@@ -92,7 +92,7 @@ public class ObjectMatcher {
      * Matches two objects representing HTTP responses<br>
      * MatchCondition.DO_NOT_MATCH is ambiguous in this case. Use MatchCondition.DO_NOT_MATCH_HTTP_RESPONSE_BY_STATUS, ...BY_BODY, etc<br>
      *
-     * @param expected a String or a HTTPResponseWrapper convertible object with the following JSON format<br>
+     * @param expected a HTTPResponseWrapper convertible object, such as org.apache.http.HttpPResponse or a String, Map or JsonNode with the following JSON format:<br>
      *                 <p>
      *                 {"status": <number> | "<text>", <br>
      *                 "body": {<jsonObject>} | [<jsonArray>] | "<text>", <br>
@@ -100,7 +100,7 @@ public class ObjectMatcher {
      *                 "reason": "<text>" <br>
      *                 } <br>
      *                 All fields are optional <br>
-     * @param actual   a String or a HTTPResponseWrapper convertible object
+     * @param actual   a HTTPResponseWrapper convertible object
      * @return properties captured after the match <br>
      * Expected object can contain placeholders for capturing values from the actual object: ~[placeholder_name]
      */
