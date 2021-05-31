@@ -291,6 +291,56 @@ public class XmlMatcherTests {
         new XmlMatcher("Failed", expected, actual, null).match();
     }
 
+    @Test(expected = AssertionError.class)
+    public void matchInnerLists_strict_size() throws InvalidTypeException {
+        String expected = "<config>\n" +
+                "    <protocols>\n" +
+                "      <ldp>" +
+                "           <a>1</a>" +
+                "      </ldp>\n" +
+                "    </protocols>\n" +
+                "</config>";
+        String actual = "<config>\n" +
+                "   <protocols>\n" +
+                "       <ldp>" +
+                "           <a>2</a>" +
+                "       </ldp>" +
+                "       <ldp>" +
+                "           <a>1</a>" +
+                "       </ldp>\n" +
+                "       <ldp>" +
+                "           <a>3</a>" +
+                "       </ldp>\n" +
+                "   </protocols>\n" +
+                "</config>\n";
+        new XmlMatcher("Failed", expected, actual, new HashSet<>(Collections.singleton(MatchCondition.XML_CHILD_NODELIST_LENGTH))).match();
+    }
+
+    @Test(expected = AssertionError.class)
+    public void matchInnerLists_strict_order() throws InvalidTypeException {
+        String expected = "<config>\n" +
+                "    <protocols>\n" +
+                "      <ldp>" +
+                "           <a>1</a>" +
+                "      </ldp>\n" +
+                "    </protocols>\n" +
+                "</config>";
+        String actual = "<config>\n" +
+                "   <protocols>\n" +
+                "       <ldp>" +
+                "           <a>2</a>" +
+                "       </ldp>" +
+                "       <ldp>" +
+                "           <a>1</a>" +
+                "       </ldp>\n" +
+                "       <ldp>" +
+                "           <a>3</a>" +
+                "       </ldp>\n" +
+                "   </protocols>\n" +
+                "</config>\n";
+        new XmlMatcher("Failed", expected, actual, new HashSet<>(Collections.singleton(MatchCondition.XML_CHILD_NODELIST_SEQUENCE))).match();
+    }
+
     @Test
     public void matchInnerLists_negative() throws InvalidTypeException {
         try {
