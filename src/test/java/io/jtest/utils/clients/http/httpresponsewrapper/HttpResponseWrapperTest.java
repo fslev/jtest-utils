@@ -67,7 +67,7 @@ public class HttpResponseWrapperTest {
         try {
             new HttpResponseWrapper(content);
         } catch (Exception e) {
-            assertTrue(e.getMessage(), e.getMessage().contains("Object should be convertible to HttpResponseWrapper type"));
+            assertTrue(e.getMessage(), e.getMessage().contains("Object should be convertible to io.jtest.utils.clients.http.wrappers.HttpResponseWrapper type"));
         }
     }
 
