@@ -1,6 +1,8 @@
 # Changelog
 
 ### 1.41-SNAPSHOT
+Refactor Http response conversion error message  
+Upgrade dependencies  
 
 ### 1.40
 Refactoring  
