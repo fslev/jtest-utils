@@ -24,7 +24,7 @@
         <xmlunit.version>2.8.2</xmlunit.version>
         <surefire.version>2.22.2</surefire.version>
         <jackson.version>2.12.3</jackson.version>
-        <spring-expression-version>5.3.7</spring-expression-version>
+        <spring-expression-version>5.3.8</spring-expression-version>
     </properties>
 
     <dependencies>
@@ -48,7 +48,7 @@
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
-            <version>42.2.20</version>
+            <version>42.2.21</version>
         </dependency>
         <dependency>
             <groupId>net.sourceforge.jtds</groupId>
@@ -103,7 +103,7 @@
         <dependency>
             <groupId>org.yaml</groupId>
             <artifactId>snakeyaml</artifactId>
-            <version>1.28</version>
+            <version>1.29</version>
         </dependency>
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
