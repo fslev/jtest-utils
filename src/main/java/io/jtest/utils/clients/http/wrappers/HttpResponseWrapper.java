@@ -43,7 +43,8 @@ public class HttpResponseWrapper {
                 fromObject(object);
             } catch (Exception e) {
                 throw new HttpResponseParseException("Cannot parse object:\n" + MessageUtil.cropS(object.toString()) +
-                        "\n\nObject should be convertible to HttpResponseWrapper type, such as org.apache.http.HttpPResponse\nor a String, Map or JsonNode" +
+                        "\n\nObject should be convertible to io.jtest.utils.clients.http.wrappers.HttpResponseWrapper type,\n" +
+                        "such as org.apache.http.HttpPResponse\nor a String, Map or JsonNode" +
                         " with the following JSON format:\n" + HttpResponseParseException.EXPECTED_FORMAT + "\n", e);
             }
         }
