@@ -191,6 +191,11 @@ public class HttpClient {
                     request = deleteWithBody;
                 }
                 break;
+            case PATCH:
+                HttpPatch patch = new HttpPatch(uri);
+                patch.setEntity(new StringEntity(requestEntity != null ? requestEntity : "", StandardCharsets.UTF_8));
+                request = patch;
+                break;
             case OPTIONS:
                 request = new HttpOptions(uri);
                 break;
@@ -199,11 +204,6 @@ public class HttpClient {
                 break;
             case HEAD:
                 request = new HttpHead(uri);
-                break;
-            case PATCH:
-                HttpPatch patch = new HttpPatch(uri);
-                patch.setEntity(new StringEntity(requestEntity != null ? requestEntity : "", StandardCharsets.UTF_8));
-                request = patch;
                 break;
             default:
                 throw new IllegalStateException("Invalid HTTP method");
