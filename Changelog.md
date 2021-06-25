@@ -2,6 +2,7 @@
 
 ### 1.41-SNAPSHOT
 Refactor Http response conversion error message  
+Encode Http request and response entity using StandardCharsets.UTF_8  
 Upgrade dependencies  
 
 ### 1.40

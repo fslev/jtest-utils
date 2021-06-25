@@ -21,9 +21,9 @@ import org.apache.http.protocol.HttpContext;
 
 import javax.net.ssl.*;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -174,20 +174,12 @@ public class HttpClient {
                 break;
             case POST:
                 HttpPost post = new HttpPost(uri);
-                try {
-                    post.setEntity(new StringEntity(requestEntity != null ? requestEntity : ""));
-                } catch (UnsupportedEncodingException e) {
-                    throw new RuntimeException(e);
-                }
+                post.setEntity(new StringEntity(requestEntity != null ? requestEntity : "", StandardCharsets.UTF_8));
                 request = post;
                 break;
             case PUT:
                 HttpPut put = new HttpPut(uri);
-                try {
-                    put.setEntity(new StringEntity(requestEntity != null ? requestEntity : ""));
-                } catch (UnsupportedEncodingException e) {
-                    throw new RuntimeException(e);
-                }
+                put.setEntity(new StringEntity(requestEntity != null ? requestEntity : "", StandardCharsets.UTF_8));
                 request = put;
                 break;
             case DELETE:
@@ -195,11 +187,7 @@ public class HttpClient {
                     request = new HttpDelete(uri);
                 } else {
                     HttpDeleteWithBody deleteWithBody = new HttpDeleteWithBody(uri);
-                    try {
-                        deleteWithBody.setEntity(new StringEntity(requestEntity));
-                    } catch (UnsupportedEncodingException e) {
-                        throw new RuntimeException(e);
-                    }
+                    deleteWithBody.setEntity(new StringEntity(requestEntity, StandardCharsets.UTF_8));
                     request = deleteWithBody;
                 }
                 break;
@@ -214,11 +202,7 @@ public class HttpClient {
                 break;
             case PATCH:
                 HttpPatch patch = new HttpPatch(uri);
-                try {
-                    patch.setEntity(new StringEntity(requestEntity != null ? requestEntity : ""));
-                } catch (UnsupportedEncodingException e) {
-                    throw new RuntimeException(e);
-                }
+                patch.setEntity(new StringEntity(requestEntity != null ? requestEntity : "", StandardCharsets.UTF_8));
                 request = patch;
                 break;
             default:

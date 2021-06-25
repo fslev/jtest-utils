@@ -12,6 +12,7 @@ import org.apache.http.util.EntityUtils;
 import ro.skyah.util.MessageUtil;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.AbstractMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -103,14 +104,14 @@ public class HttpResponseWrapper {
         HttpEntity entity = response.getEntity();
         if (entity != null) {
             try {
-                content = EntityUtils.toString(entity);
+                content = EntityUtils.toString(entity, StandardCharsets.UTF_8);
                 this.entity = content;
             } catch (Exception e) {
                 throw new IOException("Cannot extract entity from HTTP Response", e);
             } finally {
                 EntityUtils.consumeQuietly(entity);
                 if (content != null) {
-                    response.setEntity(new StringEntity(content));
+                    response.setEntity(new StringEntity(content, StandardCharsets.UTF_8));
                 }
             }
         }
