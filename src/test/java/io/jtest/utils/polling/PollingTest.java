@@ -37,7 +37,7 @@ public class PollingTest {
         int expected = 3;
         int result = new Polling<Integer>()
                 .supplier(() -> generateRandomNumber(4))
-                .duration(Duration.ofSeconds(10), 3000L)
+                .duration(Duration.ofSeconds(30), 100L)
                 .exponentialBackOff(1.5)
                 .until(n -> n.equals(expected)).get();
         assertEquals(expected, result);

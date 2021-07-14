@@ -1,6 +1,7 @@
 # Changelog
 
 ### 1.43-SNAPSHOT
+Refactor Polling  
 
 ### 1.42
 Update dependencies  

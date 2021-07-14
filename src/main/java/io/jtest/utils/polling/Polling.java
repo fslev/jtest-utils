@@ -10,28 +10,28 @@ import java.util.function.Supplier;
 public class Polling<T> {
     private static final Logger LOG = LogManager.getLogger();
 
-    private Duration pollingDurationSec = Duration.ofSeconds(30);
+    private Duration pollingDuration = Duration.ofSeconds(30);
     private Long pollingIntervalMillis = 3000L;
     private Double exponentialBackOff = 1.0;
 
     private Supplier<T> supplier = null;
     private Predicate<T> predicate = null;
 
-    public Polling<T> duration(Long pollIntervalMillis) {
-        return duration((Duration) null, pollIntervalMillis);
+    public Polling<T> duration(Long pollingIntervalMillis) {
+        return duration((Duration) null, pollingIntervalMillis);
     }
 
-    public Polling<T> duration(Integer pollDurationSec) {
-        return duration(pollDurationSec, null);
+    public Polling<T> duration(Integer pollingDurationSec) {
+        return duration(pollingDurationSec, null);
     }
 
-    public Polling<T> duration(Integer pollDurationSec, Long pollIntervalMillis) {
-        return duration(pollDurationSec != null ? Duration.ofSeconds(pollDurationSec) : null, pollIntervalMillis);
+    public Polling<T> duration(Integer pollingDurationSec, Long pollingIntervalMillis) {
+        return duration(pollingDurationSec != null ? Duration.ofSeconds(pollingDurationSec) : null, pollingIntervalMillis);
     }
 
-    public Polling<T> duration(Duration pollDurationSec, Long pollIntervalMillis) {
-        this.pollingDurationSec = pollDurationSec != null ? pollDurationSec : this.pollingDurationSec;
-        this.pollingIntervalMillis = pollIntervalMillis != null ? pollIntervalMillis : this.pollingIntervalMillis;
+    public Polling<T> duration(Duration pollingDuration, Long pollingIntervalMillis) {
+        this.pollingDuration = pollingDuration != null ? pollingDuration : this.pollingDuration;
+        this.pollingIntervalMillis = pollingIntervalMillis != null ? pollingIntervalMillis : this.pollingIntervalMillis;
         return this;
     }
 
@@ -57,18 +57,18 @@ public class Polling<T> {
         boolean success = false;
         boolean timeout = false;
         T result = null;
+        long interval = pollingIntervalMillis;
+        long start = System.currentTimeMillis();
         while (!success && !timeout) {
-            long start = System.currentTimeMillis();
             result = supplier.get();
             success = predicate.test(result);
             if (!success) {
                 try {
-                    LOG.debug("Polling failed, I'll take another shot after {}ms", pollingIntervalMillis);
-                    Thread.sleep(pollingIntervalMillis);
-                    pollingIntervalMillis = (long) (pollingIntervalMillis * exponentialBackOff);
+                    LOG.debug("Polling failed, I'll take another shot after {}ms", interval);
+                    Thread.sleep(interval);
+                    interval = (long) (interval * exponentialBackOff);
                     long elapsed = System.currentTimeMillis() - start;
-                    pollingDurationSec = pollingDurationSec.minusMillis(elapsed);
-                    if (pollingDurationSec.isZero() || pollingDurationSec.isNegative()) {
+                    if (pollingDuration.minusMillis(elapsed).toMillis() <= 0) {
                         timeout = true;
                     }
                 } catch (InterruptedException e) {

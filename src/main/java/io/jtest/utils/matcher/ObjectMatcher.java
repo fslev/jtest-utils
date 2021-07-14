@@ -131,9 +131,9 @@ public class ObjectMatcher {
                 .duration(pollingDurationSeconds, pollingIntervalMillis)
                 .exponentialBackOff(exponentialBackOff)
                 .supplier(actualObjectSupplier)
-                .until(p -> {
+                .until(actual -> {
                     try {
-                        props.putAll(matchFunction.apply(p));
+                        props.putAll(matchFunction.apply(actual));
                         error.set(null);
                         return true;
                     } catch (AssertionError e) {
