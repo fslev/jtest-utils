@@ -1,79 +1,75 @@
 package io.jtest.utils.polling;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.time.Duration;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
-@Ignore
 public class PollingTest {
 
     @Test
     public void testPollerForResult() {
-        int expected = 3;
-        int result = new Polling<Integer>()
-                .supplier(() -> generateRandomNumber(4))
-                .duration(Duration.ofSeconds(10), 100L)
-                .until(n -> n.equals(expected)).get();
-        assertEquals(expected, result);
+        Service service = new Service(3);
+        boolean result = new Polling<Boolean>()
+                .supplier(service::get)
+                .duration(Duration.ofSeconds(1), 410L)
+                .until(val -> val.equals(true)).get();
+        assertTrue(result);
+    }
+
+    @Test
+    public void testPollerForResult_negative() {
+        Service service = new Service(3);
+        boolean result = new Polling<Boolean>()
+                .supplier(service::get)
+                .duration(Duration.ofSeconds(1), 550L)
+                .until(val -> val.equals(true)).get();
+        assertFalse(result);
     }
 
     @Test
     public void testPollerWithNullDuration() {
-        int expected = 3;
-        Integer duration = null;
-        int result = new Polling<Integer>()
-                .supplier(() -> 3)
-                .duration(duration, 100L)
-                .until(n -> n.equals(expected)).get();
-        assertEquals(expected, result);
+        Service service = new Service(1);
+        boolean result = new Polling<Boolean>()
+                .supplier(service::get)
+                .duration((Duration) null, 550L)
+                .until(val -> val.equals(true)).get();
+        assertTrue(result);
     }
 
     @Test
     public void testPollerExponentialBackOff() {
-        int expected = 3;
-        int result = new Polling<Integer>()
-                .supplier(() -> generateRandomNumber(4))
-                .duration(Duration.ofSeconds(30), 100L)
+        Service service = new Service(3);
+        boolean result = new Polling<Boolean>()
+                .supplier(service::get)
+                .duration(Duration.ofSeconds(1), 410L)
                 .exponentialBackOff(1.5)
-                .until(n -> n.equals(expected)).get();
-        assertEquals(expected, result);
+                .until(val -> val.equals(true)).get();
+        assertFalse(result);
     }
 
     @Test
     public void testPollerTimeout() {
-        int expected = 5;
-        int result = new Polling<Integer>()
-                .supplier(() -> generateRandomNumber(4))
-                .duration(Duration.ofSeconds(2), 100L)
-                .until(n -> n.equals(expected)).get();
-        assertNotEquals(expected, result);
+        Service service = new Service(1000);
+        boolean result = new Polling<Boolean>()
+                .supplier(service::get)
+                .duration(Duration.ofSeconds(1), 400L)
+                .until(val -> val.equals(true)).get();
+        assertFalse(result);
     }
 
-    @Test
-    public void testPollerDurationTimeout() {
-        int expected = 5;
-        int result = new Polling<Integer>()
-                .supplier(() -> generateRandomNumber(4))
-                .duration(5)
-                .until(n -> n.equals(expected)).get();
-        assertNotEquals(expected, result);
-    }
+    private static class Service {
+        int successfulRetry;
+        int retry;
 
-    @Test
-    public void testPollerInterval() {
-        int expected = 5;
-        int result = new Polling<Integer>()
-                .supplier(() -> generateRandomNumber(4))
-                .duration(500L)
-                .until(n -> n.equals(expected)).get();
-        assertNotEquals(expected, result);
-    }
+        public Service(int successAfterRetry) {
+            this.successfulRetry = successAfterRetry;
+        }
 
-    private int generateRandomNumber(int maxLimit) {
-        return (int) (Math.random() * maxLimit);
+        public boolean get() {
+            return ++retry == successfulRetry;
+        }
     }
 }
