@@ -137,8 +137,8 @@ public class HttpClient {
             configBuilder.setProxy(proxyHost);
         }
         clientBuilder.setSSLSocketFactory(new SSLConnectionSocketFactory(sslContext == null ?
-                defaultSslContext() : sslContext, hostnameVerifier == null ?
-                new NoopHostnameVerifier() : hostnameVerifier))
+                        defaultSslContext() : sslContext, hostnameVerifier == null ?
+                        new NoopHostnameVerifier() : hostnameVerifier))
                 .setDefaultRequestConfig(configBuilder.build());
         if (requestRetryHandler != null) {
             clientBuilder.setRetryHandler(requestRetryHandler);

@@ -1,6 +1,7 @@
 package io.jtest.utils.matcher;
 
 import io.jtest.utils.exceptions.InvalidTypeException;
+import io.jtest.utils.exceptions.PollingTimeoutException;
 import io.jtest.utils.matcher.condition.MatchCondition;
 import io.jtest.utils.polling.Polling;
 
@@ -127,7 +128,7 @@ public class ObjectMatcher {
                                                  Long pollingIntervalMillis, Double exponentialBackOff) {
         Map<String, Object> props = new HashMap<>();
         AtomicReference<AssertionError> error = new AtomicReference<>();
-        new Polling<T>()
+        Polling<T> polling = new Polling<T>()
                 .duration(pollingDurationSeconds, pollingIntervalMillis)
                 .exponentialBackOff(exponentialBackOff)
                 .supplier(actualObjectSupplier)
@@ -140,8 +141,10 @@ public class ObjectMatcher {
                         error.set(e);
                         return false;
                     }
-                }).get();
-        if (error.get() != null) {
+                });
+        try {
+            polling.get();
+        } catch (PollingTimeoutException e) {
             throw error.get();
         }
         return props;

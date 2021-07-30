@@ -1,5 +1,6 @@
 package io.jtest.utils.polling;
 
+import io.jtest.utils.exceptions.PollingTimeoutException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -14,8 +15,10 @@ public class Polling<T> {
     private Long pollingIntervalMillis = 3000L;
     private Double exponentialBackOff = 1.0;
 
-    private Supplier<T> supplier = null;
-    private Predicate<T> predicate = null;
+    private Supplier<T> supplier;
+    private Predicate<T> predicate;
+
+    private T result;
 
     public Polling<T> duration(Long pollingIntervalMillis) {
         return duration((Duration) null, pollingIntervalMillis);
@@ -52,14 +55,16 @@ public class Polling<T> {
         return this;
     }
 
-    public T get() {
+    public T getLastResult() {
+        return result;
+    }
+
+    public T get() throws PollingTimeoutException {
         LOG.debug("Polling for result...");
         boolean success = false;
-        boolean timeout = false;
-        T result = null;
         long interval = pollingIntervalMillis;
         long start = System.currentTimeMillis();
-        while (!success && !timeout) {
+        while (!success) {
             result = supplier.get();
             success = predicate.test(result);
             if (!success) {
@@ -69,14 +74,13 @@ public class Polling<T> {
                     interval = (long) (interval * exponentialBackOff);
                     long elapsed = System.currentTimeMillis() - start;
                     if (pollingDuration.minusMillis(elapsed).toMillis() <= 0) {
-                        timeout = true;
+                        throw new PollingTimeoutException();
                     }
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
             }
         }
-        LOG.debug(!timeout ? "Found correct result" : "Polling timeout");
         return result;
     }
 }

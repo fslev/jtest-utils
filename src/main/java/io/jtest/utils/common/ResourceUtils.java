@@ -64,17 +64,17 @@ public class ResourceUtils {
             throw new IOException("Not a directory " + rootPath);
         }
         return Files.walk(rootPath).filter(path -> {
-            if (!path.toFile().isFile()) {
-                return false;
-            }
-            if (fileExtensionPatterns.length == 0 || (path.getFileName().toString().contains(".")
-                    && new HashSet<>(Arrays.asList(fileExtensionPatterns))
-                    .contains(path.getFileName().toString().substring(path.getFileName().toString().lastIndexOf("."))))) {
-                return true;
-            }
-            LOG.warn("Ignore file '{}'.\nIt has none of the following extensions: {}", path.getFileName().toString(), fileExtensionPatterns);
-            return false;
-        }).map(path -> dirPath + (!dirPath.isEmpty() ? File.separator : "") + rootPath.relativize(path))
+                    if (!path.toFile().isFile()) {
+                        return false;
+                    }
+                    if (fileExtensionPatterns.length == 0 || (path.getFileName().toString().contains(".")
+                            && new HashSet<>(Arrays.asList(fileExtensionPatterns))
+                            .contains(path.getFileName().toString().substring(path.getFileName().toString().lastIndexOf("."))))) {
+                        return true;
+                    }
+                    LOG.warn("Ignore file '{}'.\nIt has none of the following extensions: {}", path.getFileName().toString(), fileExtensionPatterns);
+                    return false;
+                }).map(path -> dirPath + (!dirPath.isEmpty() ? File.separator : "") + rootPath.relativize(path))
                 .collect(Collectors.toSet());
     }
 

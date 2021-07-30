@@ -1,6 +1,11 @@
 # Changelog
 
-### 1.44-SNAPSHOT
+### 1.45-SNAPSHOT
+
+
+### 1.44
+Refactor polling  
+Remove SupplierUtils  
 
 ### 1.43
 Refactor Polling  
