@@ -69,13 +69,13 @@ public class Polling<T> {
             success = predicate.test(result);
             if (!success) {
                 try {
-                    LOG.debug("Polling failed, I'll take another shot after {}ms", interval);
-                    Thread.sleep(interval);
-                    interval = (long) (interval * exponentialBackOff);
                     long elapsed = System.currentTimeMillis() - start;
                     if (pollingDuration.minusMillis(elapsed).toMillis() <= 0) {
                         throw new PollingTimeoutException();
                     }
+                    LOG.debug("Polling failed, I'll take another shot after {}ms", interval);
+                    Thread.sleep(interval);
+                    interval = (long) (interval * exponentialBackOff);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }

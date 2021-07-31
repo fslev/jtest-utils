@@ -1,7 +1,10 @@
 # Changelog
 
-### 1.45-SNAPSHOT
+### 1.46-SNAPSHOT
 
+
+### 1.45
+Optimize polling  
 
 ### 1.44
 Refactor polling  
