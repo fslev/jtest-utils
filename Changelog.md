@@ -1,7 +1,9 @@
 # Changelog
 
-### 1.46-SNAPSHOT
+### 1.47-SNAPSHOT
 
+### 1.46
+HttpClient execute() throws IOException   
 
 ### 1.45
 Optimize polling  

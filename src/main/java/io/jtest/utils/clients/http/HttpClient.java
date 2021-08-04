@@ -71,12 +71,8 @@ public class HttpClient {
         this.request = getRequest();
     }
 
-    public CloseableHttpResponse execute() {
-        try {
-            return client.execute(request, context);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+    public CloseableHttpResponse execute() throws IOException {
+        return client.execute(request, context);
     }
 
     public Integer getTimeout() {
