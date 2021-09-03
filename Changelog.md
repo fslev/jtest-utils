@@ -1,6 +1,10 @@
 # Changelog
 
-### 1.47-SNAPSHOT
+### 1.48-SNAPSHOT
+
+
+### 1.47
+Update dependencies  
 
 ### 1.46
 HttpClient execute() throws IOException   
