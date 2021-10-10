@@ -1,7 +1,9 @@
 # Changelog
 
-### 1.48-SNAPSHOT
+### 1.49-SNAPSHOT
 
+### 1.48
+Update dependencies  
 
 ### 1.47
 Update dependencies  
