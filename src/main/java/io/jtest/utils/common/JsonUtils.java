@@ -13,8 +13,8 @@ public class JsonUtils {
 
     public static JsonNode toJson(Object obj) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
-        mapper.enable(DeserializationFeature.FAIL_ON_TRAILING_TOKENS);
         if (obj instanceof String) {
+            mapper.enable(DeserializationFeature.FAIL_ON_TRAILING_TOKENS);
             return mapper.readTree(obj.toString());
         }
         return mapper.valueToTree(obj);
