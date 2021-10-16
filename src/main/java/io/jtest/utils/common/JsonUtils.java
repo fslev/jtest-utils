@@ -11,10 +11,13 @@ import java.util.function.Function;
 
 public class JsonUtils {
 
-    public static JsonNode toJson(String content) throws IOException {
+    public static JsonNode toJson(Object obj) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         mapper.enable(DeserializationFeature.FAIL_ON_TRAILING_TOKENS);
-        return mapper.readTree(content);
+        if (obj instanceof String) {
+            return mapper.readTree(obj.toString());
+        }
+        return mapper.valueToTree(obj);
     }
 
     public static String prettyPrint(String content) {

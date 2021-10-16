@@ -4,6 +4,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -16,6 +17,18 @@ public class JsonUtilsTest {
         List<String> regexChars = RegexUtils.getRegexCharsFromString(s);
         return regexChars.isEmpty() ? null : regexChars;
     };
+
+    @Test
+    public void convertStringToJson() throws IOException {
+        assertEquals(2, JsonUtils.toJson("{\"a\":2}").get("a").asInt());
+    }
+
+    @Test
+    public void convertObjectToJson() throws IOException {
+        Map<String, Integer> map = new HashMap<>();
+        map.put("a", 2);
+        assertEquals(2, JsonUtils.toJson(map).get("a").asInt());
+    }
 
     @Test
     public void testBigJsonPrettyPrint() throws IOException {

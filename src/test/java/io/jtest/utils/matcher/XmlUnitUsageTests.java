@@ -64,20 +64,20 @@ public class XmlUnitUsageTests {
         String myTestXML = "<struct><boolean>false</boolean><int>3</int></struct>";
 
         Diff myDiff = DiffBuilder.compare(myControlXML).withTest(myTestXML).withDifferenceEvaluator(
-                DifferenceEvaluators.chain(DifferenceEvaluators.Default, new DifferenceEvaluator() {
-                    @Override
-                    public ComparisonResult evaluate(Comparison comparison,
-                                                     ComparisonResult comparisonResult) {
-                        if (comparisonResult == ComparisonResult.EQUAL) {
-                            return comparisonResult;
-                        }
-                        if (comparison.getType() == ComparisonType.CHILD_NODELIST_LENGTH
-                                || comparison.getControlDetails().getTarget() == null) {
-                            return ComparisonResult.SIMILAR;
-                        }
-                        return ComparisonResult.DIFFERENT;
-                    }
-                })).checkForSimilar()
+                        DifferenceEvaluators.chain(DifferenceEvaluators.Default, new DifferenceEvaluator() {
+                            @Override
+                            public ComparisonResult evaluate(Comparison comparison,
+                                                             ComparisonResult comparisonResult) {
+                                if (comparisonResult == ComparisonResult.EQUAL) {
+                                    return comparisonResult;
+                                }
+                                if (comparison.getType() == ComparisonType.CHILD_NODELIST_LENGTH
+                                        || comparison.getControlDetails().getTarget() == null) {
+                                    return ComparisonResult.SIMILAR;
+                                }
+                                return ComparisonResult.DIFFERENT;
+                            }
+                        })).checkForSimilar()
                 .withNodeMatcher(new DefaultNodeMatcher(ElementSelectors.byNameAndText)).build();
 
         Iterator<Difference> iter = myDiff.getDifferences().iterator();
