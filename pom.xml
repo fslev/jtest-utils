@@ -4,7 +4,7 @@
 
     <groupId>io.github.fslev</groupId>
     <artifactId>jtest-utils</artifactId>
-    <version>1.49</version>
+    <version>1.50-SNAPSHOT</version>
 
     <name>JTest Utils</name>
     <description>Java Utilities for testing</description>
@@ -279,7 +279,7 @@
         <connection>scm:git:ssh://git@github.com/fslev/jtest-utils.git</connection>
         <developerConnection>scm:git:ssh://git@github.com/fslev/jtest-utils.git</developerConnection>
         <url>https://github.com/fslev/jtest-utils/tree/main</url>
-        <tag>jtest-utils-1.49</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <distributionManagement>
