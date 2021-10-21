@@ -1,6 +1,10 @@
 # Changelog
 
-### 1.50-SNAPSHOT
+### 1.51-SNAPSHOT
+
+### 1.50
+Bug fixes    
+Update dependencies  
 
 ### 1.49
 JsonUtils converts Object to JsonNode  
