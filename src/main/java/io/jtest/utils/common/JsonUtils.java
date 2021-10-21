@@ -11,25 +11,21 @@ import java.util.function.Function;
 
 public class JsonUtils {
 
+    private static final ObjectMapper MAPPER = new ObjectMapper().enable(DeserializationFeature.FAIL_ON_TRAILING_TOKENS);
+
     public static JsonNode toJson(Object obj) throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
-        if (obj instanceof String) {
-            mapper.enable(DeserializationFeature.FAIL_ON_TRAILING_TOKENS);
-            return mapper.readTree(obj.toString());
-        }
-        return mapper.valueToTree(obj);
+        return obj instanceof JsonNode ? (JsonNode) obj :
+                (obj instanceof String) ? MAPPER.readTree(obj.toString()) : MAPPER.convertValue(obj, JsonNode.class);
     }
 
     public static String prettyPrint(String content) {
-        if (content == null || content.isEmpty()) {
-            return content;
+        if (content != null && !content.isEmpty()) {
+            try {
+                return MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(toJson(content));
+            } catch (IOException ignored) {
+            }
         }
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-            return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(toJson(content));
-        } catch (IOException e) {
-            return content;
-        }
+        return content;
     }
 
     public static <R> Map<String, R> walkJsonAndProcessNodes(String json, Function<String, R> processFunction) throws IOException {

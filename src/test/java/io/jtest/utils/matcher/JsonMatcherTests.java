@@ -1,5 +1,7 @@
 package io.jtest.utils.matcher;
 
+import com.fasterxml.jackson.databind.node.IntNode;
+import com.fasterxml.jackson.databind.node.TextNode;
 import io.jtest.utils.exceptions.InvalidTypeException;
 import io.jtest.utils.matcher.condition.MatchCondition;
 import org.junit.Test;
@@ -8,8 +10,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class JsonMatcherTests {
 
@@ -20,11 +21,11 @@ public class JsonMatcherTests {
         new JsonMatcher(null, expected, actual, null);
     }
 
-    @Test(expected = InvalidTypeException.class)
-    public void compareJsonWithNull() throws InvalidTypeException {
+    @Test
+    public void compareJsonWithNull() {
         String expected = "{\"b\":\"val1\",\"a\":\"val2\"}";
         String actual = null;
-        new JsonMatcher(null, expected, actual, null).match();
+        assertThrows(AssertionError.class, () -> new JsonMatcher(null, expected, actual, null).match());
     }
 
     @Test(expected = InvalidTypeException.class)
@@ -32,6 +33,27 @@ public class JsonMatcherTests {
         String expected = "{\"a\":\"lorem ipsum\"}";
         String actual = "string";
         new JsonMatcher(null, expected, actual, null);
+    }
+
+    @Test
+    public void matchTextNodeWithQuotedString() throws InvalidTypeException {
+        TextNode expected = new TextNode("some val");
+        String actual = "\"some val\"";
+        new JsonMatcher(null, expected, actual, null).match();
+    }
+
+    @Test
+    public void matchIntNodeWithInt() throws InvalidTypeException {
+        IntNode expected = new IntNode(1000);
+        int actual = 1000;
+        new JsonMatcher(null, expected, actual, null).match();
+    }
+
+    @Test(expected = InvalidTypeException.class)
+    public void matchTextNodeWithUnQuotedString() throws InvalidTypeException {
+        TextNode expected = new TextNode("some val");
+        String actual = "some val";
+        new JsonMatcher(null, expected, actual, null).match();
     }
 
     @Test

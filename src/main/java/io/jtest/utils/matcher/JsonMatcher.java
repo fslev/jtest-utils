@@ -1,9 +1,6 @@
 package io.jtest.utils.matcher;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.JsonNodeType;
 import io.jtest.utils.common.JsonUtils;
 import io.jtest.utils.common.RegexUtils;
 import io.jtest.utils.exceptions.InvalidTypeException;
@@ -27,13 +24,8 @@ public class JsonMatcher extends AbstractObjectMatcher<JsonNode> {
 
     @Override
     JsonNode convert(Object value) throws InvalidTypeException {
-        ObjectMapper mapper = new ObjectMapper().enable(DeserializationFeature.FAIL_ON_TRAILING_TOKENS);
         try {
-            JsonNode jsonNode = value instanceof String ? mapper.readTree((String) value) : mapper.convertValue(value, JsonNode.class);
-            if (!jsonNode.getNodeType().equals(JsonNodeType.OBJECT) && !jsonNode.getNodeType().equals(JsonNodeType.ARRAY)) {
-                throw new InvalidTypeException("Malformed JSON");
-            }
-            return jsonNode;
+            return JsonUtils.toJson(value);
         } catch (Exception e) {
             throw new InvalidTypeException("Invalid JSON NODE", e);
         }
@@ -103,14 +95,14 @@ public class JsonMatcher extends AbstractObjectMatcher<JsonNode> {
                 if (!specialRegexChars.isEmpty()) {
                     String prettyResult = specialRegexChars.entrySet().stream().map(e -> e.getKey() + " contains: " + e.getValue().toString())
                             .collect(Collectors.joining("\n"));
-                    LOG.debug(" \n\n Comparison mechanism failed while comparing JSONs." +
-                                    " \n One reason for this, might be that Json may have unintentional regex special characters. " +
+                    LOG.debug(" \n\n JSON matching mechanism failed." +
+                                    " \n One reason for this, might be that JSON may have unintentional regex special characters. " +
                                     "\n If so, try to quote them by using \\Q and \\E or simply \\" +
                                     "\n Found the following list of special regex characters inside expected:\n\n{}\n\nExpected:\n{}\n",
                             prettyResult, json);
                 }
             } catch (Exception e) {
-                LOG.debug("Cannot extract special regex characters from json", e);
+                LOG.debug("Cannot extract special regex characters from JSON", e);
             }
         }
     }

@@ -1,5 +1,8 @@
 package io.jtest.utils.matcher;
 
+import com.fasterxml.jackson.databind.node.BooleanNode;
+import com.fasterxml.jackson.databind.node.IntNode;
+import com.fasterxml.jackson.databind.node.TextNode;
 import io.jtest.utils.matcher.condition.MatchCondition;
 import org.junit.Test;
 
@@ -74,6 +77,32 @@ public class FlowMatcherTests {
     @Test(expected = AssertionError.class)
     public void comparePrimitives_negative() {
         new FlowMatcher().match("", 200.0, 200, new HashSet<>(Collections.singletonList(MatchCondition.JSON_NON_EXTENSIBLE_ARRAY)));
+    }
+
+    @Test
+    public void matchPrimitiveWithValueNode() {
+        String expectedString = "some value";
+        TextNode actualTextNode = new TextNode("some value");
+        new FlowMatcher().match("", expectedString, actualTextNode, null);
+        int expectedInt = 129;
+        IntNode actualIntNode = new IntNode(129);
+        new FlowMatcher().match("", expectedInt, actualIntNode, null);
+        boolean expectedBoolean = false;
+        BooleanNode actualBooleanNode = BooleanNode.getFalse();
+        new FlowMatcher().match("", expectedBoolean, actualBooleanNode, null);
+    }
+
+    @Test
+    public void matchValueNodeWithPrimitive() {
+        TextNode expectedTextNode = new TextNode("some value");
+        String actualString = "some value";
+        new FlowMatcher().match("", expectedTextNode, actualString, null);
+        IntNode expectedIntNode = new IntNode(129);
+        int actualInt = 129;
+        new FlowMatcher().match("", expectedIntNode, actualInt, null);
+        BooleanNode expectedBooleanNode = BooleanNode.getFalse();
+        boolean actualBoolean = false;
+        new FlowMatcher().match("", expectedBooleanNode, actualBoolean, null);
     }
 
     @Test
