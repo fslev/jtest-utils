@@ -261,6 +261,8 @@
                         <include>**/*</include>
                         <skipTests>false</skipTests>
                     </includes>
+                    <parallel>all</parallel>
+                    <threadCount>8</threadCount>
                 </configuration>
             </plugin>
             <plugin>
