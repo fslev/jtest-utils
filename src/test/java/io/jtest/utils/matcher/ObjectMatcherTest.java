@@ -79,7 +79,7 @@ public class ObjectMatcherTest {
                 "            },\n" +
                 "{\n" +
                 "                \"category\": \"reference\",\n" +
-                "                \"author\": \"~[title2]\",\n" +
+                "                \"author\": \"~[author2]\",\n" +
                 "                \"title\": \"S.*e Century\",\n" +
                 "                \"price\": 8.95\n" +
                 "            }\n" +
@@ -123,6 +123,6 @@ public class ObjectMatcherTest {
                 "}";
         Map<String, Object> resultedVars = ObjectMatcher.match(null, expected, actual);
         assertEquals("Moby Dick", resultedVars.get("title1"));
-        assertEquals("Nigel Rees", resultedVars.get("title2"));
+        assertEquals("Nigel Rees", resultedVars.get("author2"));
     }
 }
