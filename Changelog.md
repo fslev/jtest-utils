@@ -1,6 +1,10 @@
 # Changelog
 
-### 1.51-SNAPSHOT
+### 1.52-SNAPSHOT
+
+### 1.51
+Update dependencies  
+Json path support  
 
 ### 1.50
 Bug fixes    
