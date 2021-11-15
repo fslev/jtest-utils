@@ -1,7 +1,11 @@
 # Changelog
 
-### 1.52-SNAPSHOT
+### 1.53-SNAPSHOT
+
+
+### 1.52
 Update dependencies  
+Json-Compare - bugfix  
 
 ### 1.51
 Update dependencies  
