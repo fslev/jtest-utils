@@ -1,11 +1,11 @@
 package io.jtest.utils.polling;
 
 import io.jtest.utils.exceptions.PollingTimeoutException;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class PollingTest {
 

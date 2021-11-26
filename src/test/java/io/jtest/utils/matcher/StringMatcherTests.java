@@ -1,13 +1,13 @@
 package io.jtest.utils.matcher;
 
 import io.jtest.utils.exceptions.InvalidTypeException;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class StringMatcherTests {
 
@@ -85,12 +85,12 @@ public class StringMatcherTests {
         assertEquals("And 7 continents...", symbols.get("prop3"));
     }
 
-    @Test(expected = AssertionError.class)
+    @Test
     public void compareSimpleInt_negative() throws InvalidTypeException {
         int expected = 1;
         int actual = 2;
         StringMatcher matcher = new StringMatcher(null, expected, actual, null);
-        matcher.match();
+        assertThrows(AssertionError.class, matcher::match);
     }
 
     @Test
@@ -111,20 +111,20 @@ public class StringMatcherTests {
         assertTrue(symbols.isEmpty());
     }
 
-    @Test(expected = AssertionError.class)
+    @Test
     public void compareSimpleBoolean_negative() throws InvalidTypeException {
         boolean expected = true;
         Boolean actual = false;
         StringMatcher matcher = new StringMatcher(null, expected, actual, null);
-        matcher.match();
+        assertThrows(AssertionError.class, matcher::match);
     }
 
-    @Test(expected = AssertionError.class)
+    @Test
     public void compareSimpleString_negative() throws InvalidTypeException {
         String expected = "val";
         String actual = "result";
         StringMatcher matcher = new StringMatcher(null, expected, actual, null);
-        matcher.match();
+        assertThrows(AssertionError.class, matcher::match);
     }
 
     @Test
@@ -145,12 +145,12 @@ public class StringMatcherTests {
         assertTrue(symbols.isEmpty());
     }
 
-    @Test(expected = AssertionError.class)
+    @Test
     public void compareRegex_negative() throws InvalidTypeException {
         String expected = "va.*ue";
         String actual = "va(le";
         StringMatcher matcher = new StringMatcher(null, expected, actual, null);
-        matcher.match();
+        assertThrows(AssertionError.class, matcher::match);
     }
 
     @Test
@@ -174,24 +174,26 @@ public class StringMatcherTests {
         assertEquals(1, symbols.size());
     }
 
-    @Test(expected = AssertionError.class)
+    @Test
     public void compareRegexWithAssignSymbols_negative() throws InvalidTypeException {
         String expected = ".* Fox ~[sym1] in the .*";
         String actual = "The Rabbit is running in the forest";
         StringMatcher matcher = new StringMatcher(null, expected, actual, null);
-        matcher.match();
+        assertThrows(AssertionError.class, matcher::match);
     }
 
-    @Test(expected = AssertionError.class)
-    public void checkMessageFromFailedCompare() throws InvalidTypeException {
+    @Test
+    public void checkMessageFromFailedCompare() {
         String expected = "wa";
         int actual = 1;
-        try {
-            new StringMatcher("Some mess", expected, actual, null).match();
-        } catch (AssertionError e) {
-            assertTrue(e.getMessage().contains("Some mess") && e.getMessage().contains("Expected:"));
-            throw e;
-        }
+        assertThrows(AssertionError.class, () -> {
+            try {
+                new StringMatcher("Some mess", expected, actual, null).match();
+            } catch (AssertionError e) {
+                assertTrue(e.getMessage().contains("Some mess") && e.getMessage().contains("Expected:"));
+                throw e;
+            }
+        });
     }
 
     @Test
@@ -302,11 +304,11 @@ public class StringMatcherTests {
         assertEquals(1, props.size());
     }
 
-    @Test(expected = AssertionError.class)
-    public void testPropertiesGeneratorFromSimpleText_negative() throws InvalidTypeException {
+    @Test
+    public void testPropertiesGeneratorFromSimpleText_negative() {
         String a = "foo ~[sym1] bar";
         String b = "foo some bra";
-        Map<String, Object> props = new StringMatcher(null, a, b, null).match();
+        assertThrows(AssertionError.class, () -> new StringMatcher(null, a, b, null).match());
     }
 
     @Test
@@ -328,12 +330,11 @@ public class StringMatcherTests {
         assertEquals(1, props.size());
     }
 
-    @Test(expected = AssertionError.class)
-    public void testPropertiesGeneratorWithNoMatch() throws InvalidTypeException {
+    @Test
+    public void testPropertiesGeneratorWithNoMatch() {
         String a = "this is ~[prop1] property ~[prop2]";
         String b = "this is ~[prop1] property";
-        Map<String, Object> props = new StringMatcher(null, a, b, null).match();
-        assertEquals(0, props.size());
+        assertThrows(AssertionError.class, () -> new StringMatcher(null, a, b, null).match());
     }
 
     @Test
@@ -454,11 +455,12 @@ public class StringMatcherTests {
 
     }
 
-    @Test(expected = AssertionError.class)
-    public void compareRegexWithPositiveLookAhead_negative() throws InvalidTypeException {
+    @Test
+    public void compareRegexWithPositiveLookAhead_negative() {
         String expected = "(?=.*(zzz\n|ipsum a)).*";
         String actual = "some\n ipsum lorem and\n more";
-        new StringMatcher(null, expected, actual, null).match();
+        assertThrows(AssertionError.class, () ->
+                new StringMatcher(null, expected, actual, null).match());
     }
 
     @Test
@@ -468,11 +470,12 @@ public class StringMatcherTests {
         new StringMatcher(null, expected, actual, null).match();
     }
 
-    @Test(expected = AssertionError.class)
-    public void compareRegexWithNegativeLookAhead_negative() throws InvalidTypeException {
+    @Test
+    public void compareRegexWithNegativeLookAhead_negative() {
         String expected = "(?!.*(zzz\n|ipsum l)).*";
         String actual = "some\n ipsum lorem and\n more";
-        new StringMatcher(null, expected, actual, null).match();
+        assertThrows(AssertionError.class, () ->
+                new StringMatcher(null, expected, actual, null).match());
     }
 
     @Test
@@ -484,17 +487,18 @@ public class StringMatcherTests {
         new StringMatcher(null, expected, actual, null).match();
     }
 
-    @Test(expected = AssertionError.class)
-    public void compareRegexWithPositiveAndNegativeLookAhead_negative() throws InvalidTypeException {
+    @Test
+    public void compareRegexWithPositiveAndNegativeLookAhead_negative() {
         String expected = "(?=.*(lorems|ipsum x))(?!.*(zzz\n|ipsum x)).*";
         String actual = "some\n ipsum lorem and\n more";
-        new StringMatcher(null, expected, actual, null).match();
+        assertThrows(AssertionError.class, () ->
+                new StringMatcher(null, expected, actual, null).match());
     }
 
-    @Test(expected = AssertionError.class)
-    public void compareRegexWithPositiveAndNegativeLookAhead_negative1() throws InvalidTypeException {
+    @Test
+    public void compareRegexWithPositiveAndNegativeLookAhead_negative1() {
         String expected = "(?=.*(lorem|ipsum x))\n(?!.*(zzz\n|ipsum l)).*";
         String actual = "some\n ipsum lorem and\n more";
-        new StringMatcher(null, expected, actual, null).match();
+        assertThrows(AssertionError.class, () -> new StringMatcher(null, expected, actual, null).match());
     }
 }

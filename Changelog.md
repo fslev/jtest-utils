@@ -1,7 +1,10 @@
 # Changelog
 
-### 1.53-SNAPSHOT
+### 1.54-SNAPSHOT
 
+### 1.53
+Update dependencies
+Use Junit Jupiter API
 
 ### 1.52
 Update dependencies  

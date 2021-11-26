@@ -3,17 +3,19 @@ package io.jtest.utils.matcher;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.jtest.utils.exceptions.InvalidTypeException;
 import io.jtest.utils.matcher.condition.MatchCondition;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.*;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 public class JsonConvertibleMatcherTests {
 
-    @Test(expected = InvalidTypeException.class)
-    public void compareObjectsWithNoJsonRepresentation() throws InvalidTypeException {
+    @Test
+    public void compareObjectsWithNoJsonRepresentation() {
         String expected = "a";
         String actual = "ab";
-        new JsonMatcher(null, expected, actual, null);
+        assertThrows(InvalidTypeException.class, () -> new JsonMatcher(null, expected, actual, null));
     }
 
     @Test
@@ -56,12 +58,12 @@ public class JsonConvertibleMatcherTests {
         matcher.match();
     }
 
-    @Test(expected = AssertionError.class)
+    @Test
     public void compareLists_nonextensible_negative() throws InvalidTypeException {
         List<String> expected = Arrays.asList("a", "b", "c", "c");
         List<String> actual = Arrays.asList("c", "a", "c", "b", "d");
         JsonMatcher matcher = new JsonMatcher(null, expected, actual, new HashSet<>(Arrays.asList(MatchCondition.JSON_NON_EXTENSIBLE_ARRAY)));
-        matcher.match();
+        assertThrows(AssertionError.class, matcher::match);
     }
 
     @Test
@@ -80,20 +82,21 @@ public class JsonConvertibleMatcherTests {
                 MatchCondition.JSON_STRICT_ORDER_ARRAY, MatchCondition.DO_NOT_MATCH))).match();
     }
 
-    @Test(expected = AssertionError.class)
-    public void doNotMatchLists_arrays_strict_order_negative() throws InvalidTypeException {
+    @Test
+    public void doNotMatchLists_arrays_strict_order_negative() {
         List<String> expected = Arrays.asList("c", "a", "c", "b");
         List<String> actual = Arrays.asList("c", "a", "c", "b", "d");
-        new JsonMatcher(null, expected, actual, new HashSet<>(Arrays.asList(MatchCondition.JSON_NON_EXTENSIBLE_OBJECT,
-                MatchCondition.JSON_STRICT_ORDER_ARRAY, MatchCondition.DO_NOT_MATCH))).match();
+        assertThrows(AssertionError.class, () ->
+                new JsonMatcher(null, expected, actual, new HashSet<>(Arrays.asList(MatchCondition.JSON_NON_EXTENSIBLE_OBJECT,
+                        MatchCondition.JSON_STRICT_ORDER_ARRAY, MatchCondition.DO_NOT_MATCH))).match());
     }
 
-    @Test(expected = AssertionError.class)
+    @Test
     public void compareLists_arrays_strict_order_negative() throws InvalidTypeException {
         List<String> expected = Arrays.asList("c", "a", "b", "c");
         List<String> actual = Arrays.asList("c", "a", "c", "b", "d");
         JsonMatcher matcher = new JsonMatcher(null, expected, actual, new HashSet<>(Arrays.asList(MatchCondition.JSON_STRICT_ORDER_ARRAY, MatchCondition.JSON_NON_EXTENSIBLE_OBJECT)));
-        matcher.match();
+        assertThrows(AssertionError.class, matcher::match);
     }
 
     @Test
@@ -104,12 +107,12 @@ public class JsonConvertibleMatcherTests {
         matcher.match();
     }
 
-    @Test(expected = AssertionError.class)
+    @Test
     public void compareStrings_negative() throws InvalidTypeException {
         String expected = "{\"a\":\"some val1\"}";
         String actual = "{\"b\":120,\"a\":\"some val2\"}";
         JsonMatcher matcher = new JsonMatcher(null, expected, actual, null);
-        matcher.match();
+        assertThrows(AssertionError.class, matcher::match);
     }
 
     @Test
@@ -170,7 +173,7 @@ public class JsonConvertibleMatcherTests {
         matcher.match();
     }
 
-    @Test(expected = AssertionError.class)
+    @Test
     public void compareListsOfMaps_nonExtensible_negative() throws InvalidTypeException {
         List<Map<String, Object>> expected = new ArrayList<>();
         List<Map<String, Object>> actual = new ArrayList<>();
@@ -195,6 +198,6 @@ public class JsonConvertibleMatcherTests {
         actual.add(map1);
         actual.add(map2);
         JsonMatcher matcher = new JsonMatcher(null, expected, actual, null);
-        matcher.match();
+        assertThrows(AssertionError.class, matcher::match);
     }
 }

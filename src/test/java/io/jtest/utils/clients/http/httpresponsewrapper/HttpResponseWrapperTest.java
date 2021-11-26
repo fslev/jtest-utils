@@ -10,12 +10,11 @@ import org.apache.http.impl.DefaultHttpResponseFactory;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.message.BasicStatusLine;
 import org.apache.http.protocol.BasicHttpContext;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.*;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class HttpResponseWrapperTest {
 
@@ -23,42 +22,42 @@ public class HttpResponseWrapperTest {
     public void testWrapperInitFromString() throws Exception {
         String content = "{\"status\":200,\"reason\":\"some thing\",\"body\":{\"wa\":[1,2,3,4]}}";
         HttpResponseWrapper wrapper = new HttpResponseWrapper(content);
-        Assert.assertEquals("200", wrapper.getStatus());
-        Assert.assertEquals("some thing", wrapper.getReasonPhrase());
+        assertEquals("200", wrapper.getStatus());
+        assertEquals("some thing", wrapper.getReasonPhrase());
         Map<String, Object> expectedMap = new HashMap<>();
         expectedMap.put("wa", Arrays.asList(1, 2, 3, 4));
-        Assert.assertEquals(expectedMap, wrapper.getEntity());
-        Assert.assertNull(wrapper.getHeaders());
+        assertEquals(expectedMap, wrapper.getEntity());
+        assertNull(wrapper.getHeaders());
     }
 
     @Test
     public void testWrapperInitFromStringStatus() throws Exception {
         String content = "{\"status\":\"200\"}";
         HttpResponseWrapper wrapper = new HttpResponseWrapper(content);
-        Assert.assertEquals("200", wrapper.getStatus());
-        Assert.assertNull(wrapper.getHeaders());
+        assertEquals("200", wrapper.getStatus());
+        assertNull(wrapper.getHeaders());
     }
 
-    @Test(expected = Exception.class)
+    @Test
     public void testWrapperInitFromEmptyString() throws Exception {
         String content = "";
-        new HttpResponseWrapper(content);
+        assertThrows(Exception.class, () -> new HttpResponseWrapper(content));
     }
 
     @Test
     public void testWrapperInitFromEmptyJsonString() throws Exception {
         String content = "{}";
         HttpResponseWrapper wrapper = new HttpResponseWrapper(content);
-        Assert.assertNull(wrapper.getStatus());
-        Assert.assertNull(wrapper.getReasonPhrase());
-        Assert.assertNull(wrapper.getEntity());
-        Assert.assertNull(wrapper.getHeaders());
+        assertNull(wrapper.getStatus());
+        assertNull(wrapper.getReasonPhrase());
+        assertNull(wrapper.getEntity());
+        assertNull(wrapper.getHeaders());
     }
 
-    @Test(expected = Exception.class)
+    @Test
     public void testWrapperInitFromOtherJsonString() throws Exception {
         String content = "{\"reasonPhrase\":\"test\"}";
-        new HttpResponseWrapper(content);
+        assertThrows(Exception.class, () -> new HttpResponseWrapper(content));
     }
 
     @Test
@@ -67,7 +66,8 @@ public class HttpResponseWrapperTest {
         try {
             new HttpResponseWrapper(content);
         } catch (Exception e) {
-            assertTrue(e.getMessage(), e.getMessage().contains("Object should be convertible to io.jtest.utils.clients.http.wrappers.HttpResponseWrapper type"));
+            assertTrue(e.getMessage().contains("Object should be convertible to io.jtest.utils.clients.http.wrappers.HttpResponseWrapper type"),
+                    e.getMessage());
         }
     }
 
@@ -78,10 +78,10 @@ public class HttpResponseWrapperTest {
         expectedMap.put("reason", "some reason");
         expectedMap.put("body", new int[]{2, 3, 4});
         HttpResponseWrapper wrapper = new HttpResponseWrapper(expectedMap);
-        Assert.assertEquals("200", wrapper.getStatus());
-        Assert.assertEquals("some reason", wrapper.getReasonPhrase());
-        Assert.assertEquals(Arrays.asList(2, 3, 4), wrapper.getEntity());
-        Assert.assertNull(wrapper.getHeaders());
+        assertEquals("200", wrapper.getStatus());
+        assertEquals("some reason", wrapper.getReasonPhrase());
+        assertEquals(Arrays.asList(2, 3, 4), wrapper.getEntity());
+        assertNull(wrapper.getHeaders());
     }
 
     @Test
@@ -91,10 +91,10 @@ public class HttpResponseWrapperTest {
         wrapper.setEntity("test");
         wrapper.setStatus("200");
         HttpResponseWrapper wrapper1 = new HttpResponseWrapper(wrapper);
-        Assert.assertEquals("200", wrapper1.getStatus());
-        Assert.assertNull(wrapper1.getReasonPhrase());
-        Assert.assertEquals("test", wrapper1.getEntity());
-        Assert.assertNull(wrapper1.getHeaders());
+        assertEquals("200", wrapper1.getStatus());
+        assertNull(wrapper1.getReasonPhrase());
+        assertEquals("test", wrapper1.getEntity());
+        assertNull(wrapper1.getHeaders());
     }
 
     @Test
@@ -106,12 +106,12 @@ public class HttpResponseWrapperTest {
         mock.setHeader(new BasicHeader("Content-Type", "application/json"));
         mock.setHeader(new BasicHeader("Accept", "application/json"));
         HttpResponseWrapper wrapper = new HttpResponseWrapper(mock);
-        Assert.assertEquals("200", wrapper.getStatus());
-        Assert.assertEquals("some reason", wrapper.getReasonPhrase());
-        Assert.assertEquals("{\"a\":100}", wrapper.getEntity());
+        assertEquals("200", wrapper.getStatus());
+        assertEquals("some reason", wrapper.getReasonPhrase());
+        assertEquals("{\"a\":100}", wrapper.getEntity());
         Set<Map.Entry<String, Object>> entrySet = new HashSet<>();
         entrySet.add(new AbstractMap.SimpleEntry<>("Content-Type", "application/json"));
         entrySet.add(new AbstractMap.SimpleEntry<>("Accept", "application/json"));
-        Assert.assertEquals(entrySet, wrapper.getHeaders());
+        assertEquals(entrySet, wrapper.getHeaders());
     }
 }

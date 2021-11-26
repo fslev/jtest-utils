@@ -1,13 +1,12 @@
 package io.jtest.utils.matcher;
 
-import io.jtest.utils.exceptions.InvalidTypeException;
 import io.jtest.utils.matcher.condition.MatchCondition;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ObjectMatcherTest {
 
@@ -53,7 +52,7 @@ public class ObjectMatcherTest {
     }
 
     @Test
-    public void compareStringWithManyAssignSymbolsBetweenNewLines() throws InvalidTypeException {
+    public void compareStringWithManyAssignSymbolsBetweenNewLines() {
         String expected = "~[prop1],\n This is a ~[prop2]\n ~[prop3]!";
         String actual = "Hello,\n This is a world of many nations \n And 7 continents...!";
         Map<String, Object> symbols = ObjectMatcher.match(null, expected, actual);
@@ -64,7 +63,6 @@ public class ObjectMatcherTest {
         assertEquals("Hello", symbols.get("prop1"));
         assertEquals("world of many nations ", symbols.get("prop2"));
         assertEquals("And 7 continents...", symbols.get("prop3"));
-
     }
 
     @Test

@@ -4,11 +4,11 @@ import com.fasterxml.jackson.databind.node.BooleanNode;
 import com.fasterxml.jackson.databind.node.IntNode;
 import com.fasterxml.jackson.databind.node.TextNode;
 import io.jtest.utils.matcher.condition.MatchCondition;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.*;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class FlowMatcherTests {
 
@@ -25,18 +25,18 @@ public class FlowMatcherTests {
         assertNull(symbols.get("val"));
     }
 
-    @Test(expected = AssertionError.class)
+    @Test
     public void compareNulls_negative() {
         String expected = "text";
         String actual = null;
-        new FlowMatcher().match(null, expected, actual, null);
+        assertThrows(AssertionError.class, () -> new FlowMatcher().match(null, expected, actual, null));
     }
 
-    @Test(expected = AssertionError.class)
+    @Test
     public void compareNulls_negative1() {
         String expected = null;
         String actual = "text";
-        new FlowMatcher().match(null, expected, actual, null);
+        assertThrows(AssertionError.class, () -> new FlowMatcher().match(null, expected, actual, null));
     }
 
     @Test
@@ -44,9 +44,10 @@ public class FlowMatcherTests {
         new FlowMatcher().match(null, null, "val", new HashSet<>(Arrays.asList(MatchCondition.DO_NOT_MATCH)));
     }
 
-    @Test(expected = AssertionError.class)
+    @Test
     public void doNotMatchWithNull_negative() {
-        new FlowMatcher().match(null, null, null, new HashSet<>(Arrays.asList(MatchCondition.DO_NOT_MATCH)));
+        assertThrows(AssertionError.class, () ->
+                new FlowMatcher().match(null, null, null, new HashSet<>(Arrays.asList(MatchCondition.DO_NOT_MATCH))));
     }
 
     @Test
@@ -59,9 +60,10 @@ public class FlowMatcherTests {
         new FlowMatcher().match(null, "", "val", new HashSet<>(Arrays.asList(MatchCondition.DO_NOT_MATCH)));
     }
 
-    @Test(expected = AssertionError.class)
+    @Test
     public void doNotMatchEmptyStrings_negative() {
-        new FlowMatcher().match(null, "", "", new HashSet<>(Arrays.asList(MatchCondition.DO_NOT_MATCH)));
+        assertThrows(AssertionError.class, () ->
+                new FlowMatcher().match(null, "", "", new HashSet<>(Arrays.asList(MatchCondition.DO_NOT_MATCH))));
     }
 
     @Test
@@ -74,9 +76,10 @@ public class FlowMatcherTests {
         new FlowMatcher().match("", 200L, 200, new HashSet<>(Collections.singletonList(MatchCondition.JSON_NON_EXTENSIBLE_ARRAY)));
     }
 
-    @Test(expected = AssertionError.class)
+    @Test
     public void comparePrimitives_negative() {
-        new FlowMatcher().match("", 200.0, 200, new HashSet<>(Collections.singletonList(MatchCondition.JSON_NON_EXTENSIBLE_ARRAY)));
+        assertThrows(AssertionError.class, () ->
+                new FlowMatcher().match("", 200.0, 200, new HashSet<>(Collections.singletonList(MatchCondition.JSON_NON_EXTENSIBLE_ARRAY))));
     }
 
     @Test
@@ -132,11 +135,11 @@ public class FlowMatcherTests {
         assertEquals(1, symbols.size());
     }
 
-    @Test(expected = AssertionError.class)
+    @Test
     public void compareJsonWithAssignSymbolsOnFields_in_depth_negative() {
         String expected = "{\"a\":{\"abc-~[sym1]\":{\"o\":\"does not exists\"}}}";
         String actual = "{\"a\":{\"abc-X\":{\"o\":\"1\"},\"abc-Y\":{\"o\":\"0\"},\"abc-X\":{\"o\":\"2\"}}}";
-        new FlowMatcher().match(null, expected, actual, null);
+        assertThrows(AssertionError.class, () -> new FlowMatcher().match(null, expected, actual, null));
     }
 
     @Test
@@ -158,11 +161,11 @@ public class FlowMatcherTests {
         assertEquals(1, symbols.size());
     }
 
-    @Test(expected = AssertionError.class)
+    @Test
     public void compareJsonWithAssignSymbolsOnFieldsWhichHasValuesThatMatch_negative() {
         String expected = "{\"~[sym1]\":\"101\"}";
         String actual = "{\"a\":\"3\",\"x\":\"o\",\"b\":\"100\",\"c\":\"90\"}";
-        new FlowMatcher().match(null, expected, actual, null);
+        assertThrows(AssertionError.class, () -> new FlowMatcher().match(null, expected, actual, null));
     }
 
     @Test
@@ -197,12 +200,12 @@ public class FlowMatcherTests {
         assertEquals(2, symbols.size());
     }
 
-    @Test(expected = AssertionError.class)
+    @Test
     public void doNotMatchJsonNonExtensibleArrayWithAssignSymbolsOnFieldsAndValues_negative() {
         String expected = "[{\"~[sym1]\":\"~[sym2]\"},{\"x\":false}]";
         String actual = "[{\"c\":0},{\"x\":false}]";
-        Map<String, Object> symbols = new FlowMatcher().match(null, expected, actual,
-                new HashSet<>(Arrays.asList(MatchCondition.JSON_NON_EXTENSIBLE_ARRAY, MatchCondition.DO_NOT_MATCH)));
+        assertThrows(AssertionError.class, () -> new FlowMatcher().match(null, expected, actual,
+                new HashSet<>(Arrays.asList(MatchCondition.JSON_NON_EXTENSIBLE_ARRAY, MatchCondition.DO_NOT_MATCH))));
     }
 
     @Test
@@ -257,14 +260,14 @@ public class FlowMatcherTests {
         assertEquals(0, symbols.size());
     }
 
-    @Test(expected = AssertionError.class)
+    @Test
     public void doNotMatchXmlWithAssignSymbols_negative() {
         String expected =
                 "<struct><int a=\"~[sym1]\">some ~[sym3] here</int><boolean a=\"bo~[sym2]ue\">false</boolean></struct>";
         String actual = "<struct><boolean a=\"boolAttrValue\">false</boolean>"
                 + "<int a=\"(attrValue1\">some text here</int><str a=\"some result\"><a>sub text</a></str></struct>";
-        new FlowMatcher().match(null, expected, actual,
-                new HashSet<>(Arrays.asList(MatchCondition.DO_NOT_MATCH)));
+        assertThrows(AssertionError.class, () -> new FlowMatcher().match(null, expected, actual,
+                new HashSet<>(Arrays.asList(MatchCondition.DO_NOT_MATCH))));
     }
 
     @Test
@@ -281,14 +284,14 @@ public class FlowMatcherTests {
         assertEquals(3, symbols.size());
     }
 
-    @Test(expected = AssertionError.class)
+    @Test
     public void matchXmlWithAssignSymbolsWithChildNodeSequence_negative() {
         String expected =
                 "<struct><int a=\"~[sym1]\">some ~[sym3] here</int><boolean a=\"bo~[sym2]ue\">false</boolean></struct>";
         String actual = "<struct>"
                 + "<boolean a=\"boolAttrValue\">false</boolean><int a=\"(attrValue1\">some text here</int><str a=\"some result\"><a>sub text</a></str></struct>";
-        new FlowMatcher().match(null, expected, actual,
-                new HashSet<>(Arrays.asList(MatchCondition.XML_CHILD_NODELIST_SEQUENCE)));
+        assertThrows(AssertionError.class, () -> new FlowMatcher().match(null, expected, actual,
+                new HashSet<>(Arrays.asList(MatchCondition.XML_CHILD_NODELIST_SEQUENCE))));
     }
 
 
@@ -303,14 +306,14 @@ public class FlowMatcherTests {
         assertEquals(0, props.size());
     }
 
-    @Test(expected = AssertionError.class)
+    @Test
     public void doNotMatchXmlWithAssignSymbolsWithChildNodeSequence_negative() {
         String expected =
                 "<struct><int a=\"~[sym1]\">some ~[sym3] here</int><boolean a=\"bo~[sym2]ue\">false</boolean></struct>";
         String actual = "<struct>"
                 + "<int a=\"(attrValue1\">some text here</int><boolean a=\"boolAttrValue\">false</boolean><str a=\"some result\"><a>sub text</a></str></struct>";
-        new FlowMatcher().match(null, expected, actual,
-                new HashSet<>(Arrays.asList(MatchCondition.XML_CHILD_NODELIST_SEQUENCE, MatchCondition.DO_NOT_MATCH)));
+        assertThrows(AssertionError.class, () -> new FlowMatcher().match(null, expected, actual,
+                new HashSet<>(Arrays.asList(MatchCondition.XML_CHILD_NODELIST_SEQUENCE, MatchCondition.DO_NOT_MATCH))));
     }
 
     @Test
@@ -374,6 +377,4 @@ public class FlowMatcherTests {
         actual.add(map2);
         new FlowMatcher().match(null, expected, actual, null);
     }
-
-
 }

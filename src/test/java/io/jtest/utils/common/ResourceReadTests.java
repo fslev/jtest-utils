@@ -2,28 +2,26 @@ package io.jtest.utils.common;
 
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class ResourceReadTests {
 
     @Test
     public void testStringReadFromFile() throws IOException {
-        Assert.assertEquals("some content 1\nsome content 2\n", ResourceUtils.read("foobar/file1.txt"));
+        assertEquals("some content 1\nsome content 2\n", ResourceUtils.read("foobar/file1.txt"));
     }
 
     @Test
     public void testJsonReadingFromFile() throws IOException {
         ObjectNode json = JsonNodeFactory.instance.objectNode();
         json.putObject("menu").put("show", true);
-        Assert.assertEquals(json, JsonUtils.toJson(ResourceUtils.read("foobar/file1.json")));
+        assertEquals(json, JsonUtils.toJson(ResourceUtils.read("foobar/file1.json")));
     }
 
     @Test
@@ -57,14 +55,14 @@ public class ResourceReadTests {
         assertEquals("pass", actualData.get("foobar/dir1/test2.properties"));
     }
 
-    @Test(expected = IOException.class)
-    public void testInDepthReadFromNonExistentDirectory() throws IOException, URISyntaxException {
-        ResourceUtils.readDirectory("non_existent");
+    @Test
+    public void testInDepthReadFromNonExistentDirectory() {
+        assertThrows(IOException.class, () -> ResourceUtils.readDirectory("non_existent"));
     }
 
-    @Test(expected = IOException.class)
-    public void testInDepthReadFromDirectoryWhichIsAFile() throws IOException, URISyntaxException {
-        ResourceUtils.readDirectory("foobar/file1.txt");
+    @Test
+    public void testInDepthReadFromDirectoryWhichIsAFile() {
+        assertThrows(IOException.class, () -> ResourceUtils.readDirectory("foobar/file1.txt"));
     }
 
     @Test

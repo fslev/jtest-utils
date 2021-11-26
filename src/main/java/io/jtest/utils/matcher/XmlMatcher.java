@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 
 import static io.jtest.utils.common.XmlUtils.toNode;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.xmlunit.matchers.CompareMatcher.isSimilarTo;
 
 public class XmlMatcher extends AbstractObjectMatcher<Node> {

@@ -2,22 +2,22 @@ package io.jtest.utils.matcher;
 
 import io.jtest.utils.exceptions.InvalidTypeException;
 import io.jtest.utils.matcher.condition.MatchCondition;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Map;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class XmlMatcherTests {
 
-    @Test(expected = InvalidTypeException.class)
+    @Test
     public void compareMalformedXml() throws InvalidTypeException {
         String expected = "<struct><int a=2>3da</int><boolean>false</boolean></struct>";
         String actual = "<struct><int a=2>3da</int><boolean>false</boolean></struct>";
-        new XmlMatcher(null, expected, actual, null);
+        assertThrows(InvalidTypeException.class, () -> new XmlMatcher(null, expected, actual, null));
     }
 
     @Test
@@ -34,14 +34,14 @@ public class XmlMatcherTests {
         assertEquals(3, props.size());
     }
 
-    @Test(expected = AssertionError.class)
+    @Test
     public void compareXmlWithAssignpropsAndInvalidRegex_negative() throws InvalidTypeException {
         String expected =
                 "<struct><int a=\"X~[sym1]\">some ~[sym3] here</int><boolean a=\"bo~[sym2]ue\">false</boolean></struct>";
         String actual = "<struct><boolean a=\"boolAttrValue\">false</boolean>"
                 + "<int a=\"(attrValue1\">some text here</int><str a=\"some result\"><a>sub text</a></str></struct>";
         XmlMatcher matcher = new XmlMatcher(null, expected, actual, null);
-        matcher.match();
+        assertThrows(AssertionError.class, () -> matcher.match());
     }
 
     @Test
@@ -148,16 +148,18 @@ public class XmlMatcherTests {
         assertEquals(3, props.size());
     }
 
-    @Test(expected = AssertionError.class)
+    @Test
     public void checkMessageFromXmlCompare() throws InvalidTypeException {
         String expected = "<struct>test</struct>";
         String actual = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?><struct></struct>";
-        try {
-            new XmlMatcher("Some message", expected, actual, null).match();
-        } catch (AssertionError e) {
-            assertTrue(e.getMessage().contains("Some message") && e.getMessage().contains("Expected:"));
-            throw e;
-        }
+        assertThrows(AssertionError.class, () -> {
+            try {
+                new XmlMatcher("Some message", expected, actual, null).match();
+            } catch (AssertionError e) {
+                assertTrue(e.getMessage().contains("Some message") && e.getMessage().contains("Expected:"));
+                throw e;
+            }
+        });
     }
 
     @Test
@@ -174,11 +176,12 @@ public class XmlMatcherTests {
         new XmlMatcher("", expected, actual, new HashSet<>(Arrays.asList(MatchCondition.XML_CHILD_NODELIST_LENGTH, MatchCondition.DO_NOT_MATCH))).match();
     }
 
-    @Test(expected = AssertionError.class)
+    @Test
     public void compareXmlChildLength_negative() throws InvalidTypeException {
         String expected = "<struct><int a=\"2\">3da</int><boolean>.*</boolean></struct>";
         String actual = "<struct><int a=\"2\">3da</int><boolean>false</boolean><x>test</x></struct>";
-        new XmlMatcher("", expected, actual, new HashSet<>(Collections.singletonList(MatchCondition.XML_CHILD_NODELIST_LENGTH))).match();
+        assertThrows(AssertionError.class, () ->
+                new XmlMatcher("", expected, actual, new HashSet<>(Collections.singletonList(MatchCondition.XML_CHILD_NODELIST_LENGTH))).match());
     }
 
     @Test
@@ -195,11 +198,12 @@ public class XmlMatcherTests {
         new XmlMatcher("", expected, actual, new HashSet<>(Arrays.asList(MatchCondition.XML_CHILD_NODELIST_SEQUENCE, MatchCondition.DO_NOT_MATCH))).match();
     }
 
-    @Test(expected = AssertionError.class)
+    @Test
     public void compareXmlChildOrder_negative() throws InvalidTypeException {
         String expected = "<struct><list><int>3da</int><int>0da</int></list><boolean>.*</boolean></struct>";
         String actual = "<struct><list><int>0da</int><int>3da</int></list><boolean>false</boolean></struct>";
-        new XmlMatcher("", expected, actual, new HashSet<>(Collections.singleton(MatchCondition.XML_CHILD_NODELIST_SEQUENCE))).match();
+        assertThrows(AssertionError.class, () ->
+                new XmlMatcher("", expected, actual, new HashSet<>(Collections.singleton(MatchCondition.XML_CHILD_NODELIST_SEQUENCE))).match());
     }
 
     @Test
@@ -216,11 +220,11 @@ public class XmlMatcherTests {
         new XmlMatcher("", expected, actual, null).match();
     }
 
-    @Test(expected = AssertionError.class)
+    @Test
     public void compareXmlAttributesInclusion_negative() throws InvalidTypeException {
         String expected = "<struct><int a=\"[0-9]*\" c=\"2\">3da</int><boolean>.*</boolean></struct>";
         String actual = "<struct><boolean>false</boolean><int a=\"2\" b=\"3\">3da</int></struct>";
-        new XmlMatcher("", expected, actual, null).match();
+        assertThrows(AssertionError.class, () -> new XmlMatcher("", expected, actual, null).match());
     }
 
     @Test
@@ -244,18 +248,20 @@ public class XmlMatcherTests {
         new XmlMatcher("", expected, actual, new HashSet<>(Arrays.asList(MatchCondition.XML_ELEMENT_NUM_ATTRIBUTES, MatchCondition.DO_NOT_MATCH))).match();
     }
 
-    @Test(expected = AssertionError.class)
+    @Test
     public void doNotMatchXmlAttributesWithLength_negative() throws InvalidTypeException {
         String expected = "<struct><int a=\"[0-9]*\">3da</int><boolean>.*</boolean></struct>";
         String actual = "<struct><boolean>false</boolean><int a=\"2\" b=\"3\">3da</int></struct>";
-        new XmlMatcher("", expected, actual, new HashSet<>(Arrays.asList(MatchCondition.DO_NOT_MATCH))).match();
+        assertThrows(AssertionError.class, () ->
+                new XmlMatcher("", expected, actual, new HashSet<>(Arrays.asList(MatchCondition.DO_NOT_MATCH))).match());
     }
 
-    @Test(expected = AssertionError.class)
+    @Test
     public void compareXmlAttributesWithLength_negative() throws InvalidTypeException {
         String expected = "<struct><int a=\"[0-9]*\">3da</int><boolean>.*</boolean></struct>";
         String actual = "<struct><boolean>false</boolean><int a=\"2\" b=\"3\">3da</int></struct>";
-        new XmlMatcher("", expected, actual, new HashSet<>(Collections.singleton(MatchCondition.XML_ELEMENT_NUM_ATTRIBUTES))).match();
+        assertThrows(AssertionError.class, () ->
+                new XmlMatcher("", expected, actual, new HashSet<>(Collections.singleton(MatchCondition.XML_ELEMENT_NUM_ATTRIBUTES))).match());
     }
 
     @Test
@@ -291,7 +297,7 @@ public class XmlMatcherTests {
         new XmlMatcher("Failed", expected, actual, null).match();
     }
 
-    @Test(expected = AssertionError.class)
+    @Test
     public void matchInnerLists_strict_size() throws InvalidTypeException {
         String expected = "<config>\n" +
                 "    <protocols>\n" +
@@ -313,10 +319,11 @@ public class XmlMatcherTests {
                 "       </ldp>\n" +
                 "   </protocols>\n" +
                 "</config>\n";
-        new XmlMatcher("Failed", expected, actual, new HashSet<>(Collections.singleton(MatchCondition.XML_CHILD_NODELIST_LENGTH))).match();
+        assertThrows(AssertionError.class, () ->
+                new XmlMatcher("Failed", expected, actual, new HashSet<>(Collections.singleton(MatchCondition.XML_CHILD_NODELIST_LENGTH))).match());
     }
 
-    @Test(expected = AssertionError.class)
+    @Test
     public void matchInnerLists_strict_order() throws InvalidTypeException {
         String expected = "<config>\n" +
                 "    <protocols>\n" +
@@ -338,7 +345,8 @@ public class XmlMatcherTests {
                 "       </ldp>\n" +
                 "   </protocols>\n" +
                 "</config>\n";
-        new XmlMatcher("Failed", expected, actual, new HashSet<>(Collections.singleton(MatchCondition.XML_CHILD_NODELIST_SEQUENCE))).match();
+        assertThrows(AssertionError.class, () ->
+                new XmlMatcher("Failed", expected, actual, new HashSet<>(Collections.singleton(MatchCondition.XML_CHILD_NODELIST_SEQUENCE))).match());
     }
 
     @Test

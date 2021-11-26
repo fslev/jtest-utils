@@ -4,21 +4,21 @@ import com.fasterxml.jackson.databind.node.IntNode;
 import com.fasterxml.jackson.databind.node.TextNode;
 import io.jtest.utils.exceptions.InvalidTypeException;
 import io.jtest.utils.matcher.condition.MatchCondition;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Map;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class JsonMatcherTests {
 
-    @Test(expected = InvalidTypeException.class)
-    public void compareMalformedJson() throws InvalidTypeException {
+    @Test
+    public void compareMalformedJson() {
         String expected = "{\"!b\":val1\",\"a\":\"val2\"}";
         String actual = "{\"a\":\"val2\",\"c\":\"val1\"}";
-        new JsonMatcher(null, expected, actual, null);
+        assertThrows(InvalidTypeException.class, () -> new JsonMatcher(null, expected, actual, null));
     }
 
     @Test
@@ -28,11 +28,11 @@ public class JsonMatcherTests {
         assertThrows(AssertionError.class, () -> new JsonMatcher(null, expected, actual, null).match());
     }
 
-    @Test(expected = InvalidTypeException.class)
-    public void compareJsonWithString() throws InvalidTypeException {
+    @Test
+    public void compareJsonWithString() {
         String expected = "{\"a\":\"lorem ipsum\"}";
         String actual = "string";
-        new JsonMatcher(null, expected, actual, null);
+        assertThrows(InvalidTypeException.class, () -> new JsonMatcher(null, expected, actual, null));
     }
 
     @Test
@@ -49,11 +49,11 @@ public class JsonMatcherTests {
         new JsonMatcher(null, expected, actual, null).match();
     }
 
-    @Test(expected = InvalidTypeException.class)
-    public void matchTextNodeWithUnQuotedString() throws InvalidTypeException {
+    @Test
+    public void matchTextNodeWithUnQuotedString() {
         TextNode expected = new TextNode("some val");
         String actual = "some val";
-        new JsonMatcher(null, expected, actual, null).match();
+        assertThrows(InvalidTypeException.class, () -> new JsonMatcher(null, expected, actual, null).match());
     }
 
     @Test
@@ -86,11 +86,12 @@ public class JsonMatcherTests {
         assertEquals(2, symbols.size());
     }
 
-    @Test(expected = AssertionError.class)
-    public void compareJsonWithAssignSymbolsOnFields_in_depth_negative() throws InvalidTypeException {
+    @Test
+    public void compareJsonWithAssignSymbolsOnFields_in_depth_negative() {
         String expected = "{\"a\":{\"abc-~[sym1]\":{\"o\":\"2\"},\"abc-~[sym2]\":{\"o\":\"U\"}}}";
         String actual = "{\"a\":{\"abc-X\":{\"o\":\"1\"},\"abc-Y\":{\"o\":\"0\"},\"abc-X\":{\"o\":\"2\"}}}";
-        new JsonMatcher(null, expected, actual, null).match();
+        assertThrows(AssertionError.class, () ->
+                new JsonMatcher(null, expected, actual, null).match());
     }
 
     @Test
@@ -102,12 +103,12 @@ public class JsonMatcherTests {
         assertTrue(symbols.isEmpty());
     }
 
-    @Test(expected = AssertionError.class)
+    @Test
     public void compareSimpleJson_checkNoExtraFieldsExistNegative() throws InvalidTypeException {
         String expected = "{\"a\":\"val2\",\"c\":\"val1\",\"!.*\":\".*\"}";
         String actual = "{\"a\":\"val2\",\"c\":\"val1\",\"d\":\"val1\"}";
         JsonMatcher matcher = new JsonMatcher(null, expected, actual, null);
-        matcher.match();
+        assertThrows(AssertionError.class, matcher::match);
     }
 
     @Test
@@ -139,12 +140,12 @@ public class JsonMatcherTests {
         assertTrue(symbols.isEmpty());
     }
 
-    @Test(expected = AssertionError.class)
+    @Test
     public void compareJsonArray_checkNoExtraElementsExist_negative() throws InvalidTypeException {
         String expected = "{\"b\":\"val1\",\"a\":[1,2,3,4,\"!.*\"]}";
         String actual = "{\"a\":[5,4,3,2,1],\"b\":\"val1\"}";
         JsonMatcher matcher = new JsonMatcher(null, expected, actual, null);
-        matcher.match();
+        assertThrows(AssertionError.class, matcher::match);
     }
 
     @Test
@@ -158,14 +159,12 @@ public class JsonMatcherTests {
         assertEquals(2, symbols.size());
     }
 
-    @Test(expected = AssertionError.class)
+    @Test
     public void compareJsonArrayWithAssignSymbols_negative() throws InvalidTypeException {
         String expected = "{\"b\":\"val1\",\"a\":[\"~[sym1]\",2,3,5]}";
         String actual = "{\"a\":[5,4,3,2,1],\"b\":\"val1\"}";
         JsonMatcher matcher = new JsonMatcher(null, expected, actual, null);
-        Map<String, Object> symbols = matcher.match();
-        assertTrue(symbols.isEmpty());
-        matcher.match();
+        assertThrows(AssertionError.class, matcher::match);
     }
 
     @Test
@@ -177,12 +176,12 @@ public class JsonMatcherTests {
         assertTrue(symbols.isEmpty());
     }
 
-    @Test(expected = AssertionError.class)
+    @Test
     public void compareJsonWithAssignSymbolsAndDoNotFind_negative() throws InvalidTypeException {
         String expected = "{\"b\":\"!v~[sym1]1\"}";
         String actual = "{\"a\":[5,4,3,2,1],\"b\":\"val1\"}";
         JsonMatcher matcher = new JsonMatcher(null, expected, actual, null);
-        matcher.match();
+        assertThrows(AssertionError.class, matcher::match);
     }
 
     @Test
@@ -227,17 +226,19 @@ public class JsonMatcherTests {
         assertEquals(2, symbols.size());
     }
 
-    @Test(expected = AssertionError.class)
+    @Test
     public void checkMessageFromSimpleJsonCompare() throws InvalidTypeException {
         String expected = "{\"a\":\"val2\",\"c\":\"val1\",\"!.*\":\".*\"}";
         String actual = "{\"a\":\"val2\",\"c\":\"val1\",\"d\":\"val1\"}";
         JsonMatcher matcher = new JsonMatcher("some msg", expected, actual, null);
-        try {
-            matcher.match();
-        } catch (AssertionError e) {
-            assertTrue(e.getMessage().contains("some msg") && e.getMessage().contains("Expected:"));
-            throw e;
-        }
+        assertThrows(AssertionError.class, () -> {
+            try {
+                matcher.match();
+            } catch (AssertionError e) {
+                assertTrue(e.getMessage().contains("some msg") && e.getMessage().contains("Expected:"));
+                throw e;
+            }
+        });
     }
 
     @Test
@@ -256,7 +257,8 @@ public class JsonMatcherTests {
                 "}";
         JsonMatcher matcher = new JsonMatcher(null, expected, actual, null);
         Map<String, Object> symbols = matcher.match();
-        assertEquals("Actual symbol result: " + symbols.get("businessKey"), "1551172176725.com|email-verif|1d55b4f3-6ec1-4d89-ba58-2ba2a3eaa80e", symbols.get("businessKey"));
+        assertEquals("1551172176725.com|email-verif|1d55b4f3-6ec1-4d89-ba58-2ba2a3eaa80e", symbols.get("businessKey"),
+                "Actual symbol result: " + symbols.get("businessKey"));
         assertEquals(1, symbols.size());
     }
 
@@ -267,11 +269,12 @@ public class JsonMatcherTests {
         new JsonMatcher(null, expected, actual, new HashSet<>(Arrays.asList(MatchCondition.DO_NOT_MATCH))).match();
     }
 
-    @Test(expected = AssertionError.class)
-    public void doNotMatchJsons_negative() throws InvalidTypeException {
+    @Test
+    public void doNotMatchJsons_negative() {
         String expected = "{\"a\":1}";
         String actual = "{\"a\":1, \"b\":2}";
-        new JsonMatcher(null, expected, actual, new HashSet<>(Arrays.asList(MatchCondition.DO_NOT_MATCH))).match();
+        assertThrows(AssertionError.class, () ->
+                new JsonMatcher(null, expected, actual, new HashSet<>(Arrays.asList(MatchCondition.DO_NOT_MATCH))).match());
     }
 
     @Test
@@ -289,11 +292,12 @@ public class JsonMatcherTests {
         new JsonMatcher(null, expected, actual, new HashSet<>(Arrays.asList(MatchCondition.JSON_NON_EXTENSIBLE_OBJECT, MatchCondition.DO_NOT_MATCH))).match();
     }
 
-    @Test(expected = AssertionError.class)
-    public void doNotMatchNonExtensibleJsons_negative() throws InvalidTypeException {
+    @Test
+    public void doNotMatchNonExtensibleJsons_negative() {
         String expected = "{\"b\":2, \"a\":1}";
         String actual = "{\"a\":1, \"b\":2}";
-        new JsonMatcher(null, expected, actual, new HashSet<>(Arrays.asList(MatchCondition.JSON_NON_EXTENSIBLE_OBJECT, MatchCondition.DO_NOT_MATCH))).match();
+        assertThrows(AssertionError.class, () ->
+                new JsonMatcher(null, expected, actual, new HashSet<>(Arrays.asList(MatchCondition.JSON_NON_EXTENSIBLE_OBJECT, MatchCondition.DO_NOT_MATCH))).match());
     }
 
     @Test
@@ -303,11 +307,12 @@ public class JsonMatcherTests {
         new JsonMatcher(null, expected, actual, new HashSet<>(Arrays.asList(MatchCondition.JSON_NON_EXTENSIBLE_ARRAY))).match();
     }
 
-    @Test(expected = AssertionError.class)
-    public void matchNonExtensibleJsonArrays_negative() throws InvalidTypeException {
+    @Test
+    public void matchNonExtensibleJsonArrays_negative() {
         String expected = "{\"a\":{\"b\":[1]}}";
         String actual = "{\"a\":{\"c\":0, \"b\":[1, true]}}";
-        new JsonMatcher(null, expected, actual, new HashSet<>(Arrays.asList(MatchCondition.JSON_NON_EXTENSIBLE_ARRAY))).match();
+        assertThrows(AssertionError.class, () ->
+                new JsonMatcher(null, expected, actual, new HashSet<>(Arrays.asList(MatchCondition.JSON_NON_EXTENSIBLE_ARRAY))).match());
     }
 
     @Test
@@ -317,11 +322,12 @@ public class JsonMatcherTests {
         new JsonMatcher(null, expected, actual, new HashSet<>(Arrays.asList(MatchCondition.JSON_NON_EXTENSIBLE_ARRAY, MatchCondition.DO_NOT_MATCH))).match();
     }
 
-    @Test(expected = AssertionError.class)
-    public void doNotMatchNonExtensibleJsonArrays_negative() throws InvalidTypeException {
+    @Test
+    public void doNotMatchNonExtensibleJsonArrays_negative() {
         String expected = "{\"a\":{\"b\":[1, true]}}";
         String actual = "{\"a\":{\"c\":0, \"b\":[1, true]}}";
-        new JsonMatcher(null, expected, actual, new HashSet<>(Arrays.asList(MatchCondition.JSON_NON_EXTENSIBLE_ARRAY, MatchCondition.DO_NOT_MATCH))).match();
+        assertThrows(AssertionError.class, () ->
+                new JsonMatcher(null, expected, actual, new HashSet<>(Arrays.asList(MatchCondition.JSON_NON_EXTENSIBLE_ARRAY, MatchCondition.DO_NOT_MATCH))).match());
     }
 
     @Test
@@ -331,11 +337,12 @@ public class JsonMatcherTests {
         new JsonMatcher(null, expected, actual, new HashSet<>(Arrays.asList(MatchCondition.JSON_STRICT_ORDER_ARRAY))).match();
     }
 
-    @Test(expected = AssertionError.class)
-    public void matchJsonArraysStrictOrder_negative() throws InvalidTypeException {
+    @Test
+    public void matchJsonArraysStrictOrder_negative() {
         String expected = "{\"a\":{\"b\":[1, false]}}";
         String actual = "{\"a\":{\"c\":0, \"b\":[1, true, false]}}";
-        new JsonMatcher(null, expected, actual, new HashSet<>(Arrays.asList(MatchCondition.JSON_STRICT_ORDER_ARRAY))).match();
+        assertThrows(AssertionError.class, () ->
+                new JsonMatcher(null, expected, actual, new HashSet<>(Arrays.asList(MatchCondition.JSON_STRICT_ORDER_ARRAY))).match());
     }
 
     @Test
@@ -354,12 +361,13 @@ public class JsonMatcherTests {
                 MatchCondition.JSON_NON_EXTENSIBLE_OBJECT, MatchCondition.JSON_NON_EXTENSIBLE_ARRAY))).match();
     }
 
-    @Test(expected = AssertionError.class)
-    public void matchJsonNonExtensibleAndArraysStrictOrder_negative() throws InvalidTypeException {
+    @Test
+    public void matchJsonNonExtensibleAndArraysStrictOrder_negative() {
         String expected = "{\"a\":{\"d\":null, \"b\":[1, true]}, \"c\":0}";
         String actual = "{\"c\":0, \"a\":{\"b\":[true, 1], \"d\":null}}";
-        new JsonMatcher(null, expected, actual, new HashSet<>(Arrays.asList(MatchCondition.JSON_STRICT_ORDER_ARRAY,
-                MatchCondition.JSON_NON_EXTENSIBLE_OBJECT, MatchCondition.JSON_NON_EXTENSIBLE_ARRAY))).match();
+        assertThrows(AssertionError.class, () ->
+                new JsonMatcher(null, expected, actual, new HashSet<>(Arrays.asList(MatchCondition.JSON_STRICT_ORDER_ARRAY,
+                        MatchCondition.JSON_NON_EXTENSIBLE_OBJECT, MatchCondition.JSON_NON_EXTENSIBLE_ARRAY))).match());
     }
 
     @Test
@@ -370,12 +378,13 @@ public class JsonMatcherTests {
                 MatchCondition.JSON_NON_EXTENSIBLE_OBJECT, MatchCondition.JSON_NON_EXTENSIBLE_ARRAY, MatchCondition.DO_NOT_MATCH))).match();
     }
 
-    @Test(expected = AssertionError.class)
-    public void doNotMatchJsonNonExtensibleAndArraysStrictOrder_negative() throws InvalidTypeException {
+    @Test
+    public void doNotMatchJsonNonExtensibleAndArraysStrictOrder_negative() {
         String expected = "{\"a\":{\"d\":null, \"b\":[1, true]}, \"c\":0}";
         String actual = "{\"c\":0, \"a\":{\"b\":[1, true], \"d\":null}}";
-        new JsonMatcher(null, expected, actual, new HashSet<>(Arrays.asList(MatchCondition.JSON_STRICT_ORDER_ARRAY,
-                MatchCondition.JSON_NON_EXTENSIBLE_OBJECT, MatchCondition.JSON_NON_EXTENSIBLE_ARRAY, MatchCondition.DO_NOT_MATCH))).match();
+        assertThrows(AssertionError.class, () ->
+                new JsonMatcher(null, expected, actual, new HashSet<>(Arrays.asList(MatchCondition.JSON_STRICT_ORDER_ARRAY,
+                        MatchCondition.JSON_NON_EXTENSIBLE_OBJECT, MatchCondition.JSON_NON_EXTENSIBLE_ARRAY, MatchCondition.DO_NOT_MATCH))).match());
     }
 
     @Test

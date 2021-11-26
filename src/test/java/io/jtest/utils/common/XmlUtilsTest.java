@@ -1,6 +1,6 @@
 package io.jtest.utils.common;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class XmlUtilsTest {
 
@@ -27,8 +27,8 @@ public class XmlUtilsTest {
 
     @Test
     public void testXmlsAreValid() {
-        assertTrue(XmlUtils.isValid("<a>test<b>test</b></a>"));
         assertTrue(XmlUtils.isValid("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><a>test<b>test</b></a>"));
+        assertTrue(XmlUtils.isValid("<a>test<b>test</b></a>"));
         assertTrue(XmlUtils.isValid("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n" +
                 "<bookingResponse>\n" +
                 "  <bookingId>dlc:~[var1]</bookingId>\n" +
