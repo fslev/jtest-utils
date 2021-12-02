@@ -1,6 +1,9 @@
 # Changelog
 
-### 1.54-SNAPSHOT
+### 1.55-SNAPSHOT
+
+### 1.54
+Update dependencies  
 
 ### 1.53
 Update dependencies
