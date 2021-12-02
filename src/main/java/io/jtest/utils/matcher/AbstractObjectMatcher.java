@@ -17,10 +17,10 @@ abstract class AbstractObjectMatcher<T> {
     protected static final Logger LOG = LogManager.getLogger();
 
     protected String message;
-    protected String negativeMatchMessage;
-    protected T expected;
-    protected T actual;
-    protected Set<MatchCondition> matchConditions;
+    protected final String negativeMatchMessage;
+    protected final T expected;
+    protected final T actual;
+    protected final Set<MatchCondition> matchConditions;
 
     protected AbstractObjectMatcher(String message, Object expected, Object actual, Set<MatchCondition> matchConditions) throws InvalidTypeException {
         this.expected = convert(expected);
