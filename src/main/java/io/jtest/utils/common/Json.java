@@ -7,7 +7,7 @@ import java.util.AbstractMap;
 import java.util.Map;
 import java.util.function.Function;
 
-public class Json {
+class Json {
 
     static <R> void walkAndProcessJson(JsonNode jsonNode, Function<String, R> processFunction, String parentPath, Map<String, R> results) {
         String pathPrefix = parentPath.isEmpty() ? "" : parentPath + "/";
