@@ -29,6 +29,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class HttpClient {
     private final Integer timeout;
@@ -272,17 +273,33 @@ public class HttpClient {
         }
 
         public Builder header(String name, String value) {
+            return header(name, value, false);
+        }
+
+        public Builder header(String name, String value, boolean replace) {
+            if (replace) {
+                Set<Header> duplicatedHeaders = this.headers.stream().filter(h -> h.getName().equals(name)).collect(Collectors.toSet());
+                this.headers.removeAll(duplicatedHeaders);
+            }
             this.headers.add(new BasicHeader(name, value));
             return this;
         }
 
         public Builder nonEmptyHeader(String name, String value) {
-            return value != null && !value.isEmpty() ? header(name, value) : this;
+            return nonEmptyHeader(name, value, false);
+        }
+
+        public Builder nonEmptyHeader(String name, String value, boolean replace) {
+            return value != null && !value.isEmpty() ? header(name, value, replace) : this;
         }
 
         public Builder headers(Map<String, String> headers) {
+            return headers(headers, false);
+        }
+
+        public Builder headers(Map<String, String> headers, boolean replace) {
             if (headers != null) {
-                headers.forEach((k, v) -> this.headers.add(new BasicHeader(k, v)));
+                headers.forEach((k, v) -> header(k, v, replace));
             }
             return this;
         }

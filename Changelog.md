@@ -1,6 +1,11 @@
 # Changelog
 
-### 1.55-SNAPSHOT
+### 1.56-SNAPSHOT
+
+### 1.55
+Add option to replace Http client header  
+Update dependencies 
+- Log4j vulnerability fix
 
 ### 1.54
 Update dependencies  

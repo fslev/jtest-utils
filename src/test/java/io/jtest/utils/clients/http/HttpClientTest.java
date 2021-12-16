@@ -2,6 +2,9 @@ package io.jtest.utils.clients.http;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 
@@ -34,6 +37,85 @@ public class HttpClientTest {
             } catch (AssertionError e) {
                 assertEquals("2", header.getValue());
             }
+        });
+    }
+
+    @Test
+    public void testHeaderOverride() {
+        HttpClient.Builder builder = new HttpClient.Builder().address("test").method(Method.GET);
+        builder.header("test1", "0", true);
+        builder.header("test1", "1");
+        HttpClient client = builder.build();
+        assertEquals(2, client.getHeaders().size());
+        builder.build().getHeaders().forEach(header -> {
+            assertEquals("test1", header.getName());
+            try {
+                assertEquals("0", header.getValue());
+            } catch (AssertionError e) {
+                assertEquals("1", header.getValue());
+            }
+        });
+
+        builder.header("test1", "2", true);
+        client = builder.build();
+        assertEquals(1, client.getHeaders().size());
+        builder.build().getHeaders().forEach(header -> {
+            assertEquals("test1", header.getName());
+            assertEquals("2", header.getValue());
+        });
+    }
+
+    @Test
+    public void testNonEmptyHeaderOverride() {
+        HttpClient.Builder builder = new HttpClient.Builder().address("test").method(Method.GET);
+        builder.nonEmptyHeader("test1", "0", true);
+        builder.nonEmptyHeader("test1", "1");
+        HttpClient client = builder.build();
+        assertEquals(2, client.getHeaders().size());
+        builder.build().getHeaders().forEach(header -> {
+            assertEquals("test1", header.getName());
+            try {
+                assertEquals("0", header.getValue());
+            } catch (AssertionError e) {
+                assertEquals("1", header.getValue());
+            }
+        });
+
+        builder.nonEmptyHeader("test1", "2", true);
+        client = builder.build();
+        assertEquals(1, client.getHeaders().size());
+        builder.build().getHeaders().forEach(header -> {
+            assertEquals("test1", header.getName());
+            assertEquals("2", header.getValue());
+        });
+    }
+
+    @Test
+    public void testHeadersOverride() {
+        HttpClient.Builder builder = new HttpClient.Builder().address("test").method(Method.GET);
+        builder.header("test1", "0");
+        Map<String, String> headers = new HashMap<>();
+        headers.put("test1", "1");
+        builder.headers(headers);
+        HttpClient client = builder.build();
+        assertEquals(2, client.getHeaders().size());
+        builder.build().getHeaders().forEach(header -> {
+            assertEquals("test1", header.getName());
+            try {
+                assertEquals("0", header.getValue());
+            } catch (AssertionError e) {
+                assertEquals("1", header.getValue());
+            }
+        });
+
+        headers.clear();
+        headers.put("test1", "2");
+        builder.headers(headers,true);
+        client = builder.build();
+        assertEquals(1, client.getHeaders().size());
+        builder.build().getHeaders().forEach(header -> {
+            assertEquals("test1", header.getName());
+            assertEquals("2", header.getValue());
         });
     }
 
