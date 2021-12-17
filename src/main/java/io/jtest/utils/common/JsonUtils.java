@@ -3,6 +3,7 @@ package io.jtest.utils.common;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -11,7 +12,8 @@ import java.util.function.Function;
 
 public class JsonUtils {
 
-    private static final ObjectMapper MAPPER = new ObjectMapper().enable(DeserializationFeature.FAIL_ON_TRAILING_TOKENS);
+    private static final ObjectMapper MAPPER = new ObjectMapper().setNodeFactory(JsonNodeFactory.withExactBigDecimals(true))
+            .enable(DeserializationFeature.FAIL_ON_TRAILING_TOKENS);
 
     public static JsonNode toJson(Object obj) throws IOException {
         return obj instanceof JsonNode ? (JsonNode) obj :

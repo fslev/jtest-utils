@@ -1,6 +1,10 @@
 # Changelog
 
-### 1.56-SNAPSHOT
+### 1.57-SNAPSHOT
+
+
+### 1.56
+Use exact big decimals at JsonNode conversion      
 
 ### 1.55
 Add option to replace Http client header  

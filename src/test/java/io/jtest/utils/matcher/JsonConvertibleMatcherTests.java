@@ -5,11 +5,27 @@ import io.jtest.utils.exceptions.InvalidTypeException;
 import io.jtest.utils.matcher.condition.MatchCondition;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class JsonConvertibleMatcherTests {
+
+    @Test
+    public void compareNumbers() throws InvalidTypeException, IOException {
+        BigDecimal expectedBigDec = new BigDecimal(20000);
+        BigDecimal actualBigDec = new BigDecimal(20000L);
+        new JsonMatcher(null, expectedBigDec, actualBigDec, null).match();
+        BigInteger expectedBigInt = new BigInteger("20000000");
+        BigInteger actualBigInt = new BigInteger("20000000");
+        new JsonMatcher(null, expectedBigInt, actualBigInt, null).match();
+        Double expectedDouble = 0.12454543D;
+        Double actualDouble = 0.12454543D;
+        new JsonMatcher(null, expectedDouble, actualDouble, null).match();
+    }
 
     @Test
     public void compareObjectsWithNoJsonRepresentation() {
