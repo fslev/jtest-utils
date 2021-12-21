@@ -1,7 +1,10 @@
 # Changelog
 
-### 1.57-SNAPSHOT
+### 1.58-SNAPSHOT
 
+### 1.57
+Update Jackson dependencies  
+Update Log4j to 2.17.0 (Major vulnerability fix)  
 
 ### 1.56
 Use exact big decimals at JsonNode conversion      
