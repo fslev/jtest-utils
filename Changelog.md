@@ -1,6 +1,9 @@
 # Changelog
 
-### 1.58-SNAPSHOT
+### 1.59-SNAPSHOT
+
+### 1.58
+Update dependencies  
 
 ### 1.57
 Update Jackson dependencies  
