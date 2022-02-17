@@ -1,6 +1,9 @@
 # Changelog
 
-### 1.59-SNAPSHOT
+### 1.60-SNAPSHOT
+
+### 1.59
+Update dependencies  
 
 ### 1.58
 Update dependencies  
