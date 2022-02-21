@@ -1,6 +1,9 @@
 # Changelog
 
-### 1.61-SNAPSHOT
+### 1.62-SNAPSHOT
+
+### 1.61
+Fix hint message about unintentional regexes  
 
 ### 1.60
 Enhance AssertionError message with hint about unintentional regexes    
