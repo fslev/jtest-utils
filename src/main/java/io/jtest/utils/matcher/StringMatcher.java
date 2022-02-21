@@ -33,7 +33,7 @@ public class StringMatcher extends AbstractObjectMatcher<Object> {
     public StringMatcher(String message, Object expected, Object actual, Set<MatchCondition> matchConditions) throws InvalidTypeException {
         super(message, expected, actual, matchConditions);
         String defaultMessage = "\nEXPECTED:\n" + MessageUtil.cropL(toString(this.expected))
-                + "\n\nBUT GOT:\n" + MessageUtil.cropL(toString(this.actual)) + "\n";
+                + "\n\nBUT GOT:\n" + MessageUtil.cropL(toString(this.actual)) + "\n\n";
         this.message = this.message != null ? defaultMessage + this.message : defaultMessage;
     }
 
@@ -90,11 +90,9 @@ public class StringMatcher extends AbstractObjectMatcher<Object> {
             try {
                 Pattern pattern = Pattern.compile(expectedString, Pattern.CASE_INSENSITIVE | Pattern.DOTALL | Pattern.MULTILINE);
                 if (!pattern.matcher(actualString).matches()) {
-                    debugIfStringContainsUnintentionalRegexChars(expectedString);
                     fail(message);
                 }
             } catch (PatternSyntaxException e) {
-                debugIfStringContainsUnintentionalRegexChars(expectedString);
                 if (!expectedString.equals(actual)) {
                     fail(message);
                 }
@@ -131,18 +129,5 @@ public class StringMatcher extends AbstractObjectMatcher<Object> {
             s = s.replace(CAPTURE_PLACEHOLDER_PREFIX + key + CAPTURE_PLACEHOLDER_SUFFIX, regex ? "(.*)" : "\\E(.*)\\Q");
         }
         return Pattern.compile(regex ? s : "\\Q" + s + "\\E", Pattern.CASE_INSENSITIVE | Pattern.DOTALL | Pattern.MULTILINE);
-    }
-
-    private static void debugIfStringContainsUnintentionalRegexChars(String expected) {
-        if (LOG.isDebugEnabled()) {
-            List<String> specialRegexCharList = RegexUtils.getRegexCharsFromString(expected);
-            if (!specialRegexCharList.isEmpty()) {
-                LOG.debug(" \n\n Matching mechanism failed." +
-                                " \n Make sure expected String has no unintentional regex special characters that failed the comparison. " +
-                                "\n If so, try to quote them by using \\Q and \\E or simply \\" +
-                                "\n Found the following list of special regex characters inside expected: {}\nExpected:\n{}\n",
-                        specialRegexCharList, expected);
-            }
-        }
     }
 }

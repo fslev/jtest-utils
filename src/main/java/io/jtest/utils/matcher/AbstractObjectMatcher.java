@@ -22,11 +22,14 @@ abstract class AbstractObjectMatcher<T> {
     protected final T actual;
     protected final Set<MatchCondition> matchConditions;
 
+    private static final String ASSERTION_ERROR_HINT_MESSAGE = "Hint: By default, json matching uses regular expressions.\n" +
+            "If expected json contains unintentional regexes, then quote them between \\Q and \\E delimiters.";
+
     protected AbstractObjectMatcher(String message, Object expected, Object actual, Set<MatchCondition> matchConditions) throws InvalidTypeException {
         this.expected = convert(expected);
         this.actual = convert(actual);
         this.matchConditions = matchConditions != null ? matchConditions : new HashSet<>();
-        this.message = message;
+        this.message = message != null ? message + "\n\n" + ASSERTION_ERROR_HINT_MESSAGE + "\n" : "\n" + ASSERTION_ERROR_HINT_MESSAGE + "\n";
         this.negativeMatchMessage = message == null ? negativeMatchMessage() : message + "\n" + negativeMatchMessage();
     }
 

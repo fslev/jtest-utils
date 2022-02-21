@@ -2,15 +2,16 @@ package io.jtest.utils.matcher;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import io.jtest.utils.common.JsonUtils;
-import io.jtest.utils.common.RegexUtils;
 import io.jtest.utils.exceptions.InvalidTypeException;
 import io.jtest.utils.matcher.comparators.json.CustomJsonComparator;
 import io.jtest.utils.matcher.condition.MatchCondition;
 import ro.skyah.comparator.CompareMode;
 import ro.skyah.comparator.JSONCompare;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -65,7 +66,6 @@ public class JsonMatcher extends AbstractObjectMatcher<JsonNode> {
                     break;
                 }
             } else {
-                debugIfJsonContainsUnintentionalRegexChars(expected.toString());
                 throw e;
             }
         }
@@ -84,27 +84,5 @@ public class JsonMatcher extends AbstractObjectMatcher<JsonNode> {
             }
         }
         return jsonCompareModes.toArray(new CompareMode[0]);
-    }
-
-    private static void debugIfJsonContainsUnintentionalRegexChars(String json) {
-        if (LOG.isDebugEnabled()) {
-            try {
-                Map<String, List<String>> specialRegexChars = JsonUtils.walkJsonAndProcessNodes(json, nodeValue -> {
-                    List<String> regexChars = RegexUtils.getRegexCharsFromString(nodeValue);
-                    return regexChars.isEmpty() ? null : regexChars;
-                });
-                if (!specialRegexChars.isEmpty()) {
-                    String prettyResult = specialRegexChars.entrySet().stream().map(e -> e.getKey() + " contains: " + e.getValue().toString())
-                            .collect(Collectors.joining("\n"));
-                    LOG.debug(" \n\n JSON matching mechanism failed." +
-                                    " \n One reason for this, might be that JSON may have unintentional regex special characters. " +
-                                    "\n If so, try to quote them by using \\Q and \\E or simply \\" +
-                                    "\n Found the following list of special regex characters inside expected:\n\n{}\n\nExpected:\n{}\n",
-                            prettyResult, json);
-                }
-            } catch (Exception e) {
-                LOG.debug("Cannot extract special regex characters from JSON", e);
-            }
-        }
     }
 }

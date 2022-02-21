@@ -123,4 +123,31 @@ public class ObjectMatcherTest {
         assertEquals("Moby Dick", resultedVars.get("title1"));
         assertEquals("Nigel Rees", resultedVars.get("author2"));
     }
+
+    @Test
+    public void checkHintMessageAboutUnintentionalRegexes() {
+        String expectedJson = "[{ \"name\" : \"someText (anotherText)\", \"code\" : \"oneMoreText\" }]";
+        String actualJson = "[{ \"name\" : \"someText (anotherText)\", \"code\" : \"oneMoreText\" }]";
+        try {
+            ObjectMatcher.match(null, expectedJson, actualJson);
+        } catch (AssertionError e) {
+            assertTrue(e.getMessage().contains("Hint"));
+        }
+
+        String expectedXml = "<struct>test</struct>";
+        String actualXml = "<struct></struct>";
+        try {
+            ObjectMatcher.match(null, expectedXml, actualXml);
+        } catch (AssertionError e) {
+            assertTrue(e.getMessage().contains("Hint"));
+        }
+
+        String expected = "some value";
+        String actual = "some other value";
+        try {
+            ObjectMatcher.match("Strings do not match", expected, actual);
+        } catch (AssertionError e) {
+            assertTrue(e.getMessage().contains("Hint"));
+        }
+    }
 }
