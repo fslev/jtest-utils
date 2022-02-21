@@ -236,8 +236,8 @@ public class StringMatcherTests {
             assertEquals("\nEXPECTED:\n" +
                     ".* is regex ~[regex] [0-9]*\n\n" +
                     "BUT GOT:\n" +
-                    "This is regex a|b|c|d [0-9]*\n\n\nHint: By default, json matching uses regular expressions.\n" +
-                    "If expected json contains unintentional regexes, then quote them between \\Q and \\E delimiters.\n", e.getMessage());
+                    "This is regex a|b|c|d [0-9]*\n\n\nHint: By default, matching is done using regular expressions.\n" +
+                    "If expected object contains unintentional regexes, then quote them between \\Q and \\E delimiters.\n", e.getMessage());
             return;
         }
         fail("Values should not match ! But they do...");
@@ -254,8 +254,8 @@ public class StringMatcherTests {
                     "EXPECTED:\n" +
                     ".* is regex ~[regex]lorem\n\n" +
                     "BUT GOT:\n" +
-                    "This is regex a|b|c|d\n\n\nHint: By default, json matching uses regular expressions.\n" +
-                    "If expected json contains unintentional regexes, then quote them between \\Q and \\E delimiters.\n", e.getMessage());
+                    "This is regex a|b|c|d\n\n\nHint: By default, matching is done using regular expressions.\n" +
+                    "If expected object contains unintentional regexes, then quote them between \\Q and \\E delimiters.\n", e.getMessage());
             return;
         }
         fail("Values should not match ! But they do...");
