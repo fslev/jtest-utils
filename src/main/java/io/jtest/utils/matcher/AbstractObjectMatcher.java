@@ -22,8 +22,8 @@ abstract class AbstractObjectMatcher<T> {
     protected final T actual;
     protected final Set<MatchCondition> matchConditions;
 
-    private static final String ASSERTION_ERROR_HINT_MESSAGE = "Hint: By default, json matching uses regular expressions.\n" +
-            "If expected json contains unintentional regexes, then quote them between \\Q and \\E delimiters.";
+    private static final String ASSERTION_ERROR_HINT_MESSAGE = "Hint: By default, matching is done using regular expressions.\n" +
+            "If expected object contains unintentional regexes, then quote them between \\Q and \\E delimiters.";
 
     protected AbstractObjectMatcher(String message, Object expected, Object actual, Set<MatchCondition> matchConditions) throws InvalidTypeException {
         this.expected = convert(expected);
