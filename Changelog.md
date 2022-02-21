@@ -1,6 +1,9 @@
 # Changelog
 
-### 1.60-SNAPSHOT
+### 1.61-SNAPSHOT
+
+### 1.60
+Enhance AssertionError message with hint about unintentional regexes    
 
 ### 1.59
 Update dependencies  
