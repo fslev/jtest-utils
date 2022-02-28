@@ -54,7 +54,7 @@ public class HttpClient {
         this.proxyHost = builder.proxyHost;
         this.timeout = builder.timeout;
         try {
-            this.uri = builder.address + "/" + (builder.path != null ? builder.path : "") + builder.uriBuilder.build().toString();
+            this.uri = builder.address + "/" + (builder.path != null ? builder.path : "") + builder.uriParamsBuilder.build().toString();
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
@@ -237,7 +237,7 @@ public class HttpClient {
         private HttpHost proxyHost;
         private String address;
         private String path;
-        private final URIBuilder uriBuilder = new URIBuilder();
+        private final URIBuilder uriParamsBuilder = new URIBuilder();
         private final Set<Header> headers = new HashSet<>();
         private String requestEntity;
         private Method method;
@@ -306,7 +306,7 @@ public class HttpClient {
         }
 
         public Builder queryParam(String name, String value) {
-            this.uriBuilder.addParameter(name, value);
+            this.uriParamsBuilder.addParameter(name, value);
             return this;
         }
 
@@ -318,7 +318,7 @@ public class HttpClient {
             if (queryParams != null) {
                 List<NameValuePair> paramsList = new ArrayList<>();
                 queryParams.forEach((k, v) -> paramsList.add(new BasicNameValuePair(k, v)));
-                this.uriBuilder.addParameters(paramsList);
+                this.uriParamsBuilder.addParameters(paramsList);
             }
             return this;
         }
