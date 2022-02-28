@@ -1,6 +1,9 @@
 # Changelog
 
-### 1.62-SNAPSHOT
+### 1.63-SNAPSHOT
+
+### 1.62
+Refactor how HttpClient sets URI path (do not encode path)       
 
 ### 1.61
 Fix hint message about unintentional regexes  

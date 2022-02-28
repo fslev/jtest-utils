@@ -54,7 +54,7 @@ public class HttpClient {
         this.proxyHost = builder.proxyHost;
         this.timeout = builder.timeout;
         try {
-            this.uri = new URIBuilder(builder.address + builder.uriBuilder.build().toString()).build().toString();
+            this.uri = builder.address + "/" + (builder.path != null ? builder.path : "") + builder.uriBuilder.build().toString();
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
@@ -236,6 +236,7 @@ public class HttpClient {
         private Integer timeout;
         private HttpHost proxyHost;
         private String address;
+        private String path;
         private final URIBuilder uriBuilder = new URIBuilder();
         private final Set<Header> headers = new HashSet<>();
         private String requestEntity;
@@ -267,7 +268,7 @@ public class HttpClient {
 
         public Builder path(String path) {
             if (path != null) {
-                this.uriBuilder.setPath(path.replaceFirst("^/*", ""));
+                this.path = path.replaceFirst("^/*", "");
             }
             return this;
         }
