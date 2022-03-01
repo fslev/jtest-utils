@@ -110,7 +110,7 @@ public class HttpClientTest {
 
         headers.clear();
         headers.put("test1", "2");
-        builder.headers(headers,true);
+        builder.headers(headers, true);
         client = builder.build();
         assertEquals(1, client.getHeaders().size());
         builder.build().getHeaders().forEach(header -> {
@@ -143,5 +143,13 @@ public class HttpClientTest {
         builder.headers(null);
         assertTrue(builder.build().getHeaders().isEmpty());
         assertFalse(builder.build().getUri().contains("?"));
+    }
+
+    @Test
+    public void testUnencodedUriPath() {
+        HttpClient.Builder builder = new HttpClient.Builder().address("https://some-address.io").path("/%2F/test?a=12")
+                .method(Method.GET).queryParam("b", "%2Ftest1").queryParam("c", "test2%2F");
+        HttpClient client = builder.build();
+        assertEquals("https://some-address.io/%2F/test?a=12&b=%252Ftest1&c=test2%252F", client.getUri());
     }
 }

@@ -49,15 +49,9 @@ public class HttpClient {
     private final HttpContext context;
 
     protected HttpClient(Builder builder) {
-        validateMethod(builder);
-        validateAddress(builder);
         this.proxyHost = builder.proxyHost;
         this.timeout = builder.timeout;
-        try {
-            this.uri = builder.address + "/" + (builder.path != null ? builder.path : "") + builder.uriParamsBuilder.build().toString();
-        } catch (URISyntaxException e) {
-            throw new RuntimeException(e);
-        }
+        this.uri = getUri(builder);
         this.headers = builder.headers;
         this.requestEntity = builder.requestEntity;
         this.method = builder.method;
@@ -209,20 +203,24 @@ public class HttpClient {
         return request;
     }
 
-    private void validateMethod(Builder builder) {
-        if (builder.method == null) {
-            throw new IllegalStateException("HTTP Method missing");
-        }
+    private void addHeaders(HttpRequestBase request) {
+        headers.forEach(request::addHeader);
     }
 
-    private void validateAddress(Builder builder) {
+    private static String getUri(Builder builder) {
         if (builder.address == null) {
             throw new IllegalStateException("HTTP Address missing");
         }
-    }
-
-    private void addHeaders(HttpRequestBase request) {
-        headers.forEach(request::addHeader);
+        if (builder.method == null) {
+            throw new IllegalStateException("HTTP Method missing");
+        }
+        try {
+            URIBuilder uriBuilder = new URIBuilder(builder.address + (builder.path != null ? "/" + builder.path : ""));
+            uriBuilder.addParameters(builder.params);
+            return uriBuilder.build().toString();
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -237,7 +235,7 @@ public class HttpClient {
         private HttpHost proxyHost;
         private String address;
         private String path;
-        private final URIBuilder uriParamsBuilder = new URIBuilder();
+        private final List<NameValuePair> params = new ArrayList<>();
         private final Set<Header> headers = new HashSet<>();
         private String requestEntity;
         private Method method;
@@ -306,7 +304,7 @@ public class HttpClient {
         }
 
         public Builder queryParam(String name, String value) {
-            this.uriParamsBuilder.addParameter(name, value);
+            this.params.add(new BasicNameValuePair(name, value));
             return this;
         }
 
@@ -316,9 +314,7 @@ public class HttpClient {
 
         public Builder queryParams(Map<String, String> queryParams) {
             if (queryParams != null) {
-                List<NameValuePair> paramsList = new ArrayList<>();
-                queryParams.forEach((k, v) -> paramsList.add(new BasicNameValuePair(k, v)));
-                this.uriParamsBuilder.addParameters(paramsList);
+                queryParams.forEach(this::queryParam);
             }
             return this;
         }

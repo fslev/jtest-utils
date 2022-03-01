@@ -1,6 +1,9 @@
 # Changelog
 
-### 1.63-SNAPSHOT
+### 1.64-SNAPSHOT
+
+### 1.63
+Refactor HttpClient    
 
 ### 1.62
 Refactor how HttpClient sets URI path (do not encode path)       
