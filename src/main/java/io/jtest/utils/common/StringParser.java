@@ -16,9 +16,6 @@ public class StringParser {
 
     public static List<String> captureValues(String source, Pattern captureGroupPattern, boolean matchEntirely) {
         List<String> values = new ArrayList<>();
-        if (source == null) {
-            return values;
-        }
         Matcher matcher = captureGroupPattern.matcher(source);
         while (matcher.find()) {
             if (matchEntirely && !matcher.group(0).equals(source)) {
@@ -33,9 +30,6 @@ public class StringParser {
 
     public static Object replacePlaceholders(List<String> placeholderNames, String source, String prefix, String suffix,
                                              Function<String, Object> placeholderValue, Predicate<String> placeholderHasValue) {
-        if (source == null || source.isEmpty()) {
-            return source;
-        }
         if (placeholderNames.size() == 1 && source.equals(prefix + placeholderNames.get(0) + suffix)) {
             String standalonePlaceholder = placeholderNames.get(0);
             if (!placeholderHasValue.test(standalonePlaceholder)) {

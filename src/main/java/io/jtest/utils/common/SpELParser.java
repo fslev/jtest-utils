@@ -14,22 +14,19 @@ public class SpELParser {
     public static final String PREFIX = "#{";
     public static final String SUFFIX = "}";
 
-    public static final Pattern captureGroupPattern = Pattern.compile(Pattern.quote(PREFIX) + "(.*?)" + Pattern.quote(SUFFIX),
-            Pattern.CASE_INSENSITIVE | Pattern.DOTALL | Pattern.MULTILINE);
+    private static final Pattern captureGroupPattern = Pattern.compile("(?<!\\\\)" + Pattern.quote(PREFIX) + "(.*?)"
+            + "(?<!\\\\)" + Pattern.quote(SUFFIX), Pattern.CASE_INSENSITIVE | Pattern.DOTALL | Pattern.MULTILINE);
 
     public static Object parse(String source) {
-        if (source == null || source.isEmpty()) {
+        List<String> expressions = extractExpressions(source);
+        if (expressions.isEmpty()) {
             return source;
         }
-        List<String> placeholderNames = StringParser.captureValues(source, captureGroupPattern);
-        if (placeholderNames.isEmpty()) {
-            return source;
-        }
-        return StringParser.replacePlaceholders(placeholderNames, source, PREFIX, SUFFIX, SpELParser::parseExpression,
-                SpELParser::isExpressionValid);
+        return StringParser.replacePlaceholders(expressions, source, PREFIX, SUFFIX,
+                exp -> parseExpression(unescapeDelimiters(exp)), SpELParser::isExpressionValid);
     }
 
-    private static Object parseExpression(String expression) {
+    public static Object parseExpression(String expression) {
         try {
             Expression exp = new SpelExpressionParser().parseExpression(expression);
             return exp.getValue(Object.class);
@@ -39,7 +36,11 @@ public class SpELParser {
         }
     }
 
-    private static Boolean isExpressionValid(String expression) {
+    public static List<String> extractExpressions(String source) {
+        return StringParser.captureValues(source, captureGroupPattern);
+    }
+
+    public static Boolean isExpressionValid(String expression) {
         try {
             new SpelExpressionParser().parseExpression(expression).getValue(Object.class);
             return true;
@@ -49,4 +50,8 @@ public class SpELParser {
         }
     }
 
+    public static String unescapeDelimiters(String value) {
+        return value == null || value.isEmpty() ? value :
+                value.replaceAll(Pattern.quote("\\" + PREFIX), PREFIX).replaceAll(Pattern.quote("\\" + SUFFIX), SUFFIX);
+    }
 }
