@@ -36,6 +36,12 @@ public class SpELParserTest {
     }
 
     @Test
+    public void testSpelParsingOfExpressionContainingBackslash() {
+        String s = "#{('a\\Bc'+'d\\Ef').toLowerCase()}#{('g\\hi').toLowerCase()}";
+        assertEquals("a\\bcd\\efg\\hi", SpELParser.parse(s));
+    }
+
+    @Test
     public void testSpelParsingOfExpressionContainingEscapedBraces() {
         String s = "#{'abcD\\}EF'.toLowerCase()} and #{'abcD\\}EF'.toLowerCase()}";
         assertEquals("abcd}ef and abcd}ef", SpELParser.parse(s));
