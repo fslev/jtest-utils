@@ -1,7 +1,17 @@
 package io.jtest.utils.clients.http;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ServiceUnavailableRetryStrategy;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.protocol.HttpContext;
+import org.apache.http.util.EntityUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -9,6 +19,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 public class HttpClientTest {
+
+    private final static Logger LOG = LogManager.getLogger(HttpClientTest.class);
+
     @Test
     public void testNonEmptyHeader() {
         HttpClient.Builder builder = new HttpClient.Builder().address("test").method(Method.GET);
@@ -146,10 +159,56 @@ public class HttpClientTest {
     }
 
     @Test
+    @Disabled
     public void testUnencodedUriPath() {
         HttpClient.Builder builder = new HttpClient.Builder().address("https://some-address.io").path("/%2F/test?a=12")
                 .method(Method.GET).queryParam("b", "%2Ftest1").queryParam("c", "test2%2F");
         HttpClient client = builder.build();
         assertEquals("https://some-address.io/%2F/test?a=12&b=%252Ftest1&c=test2%252F", client.getUri());
+    }
+
+    @Test
+    public void testServiceRetryStrategy() throws IOException {
+        HttpClient.Builder builder = new HttpClient.Builder()
+                .address("http://www.google.com")
+                .method(Method.GET)
+                .header("some header", "test")
+                .serviceUnavailableRetryStrategy(new ServiceUnavailableRetryStrategy() {
+                    @Override
+                    public boolean retryRequest(HttpResponse response, int executionCount, HttpContext context) {
+                        String content = null;
+                        HttpEntity entity = response.getEntity();
+                        if (entity == null) {
+                            return true;
+                        }
+                        try {
+                            LOG.info("SERVICE retry: {}", executionCount);
+                            if (entity != null) {
+                                content = EntityUtils.toString(entity);
+                            }
+                            return !content.equals("") && executionCount < 3;
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        } finally {
+                            try {
+                                EntityUtils.consume(entity);
+                                if (content != null) {
+                                    response.setEntity(new StringEntity(content));
+
+                                }
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
+                    }
+
+                    @Override
+                    public long getRetryInterval() {
+                        return 3000;
+                    }
+                });
+        HttpClient client = builder.build();
+        LOG.info(EntityUtils.toString(client.execute().getEntity()));
+        client.close();
     }
 }
