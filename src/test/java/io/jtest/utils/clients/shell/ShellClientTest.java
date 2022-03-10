@@ -1,11 +1,13 @@
 package io.jtest.utils.clients.shell;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@Disabled
 public class ShellClientTest {
 
     @Test
