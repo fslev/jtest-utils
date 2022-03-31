@@ -24,7 +24,7 @@
         <xmlunit.version>2.9.0</xmlunit.version>
         <surefire.version>3.0.0-M5</surefire.version>
         <jackson.version>2.13.2</jackson.version>
-        <spring-expression-version>5.3.17</spring-expression-version>
+        <spring-expression-version>5.3.18</spring-expression-version>
     </properties>
 
     <dependencies>
