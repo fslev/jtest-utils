@@ -4,7 +4,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
-import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
 public class ShellClient {
@@ -25,9 +26,8 @@ public class ShellClient {
         StringBuilder outputBuffer = new StringBuilder();
         try {
             Process p = startProcess(command);
-            InputStream stdInput = p.getInputStream();
-            InputStream stdError = p.getErrorStream();
-
+            InputStreamReader stdInput = new InputStreamReader(p.getInputStream(), StandardCharsets.UTF_8);
+            InputStreamReader stdError = new InputStreamReader(p.getErrorStream(), StandardCharsets.UTF_8);
             int readByte = stdInput.read();
             while (readByte != 0xffffffff) {
                 outputBuffer.append((char) readByte);
