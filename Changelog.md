@@ -1,6 +1,10 @@
 # Changelog
 
-### 1.65-SNAPSHOT
+### 1.66-SNAPSHOT
+
+### 1.65
+Reading Java process output using UTF-8 encoding  (ShellClient)
+Update dependencies    
 
 ### 1.64
 Refactor SpELParser    
