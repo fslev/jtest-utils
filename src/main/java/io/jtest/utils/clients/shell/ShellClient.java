@@ -3,6 +3,7 @@ package io.jtest.utils.clients.shell;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
@@ -26,8 +27,8 @@ public class ShellClient {
         StringBuilder outputBuffer = new StringBuilder();
         try {
             Process p = startProcess(command);
-            InputStreamReader stdInput = new InputStreamReader(p.getInputStream(), StandardCharsets.UTF_8);
-            InputStreamReader stdError = new InputStreamReader(p.getErrorStream(), StandardCharsets.UTF_8);
+            BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream(), StandardCharsets.UTF_8));
+            BufferedReader stdError = new BufferedReader(new InputStreamReader(p.getErrorStream(), StandardCharsets.UTF_8));
             int readByte = stdInput.read();
             while (readByte != 0xffffffff) {
                 outputBuffer.append((char) readByte);

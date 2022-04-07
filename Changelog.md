@@ -1,9 +1,13 @@
 # Changelog
 
-### 1.66-SNAPSHOT
+### 1.67-SNAPSHOT
+
+
+### 1.66
+Optimization: Use buffered reader for Java process input / error stream   
 
 ### 1.65
-Read Java process output using UTF-8 encoding  (ShellClient)
+Read Java process input / error stream using UTF-8 encoding  (ShellClient)
 Update dependencies    
 
 ### 1.64
