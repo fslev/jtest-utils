@@ -1,4 +1,4 @@
-package io.jtest.utils.clients.http.wrappers;
+package io.jtest.utils.clients.http;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -18,7 +18,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-public class HttpResponseWrapper {
+public class PlainHttpResponse {
 
     @JsonProperty(value = "status")
     private String status;
@@ -29,24 +29,30 @@ public class HttpResponseWrapper {
     @JsonProperty(value = "headers")
     private Set<Map.Entry<String, String>> headers;
 
-    public HttpResponseWrapper() {
+    private PlainHttpResponse() {
     }
 
-    public HttpResponseWrapper(Object object) throws HttpResponseParseException {
+    private PlainHttpResponse(String status, String reasonPhrase, Object entity, Set<Map.Entry<String, String>> headers) {
+        this.status = status;
+        this.reasonPhrase = reasonPhrase;
+        this.entity = entity;
+        this.headers = headers;
+    }
+
+    public static PlainHttpResponse from(Object object) throws PlainHttpResponseParseException {
         if (object instanceof HttpResponse) {
             try {
-                fromHttpResponse((HttpResponse) object);
+                return fromHttpResponse((HttpResponse) object);
             } catch (IOException e) {
-                throw new HttpResponseParseException("Cannot parse org.apache.http.HttpPResponse", e);
+                throw new PlainHttpResponseParseException("Cannot parse org.apache.http.HttpPResponse", e);
             }
         } else {
             try {
-                fromObject(object);
+                return fromObject(object);
             } catch (Exception e) {
-                throw new HttpResponseParseException("Cannot parse object:\n" + MessageUtil.cropS(object.toString()) +
-                        "\n\nObject should be convertible to io.jtest.utils.clients.http.wrappers.HttpResponseWrapper type,\n" +
-                        "such as org.apache.http.HttpPResponse\nor a String, Map or JsonNode" +
-                        " with the following JSON format:\n" + HttpResponseParseException.EXPECTED_FORMAT + "\n", e);
+                throw new PlainHttpResponseParseException("Cannot convert to PlainHttpResponse:\n" + MessageUtil.cropS(object.toString()) +
+                        "\n\nObject should either be of type org.apache.http.HttpPResponse or of any other JSON convertible types with the format:\n"
+                        + PlainHttpResponseParseException.EXPECTED_FORMAT + "\n", e);
             }
         }
     }
@@ -55,57 +61,36 @@ public class HttpResponseWrapper {
         return status;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public String getReasonPhrase() {
+        return reasonPhrase;
     }
 
     public Object getEntity() {
         return entity;
     }
 
-    public void setEntity(Object entity) {
-        this.entity = entity;
-    }
-
-    public String getReasonPhrase() {
-        return reasonPhrase;
-    }
-
-    public void setReasonPhrase(String reasonPhrase) {
-        this.reasonPhrase = reasonPhrase;
-    }
-
     public Set<Map.Entry<String, String>> getHeaders() {
         return headers;
     }
 
-    public void setHeaders(Set<Map.Entry<String, String>> headers) {
-        this.headers = headers;
-    }
-
-    private void fromObject(Object content) throws JsonProcessingException {
+    private static PlainHttpResponse fromObject(Object content) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         mapper.enable(DeserializationFeature.FAIL_ON_TRAILING_TOKENS);
-        HttpResponseWrapper wrapper = content instanceof String ?
-                mapper.readValue((String) content, HttpResponseWrapper.class) :
-                content instanceof HttpResponseWrapper ? (HttpResponseWrapper) content :
-                        mapper.convertValue(content, HttpResponseWrapper.class);
-        this.status = wrapper.status;
-        this.entity = wrapper.entity;
-        this.reasonPhrase = wrapper.reasonPhrase;
-        this.headers = wrapper.headers;
+        return content instanceof String ?
+                mapper.readValue((String) content, PlainHttpResponse.class) :
+                content instanceof PlainHttpResponse ? (PlainHttpResponse) content :
+                        mapper.convertValue(content, PlainHttpResponse.class);
     }
 
-    private void fromHttpResponse(HttpResponse response) throws IOException {
-        this.status = String.valueOf(response.getStatusLine().getStatusCode());
-        this.reasonPhrase = response.getStatusLine().getReasonPhrase();
-        this.headers = getHeaders(response);
+    private static PlainHttpResponse fromHttpResponse(HttpResponse response) throws IOException {
+        String status = String.valueOf(response.getStatusLine().getStatusCode());
+        String reasonPhrase = response.getStatusLine().getReasonPhrase();
+        Set<Map.Entry<String, String>> headers = extractHeaders(response);
         String content = null;
         HttpEntity entity = response.getEntity();
         if (entity != null) {
             try {
                 content = EntityUtils.toString(entity, StandardCharsets.UTF_8);
-                this.entity = content;
             } catch (Exception e) {
                 throw new IOException("Cannot extract entity from HTTP Response", e);
             } finally {
@@ -115,9 +100,10 @@ public class HttpResponseWrapper {
                 }
             }
         }
+        return new PlainHttpResponse(status, reasonPhrase, content, headers);
     }
 
-    private Set<Map.Entry<String, String>> getHeaders(HttpResponse response) {
+    private static Set<Map.Entry<String, String>> extractHeaders(HttpResponse response) {
         Set<Map.Entry<String, String>> headers = new HashSet<>();
         for (Header h : response.getAllHeaders()) {
             headers.add(new AbstractMap.SimpleEntry<>(h.getName(), h.getValue()));

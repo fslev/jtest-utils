@@ -1,7 +1,7 @@
 package io.jtest.utils.matcher;
 
 
-import io.jtest.utils.clients.http.wrappers.HttpResponseWrapper;
+import io.jtest.utils.clients.http.PlainHttpResponse;
 import io.jtest.utils.exceptions.InvalidTypeException;
 import io.jtest.utils.matcher.condition.MatchCondition;
 import ro.skyah.util.MessageUtil;
@@ -12,7 +12,7 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.fail;
 
-class HttpResponseMatcher extends AbstractObjectMatcher<HttpResponseWrapper> {
+class HttpResponseMatcher extends AbstractObjectMatcher<PlainHttpResponse> {
 
     private final String expectedStatus;
     private final String expectedReason;
@@ -31,15 +31,15 @@ class HttpResponseMatcher extends AbstractObjectMatcher<HttpResponseWrapper> {
     }
 
     @Override
-    HttpResponseWrapper convert(Object value) throws InvalidTypeException {
-        if (!(value instanceof HttpResponseWrapper)) {
+    PlainHttpResponse convert(Object value) throws InvalidTypeException {
+        if (!(value instanceof PlainHttpResponse)) {
             try {
-                return new HttpResponseWrapper(value);
+                return PlainHttpResponse.from(value);
             } catch (Exception e) {
                 throw new InvalidTypeException("Cannot convert HTTP Response", e);
             }
         }
-        return (HttpResponseWrapper) value;
+        return (PlainHttpResponse) value;
     }
 
     @Override

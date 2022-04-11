@@ -1,8 +1,8 @@
-package io.jtest.utils.clients.http.wrappers;
+package io.jtest.utils.clients.http;
 
 import io.jtest.utils.exceptions.InvalidTypeException;
 
-public class HttpResponseParseException extends InvalidTypeException {
+public class PlainHttpResponseParseException extends InvalidTypeException {
     public final static String EXPECTED_FORMAT = "{\n" +
             "  \"status\": <number> | \"<text>\",\n" +
             "  \"body\": {<jsonObject>} | [<jsonArray>] | \"<text>\",\n" +
@@ -10,7 +10,7 @@ public class HttpResponseParseException extends InvalidTypeException {
             "  \"reason\": \"<text>\"\n" +
             "}";
 
-    public HttpResponseParseException(String msg, Throwable t) {
+    public PlainHttpResponseParseException(String msg, Throwable t) {
         super(msg, t);
     }
 }
