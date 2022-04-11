@@ -1,8 +1,7 @@
 # Changelog
 
-### 1.67-SNAPSHOT
+### 2.0-SNAPSHOT
 Remove logging from ShellClient  
-
 
 ### 1.66
 Optimization: Use buffered reader for Java process input / error stream   
