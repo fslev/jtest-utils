@@ -131,7 +131,7 @@ public class ObjectMatcherTest {
         try {
             ObjectMatcher.match(null, expectedJson, actualJson);
         } catch (AssertionError e) {
-            assertTrue(e.getMessage().contains("Hint"));
+            assertTrue(e.getMessage().contains("unintentional regexes"));
         }
 
         String expectedXml = "<struct>test</struct>";
@@ -139,7 +139,7 @@ public class ObjectMatcherTest {
         try {
             ObjectMatcher.match(null, expectedXml, actualXml);
         } catch (AssertionError e) {
-            assertTrue(e.getMessage().contains("Hint"));
+            assertTrue(e.getMessage().contains("unintentional regexes"));
         }
 
         String expected = "some value";
@@ -147,7 +147,7 @@ public class ObjectMatcherTest {
         try {
             ObjectMatcher.match("Strings do not match", expected, actual);
         } catch (AssertionError e) {
-            assertTrue(e.getMessage().contains("Hint"));
+            assertTrue(e.getMessage().contains("unintentional regexes"));
         }
     }
 }
