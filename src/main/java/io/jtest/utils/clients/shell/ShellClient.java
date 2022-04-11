@@ -1,17 +1,11 @@
 package io.jtest.utils.clients.shell;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 
 public class ShellClient {
-
-    private static final Logger LOG = LogManager.getLogger();
 
     private final ProcessBuilder processBuilder;
 
@@ -44,12 +38,10 @@ public class ShellClient {
         } catch (IOException | InterruptedException e) {
             throw new RuntimeException(e);
         }
-        LOG.debug("Process output: {}", outputBuffer.toString());
         return outputBuffer.toString();
     }
 
     public Process startProcess(String... command) {
-        LOG.info("Execute command \"{}\"", Arrays.toString(command));
         this.processBuilder.command(command);
         try {
             return processBuilder.start();

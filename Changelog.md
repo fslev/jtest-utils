@@ -1,6 +1,7 @@
 # Changelog
 
 ### 1.67-SNAPSHOT
+Remove logging from ShellClient  
 
 
 ### 1.66
