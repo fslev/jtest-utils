@@ -4,6 +4,7 @@
 Remove logging from ShellClient  
 Remove Polling method with duration of type Integer  
 Refactor & rename HttpResponseWrapper to PlainHttpResponse  
+Update dependencies  
 
 ### 1.66
 Optimization: Use buffered reader for Java process input / error stream   
