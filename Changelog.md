@@ -1,6 +1,8 @@
 # Changelog
 
-### 2.0-SNAPSHOT
+### 2.1-SNAPSHOT
+
+### 2.0
 Remove logging from ShellClient  
 Remove Polling method with duration of type Integer  
 Refactor & rename HttpResponseWrapper to PlainHttpResponse  
