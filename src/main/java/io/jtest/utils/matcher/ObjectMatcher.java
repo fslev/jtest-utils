@@ -5,6 +5,7 @@ import io.jtest.utils.exceptions.PollingTimeoutException;
 import io.jtest.utils.matcher.condition.MatchCondition;
 import io.jtest.utils.polling.Polling;
 
+import java.time.Duration;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -31,9 +32,9 @@ public class ObjectMatcher {
      * @return properties captured after the match
      * Expected object can contain placeholders for capturing values from the actual object: ~[placeholder_name]
      */
-    public static Map<String, Object> match(String message, Object expected, Supplier<Object> actualObjectSupplier, Integer pollingDurationSeconds,
+    public static Map<String, Object> match(String message, Object expected, Supplier<Object> actualObjectSupplier, Duration pollingDuration,
                                             Long pollingIntervalMillis, Double exponentialBackOff, MatchCondition... matchConditions) {
-        return match(actual -> match(message, expected, actual, matchConditions), actualObjectSupplier, pollingDurationSeconds, pollingIntervalMillis, exponentialBackOff);
+        return match(actual -> match(message, expected, actual, matchConditions), actualObjectSupplier, pollingDuration, pollingIntervalMillis, exponentialBackOff);
     }
 
     public static Map<String, Object> matchJson(String message, Object expected, Object actual, MatchCondition... matchConditions) {
@@ -44,9 +45,9 @@ public class ObjectMatcher {
         }
     }
 
-    public static Map<String, Object> matchJson(String message, Object expected, Supplier<Object> actualObjectSupplier, Integer pollingDurationSeconds,
+    public static Map<String, Object> matchJson(String message, Object expected, Supplier<Object> actualObjectSupplier, Duration pollingDuration,
                                                 Long pollingIntervalMillis, Double exponentialBackOff, MatchCondition... matchConditions) {
-        return match(actual -> matchJson(message, expected, actual, matchConditions), actualObjectSupplier, pollingDurationSeconds, pollingIntervalMillis, exponentialBackOff);
+        return match(actual -> matchJson(message, expected, actual, matchConditions), actualObjectSupplier, pollingDuration, pollingIntervalMillis, exponentialBackOff);
     }
 
     public static Map<String, Object> matchXml(String message, Object expected, Object actual, MatchCondition... matchConditions) {
@@ -57,9 +58,9 @@ public class ObjectMatcher {
         }
     }
 
-    public static Map<String, Object> matchXml(String message, Object expected, Supplier<Object> actualObjectSupplier, Integer pollingDurationSeconds,
+    public static Map<String, Object> matchXml(String message, Object expected, Supplier<Object> actualObjectSupplier, Duration pollingDuration,
                                                Long pollingIntervalMillis, Double exponentialBackOff, MatchCondition... matchConditions) {
-        return match(actual -> matchXml(message, expected, actual, matchConditions), actualObjectSupplier, pollingDurationSeconds, pollingIntervalMillis, exponentialBackOff);
+        return match(actual -> matchXml(message, expected, actual, matchConditions), actualObjectSupplier, pollingDuration, pollingIntervalMillis, exponentialBackOff);
     }
 
     /**
@@ -84,9 +85,9 @@ public class ObjectMatcher {
      * @return properties captured after the match
      * Expected object can contain placeholders for capturing values from the actual object: ~[placeholder_name]
      */
-    public static Map<String, Object> matchString(String message, Object expected, Supplier<Object> actualObjectSupplier, Integer pollingDurationSeconds,
+    public static Map<String, Object> matchString(String message, Object expected, Supplier<Object> actualObjectSupplier, Duration pollingDuration,
                                                   Long pollingIntervalMillis, Double exponentialBackOff, MatchCondition... matchConditions) {
-        return match(actual -> matchString(message, expected, actual, matchConditions), actualObjectSupplier, pollingDurationSeconds, pollingIntervalMillis, exponentialBackOff);
+        return match(actual -> matchString(message, expected, actual, matchConditions), actualObjectSupplier, pollingDuration, pollingIntervalMillis, exponentialBackOff);
     }
 
     /**
@@ -119,17 +120,17 @@ public class ObjectMatcher {
      * @return properties captured after the match
      * Expected object can contain placeholders for capturing values from the actual object: ~[placeholder_name]
      */
-    public static Map<String, Object> matchHttpResponse(String message, Object expected, Supplier<Object> actualSupplier, Integer pollingDurationSeconds,
+    public static Map<String, Object> matchHttpResponse(String message, Object expected, Supplier<Object> actualSupplier, Duration pollingDuration,
                                                         Long pollingIntervalMillis, Double exponentialBackOff, MatchCondition... matchConditions) {
-        return match(actual -> matchHttpResponse(message, expected, actual, matchConditions), actualSupplier, pollingDurationSeconds, pollingIntervalMillis, exponentialBackOff);
+        return match(actual -> matchHttpResponse(message, expected, actual, matchConditions), actualSupplier, pollingDuration, pollingIntervalMillis, exponentialBackOff);
     }
 
-    private static <T> Map<String, Object> match(Function<T, Map<String, Object>> matchFunction, Supplier<T> actualObjectSupplier, Integer pollingDurationSeconds,
-                                                 Long pollingIntervalMillis, Double exponentialBackOff) {
+    private static <T> Map<String, Object> match(Function<T, Map<String, Object>> matchFunction, Supplier<T> actualObjectSupplier,
+                                                 Duration pollingDuration, Long pollingIntervalMillis, Double exponentialBackOff) {
         Map<String, Object> props = new HashMap<>();
         AtomicReference<AssertionError> error = new AtomicReference<>();
         Polling<T> polling = new Polling<T>()
-                .duration(pollingDurationSeconds, pollingIntervalMillis)
+                .duration(pollingDuration, pollingIntervalMillis)
                 .exponentialBackOff(exponentialBackOff)
                 .supplier(actualObjectSupplier)
                 .until(actual -> {

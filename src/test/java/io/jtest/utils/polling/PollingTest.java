@@ -5,110 +5,91 @@ import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 public class PollingTest {
 
     @Test
-    public void testPollerForResult() throws PollingTimeoutException {
-        Service service = new Service(2);
-        Polling<Boolean> polling = new Polling<Boolean>()
+    public void testPollingForResult() throws PollingTimeoutException {
+        CountService service = new CountService();
+        Polling<Integer> polling = new Polling<Integer>()
                 .supplier(service::get)
                 .duration(Duration.ofSeconds(1), 600L)
-                .until(val -> val.equals(true));
-        boolean result = polling.get();
-        assertTrue(result);
-        assertTrue(polling.getLastResult());
+                .until(val -> val.equals(3));
+
+        int result = polling.get();
+        assertEquals(3, result);
+        assertEquals(3, polling.getLastResult());
     }
 
     @Test
-    public void testPollerForResult_negative() {
-        Service service = new Service(4);
-        Polling<Boolean> polling = new Polling<Boolean>()
+    public void testPollingForResult_negative() {
+        CountService service = new CountService();
+        Polling<Integer> polling = new Polling<Integer>()
                 .supplier(service::get)
                 .duration(Duration.ofSeconds(1), 505L)
-                .until(val -> val.equals(true));
+                .until(val -> val.equals(4));
         try {
             polling.get();
         } catch (PollingTimeoutException e) {
-            assertFalse(polling.getLastResult());
+            assertEquals(3, polling.getLastResult());
             return;
         }
         fail("Should fail with Polling timeout exception");
     }
 
     @Test
-    public void testPollerForResult_negative2() {
-        Service service = new Service(3);
-        Polling<Boolean> polling = new Polling<Boolean>()
+    public void testPollingForResult_negative2() {
+        CountService service = new CountService();
+        Polling<Integer> polling = new Polling<Integer>()
                 .supplier(service::get)
                 .duration(Duration.ofSeconds(1), 1001L)
-                .until(val -> val.equals(true));
+                .until(val -> val.equals(3));
         try {
             polling.get();
         } catch (PollingTimeoutException e) {
-            assertFalse(polling.getLastResult());
+            assertEquals(2, polling.getLastResult());
             return;
         }
         fail("Should fail with Polling timeout exception");
     }
 
     @Test
-    public void testPollerWithNullDuration() throws PollingTimeoutException {
-        Service service = new Service(2);
-        boolean result;
-        Polling<Boolean> polling = new Polling<Boolean>()
+    public void testPollingWithNullDuration() throws PollingTimeoutException {
+        CountService service = new CountService();
+        int result;
+        Polling<Integer> polling = new Polling<Integer>()
                 .supplier(service::get)
                 .duration((Duration) null, 550L)
-                .until(val -> val.equals(true));
+                .until(val -> val.equals(3));
         result = polling.get();
-        assertTrue(result);
-        assertTrue(polling.getLastResult());
+        assertEquals(3, result);
+        assertEquals(3, polling.getLastResult());
     }
 
     @Test
-    public void testPollerExponentialBackOff() {
-        Service service = new Service(4);
-        Polling<Boolean> polling = new Polling<Boolean>()
+    public void testPollingExponentialBackOff() {
+        CountService service = new CountService();
+        Polling<Integer> polling = new Polling<Integer>()
                 .supplier(service::get)
                 .duration(Duration.ofSeconds(1), 405L)
                 .exponentialBackOff(1.5)
-                .until(val -> val.equals(true));
+                .until(val -> val.equals(5));
         try {
             polling.get();
         } catch (PollingTimeoutException e) {
-            assertFalse(polling.getLastResult());
+            assertEquals(3, polling.getLastResult());
             return;
         }
         fail("Should fail with Polling timeout exception");
     }
 
-    @Test
-    public void testPollerTimeout() {
-        Service service = new Service(1000);
-        Polling<Boolean> polling = new Polling<Boolean>()
-                .supplier(service::get)
-                .duration(Duration.ofSeconds(1), 100L)
-                .until(val -> val.equals(true));
-        try {
-            polling.get();
-        } catch (PollingTimeoutException e) {
-            assertFalse(polling.getLastResult());
-            return;
-        }
-        fail("Should fail with Polling timeout exception");
-    }
+    private static class CountService {
+        int count;
 
-    private static class Service {
-        int successfulRetry;
-        int retry;
-
-        public Service(int successAfterRetry) {
-            this.successfulRetry = successAfterRetry;
-        }
-
-        public boolean get() {
-            return ++retry == successfulRetry;
+        public int get() {
+            return ++count;
         }
     }
 }

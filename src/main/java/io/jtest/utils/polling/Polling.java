@@ -16,20 +16,16 @@ public class Polling<T> {
     private Double exponentialBackOff = 1.0;
 
     private Supplier<T> supplier;
-    private Predicate<T> predicate;
+    private Predicate<T> until;
 
     private T result;
 
     public Polling<T> duration(Long pollingIntervalMillis) {
-        return duration((Duration) null, pollingIntervalMillis);
+        return duration(null, pollingIntervalMillis);
     }
 
-    public Polling<T> duration(Integer pollingDurationSec) {
-        return duration(pollingDurationSec, null);
-    }
-
-    public Polling<T> duration(Integer pollingDurationSec, Long pollingIntervalMillis) {
-        return duration(pollingDurationSec != null ? Duration.ofSeconds(pollingDurationSec) : null, pollingIntervalMillis);
+    public Polling<T> duration(Duration duration) {
+        return duration(duration, null);
     }
 
     public Polling<T> duration(Duration pollingDuration, Long pollingIntervalMillis) {
@@ -51,7 +47,7 @@ public class Polling<T> {
     }
 
     public Polling<T> until(Predicate<T> predicate) {
-        this.predicate = predicate;
+        this.until = predicate;
         return this;
     }
 
@@ -66,7 +62,7 @@ public class Polling<T> {
         long start = System.currentTimeMillis();
         while (!success) {
             result = supplier.get();
-            success = predicate.test(result);
+            success = until.test(result);
             if (!success) {
                 try {
                     long elapsed = System.currentTimeMillis() - start;
