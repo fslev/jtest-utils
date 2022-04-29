@@ -503,4 +503,74 @@ public class StringMatcherTests {
         String actual = "some\n ipsum lorem and\n more";
         assertThrows(AssertionError.class, () -> new StringMatcher(null, expected, actual, null).match());
     }
+
+    @Test
+    public void compareStringWithMultipleAssignSymbols_performance() throws InvalidTypeException {
+        String expected = ".*Apply complete.*Resources:.*4 added.*0 changed.*\n" +
+                ".*Outputs.*\n" +
+                ".*create-zone-record-ipv4-result1.*\n" +
+                ".*content.*\"1.2.3.4\".*\n" +
+                ".*disabled.*false.*\n" +
+                "^.*id.*=.*\"~[ipv4RecordId1]\"$\n" +
+                ".*name.*\"www.terraform-dns-provider-test1.de\".*\n" +
+                ".*ttl.*1800.*\n" +
+                ".*type.*\"(?-i)A(?i)\".*\n" +
+                ".*zone_id.*\"1\".*\n" +
+                ".*create-zone-record-ipv4-result2.*\n" +
+                ".*content.*\"1.2.3.5\".*\n" +
+                ".*disabled.*false.*\n" +
+                "^.*id.*=.*\"~[ipv4RecordId2]\"$\n" +
+                ".*name.*\"www.terraform-dns-provider-test1.de\".*\n" +
+                ".*ttl.*1800.*\n" +
+                ".*type.*\"(?-i)A(?i)\".*\n" +
+                ".*zone_id.*\"2\".*\n" +
+                ".*create-zone-record-ipv6-result1.*\n" +
+                ".*content.*\"2001:db8:85a3:0:0:8a2e:370:7334\".*\n" +
+                ".*disabled.*false.*\n" +
+                "^.*id.*=.*\"~[ipv6RecordId1]\"$\n" +
+                ".*name.*\"www.terraform-dns-provider-test1.de\".*\n" +
+                ".*ttl.*1800.*\n" +
+                ".*type.*\"(?-i)AAAA(?i)\".*\n" +
+                ".*zone_id.*\"3\".*";
+        String actual = "Apply complete! Resources: 4 added, 0 changed, 0 destroyed.\n" +
+                "\n" +
+                "Outputs:\n" +
+                "\n" +
+                "create-zone-record-ipv4-result1 = {\n" +
+                "  \"content\" = \"1.2.3.4\"\n" +
+                "  \"disabled\" = false\n" +
+                "  \"id\" = \"a\"\n" +
+                "  \"name\" = \"www.terraform-dns-provider-test1.de\"\n" +
+                "  \"prio\" = 0\n" +
+                "  \"ttl\" = 1800\n" +
+                "  \"type\" = \"A\"\n" +
+                "  \"zone_id\" = \"1\"\n" +
+                "}\n" +
+                "create-zone-record-ipv4-result2 = {\n" +
+                "  \"content\" = \"1.2.3.5\"\n" +
+                "  \"disabled\" = false\n" +
+                "  \"id\" = \"b\"\n" +
+                "  \"name\" = \"www.terraform-dns-provider-test1.de\"\n" +
+                "  \"prio\" = 0\n" +
+                "  \"ttl\" = 1800\n" +
+                "  \"type\" = \"A\"\n" +
+                "  \"zone_id\" = \"2\"\n" +
+                "}\n" +
+                "create-zone-record-ipv6-result1 = {\n" +
+                "  \"content\" = \"2001:db8:85a3:0:0:8a2e:370:7334\"\n" +
+                "  \"disabled\" = false\n" +
+                "  \"id\" = \"c\"\n" +
+                "  \"name\" = \"www.terraform-dns-provider-test1.de\"\n" +
+                "  \"prio\" = 0\n" +
+                "  \"ttl\" = 1800\n" +
+                "  \"type\" = \"AAAA\"\n" +
+                "  \"zone_id\" = \"3\"\n" +
+                "}";
+        StringMatcher matcher = new StringMatcher(null, expected, actual, null);
+        Map<String, Object> symbols = matcher.match();
+        assertEquals(3, symbols.size());
+        assertEquals("a", symbols.get("ipv4RecordId1"));
+        assertEquals("b", symbols.get("ipv4RecordId2"));
+        assertEquals("c", symbols.get("ipv6RecordId1"));
+    }
 }
