@@ -1,6 +1,7 @@
 # Changelog
 
 ### 2.1-SNAPSHOT
+Update dependencies  
 
 ### 2.0
 Remove logging from ShellClient  

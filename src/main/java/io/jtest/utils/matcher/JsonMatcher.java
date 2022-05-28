@@ -49,14 +49,14 @@ public class JsonMatcher extends AbstractObjectMatcher<JsonNode> {
 
     private Map<String, Object> positiveMatch() {
         try {
-            JSONCompare.assertEquals(message, expected, actual, comparator, jsonCompareModes());
+            JSONCompare.assertMatches(expected, actual, comparator, jsonCompareModes(), message);
         } catch (AssertionError e) {
             if (!comparator.getFieldProperties().isEmpty()) {
                 while (true) {
                     comparator.getDepletedFieldPropertyList().add(new HashMap<>(comparator.getFieldProperties()));
                     comparator.getFieldProperties().clear();
                     try {
-                        JSONCompare.assertEquals(message, expected, actual, comparator, jsonCompareModes());
+                        JSONCompare.assertMatches(expected, actual, comparator, jsonCompareModes(), message);
                     } catch (AssertionError e1) {
                         if (!comparator.getFieldProperties().isEmpty()) {
                             continue;
@@ -72,7 +72,7 @@ public class JsonMatcher extends AbstractObjectMatcher<JsonNode> {
         return comparator.getValueProperties();
     }
 
-    private CompareMode[] jsonCompareModes() {
+    private Set<CompareMode> jsonCompareModes() {
         Set<CompareMode> jsonCompareModes = new HashSet<>();
         for (MatchCondition condition : matchConditions) {
             if (MatchCondition.JSON_NON_EXTENSIBLE_OBJECT.equals(condition)) {
@@ -83,6 +83,6 @@ public class JsonMatcher extends AbstractObjectMatcher<JsonNode> {
                 jsonCompareModes.add(CompareMode.JSON_ARRAY_STRICT_ORDER);
             }
         }
-        return jsonCompareModes.toArray(new CompareMode[0]);
+        return jsonCompareModes;
     }
 }
