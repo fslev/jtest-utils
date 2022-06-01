@@ -1,6 +1,7 @@
 # Changelog
 
 ### 2.2-SNAPSHOT
+Code refactoring  
 
 ### 2.1
 Update dependencies  
