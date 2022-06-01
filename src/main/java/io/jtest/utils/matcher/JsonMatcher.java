@@ -35,8 +35,7 @@ public class JsonMatcher extends AbstractObjectMatcher<JsonNode> {
 
     @Override
     public Map<String, Object> match() {
-        if (matchConditions.contains(MatchCondition.DO_NOT_MATCH)) {
-            matchConditions.remove(MatchCondition.DO_NOT_MATCH);
+        if (matchConditions.remove(MatchCondition.DO_NOT_MATCH)) {
             try {
                 positiveMatch();
             } catch (AssertionError e) {
