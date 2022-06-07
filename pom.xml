@@ -22,7 +22,7 @@
         <httpclient.version>4.5.13</httpclient.version>
         <jsoncompare.version>3.0</jsoncompare.version>
         <xmlunit.version>2.9.0</xmlunit.version>
-        <surefire.version>3.0.0-M6</surefire.version>
+        <surefire.version>3.0.0-M7</surefire.version>
         <jackson.version>2.13.3</jackson.version>
         <jackson.databind.version>2.13.3</jackson.databind.version>
         <spring-expression-version>5.3.20</spring-expression-version>
