@@ -47,6 +47,9 @@ public class PlainHttpResponse {
                 throw new PlainHttpResponseParseException("Cannot parse org.apache.http.HttpPResponse", e);
             }
         } else {
+            if (object == null) {
+                throw new PlainHttpResponseParseException("Attempting to convert null to PlainHttpResponse");
+            }
             try {
                 return fromObject(object);
             } catch (Exception e) {

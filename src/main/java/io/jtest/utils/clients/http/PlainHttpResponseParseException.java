@@ -13,4 +13,8 @@ public class PlainHttpResponseParseException extends InvalidTypeException {
     public PlainHttpResponseParseException(String msg, Throwable t) {
         super(msg, t);
     }
+
+    public PlainHttpResponseParseException(String msg) {
+        super(msg);
+    }
 }

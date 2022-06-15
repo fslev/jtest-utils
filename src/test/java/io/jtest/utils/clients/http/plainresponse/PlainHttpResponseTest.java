@@ -1,6 +1,7 @@
 package io.jtest.utils.clients.http.plainresponse;
 
 import io.jtest.utils.clients.http.PlainHttpResponse;
+import io.jtest.utils.clients.http.PlainHttpResponseParseException;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.HttpVersion;
@@ -17,6 +18,11 @@ import java.util.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class PlainHttpResponseTest {
+
+    @Test
+    public void testPlainResponseInitFromNull() {
+        assertThrows(PlainHttpResponseParseException.class, () -> PlainHttpResponse.from(null));
+    }
 
     @Test
     public void testPlainResponseInitFromString() throws Exception {

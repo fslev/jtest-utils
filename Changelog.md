@@ -1,7 +1,10 @@
 # Changelog
 
-### 2.2-SNAPSHOT
+### 2.3-SNAPSHOT  
+
+### 2.2  
 Code refactoring  
+PlainHttpResponse conversion from null should throw exception    
 
 ### 2.1
 Update dependencies  
