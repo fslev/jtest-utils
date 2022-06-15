@@ -5,8 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class ObjectMatcherTest {
 
@@ -149,5 +148,18 @@ public class ObjectMatcherTest {
         } catch (AssertionError e) {
             assertTrue(e.getMessage().contains("unintentional regexes"));
         }
+    }
+
+    @Test
+    public void matchHttpResponses() {
+        String expected = "{\"status\":\"\\\\d+\"}";
+        String actual = "{\"status\":409}";
+        ObjectMatcher.matchHttpResponse(null, expected, actual);
+    }
+
+    @Test
+    public void matchNullHttpResponse() {
+        String expected = "{\"status\":\"\\\\d+\"}";
+        assertThrows(Exception.class, () -> ObjectMatcher.matchHttpResponse(null, expected, null));
     }
 }
