@@ -1,6 +1,7 @@
 # Changelog
 
 ### 2.3-SNAPSHOT  
+Remove unused duration methods from Polling class  
 
 ### 2.2  
 Code refactoring  
