@@ -91,6 +91,7 @@ public class SqlClientTest {
     @Test
     public void testQueryResult() throws SQLException {
         sqlClient.prepareStatement("test");
+        sqlClient.prepareStatement("test");
         ResultSet resultSet = sqlClient.executeQuery();
         resultSet.next();
         assertEquals("David", resultSet.getObject(1));
