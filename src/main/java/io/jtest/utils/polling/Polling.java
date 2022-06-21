@@ -20,14 +20,6 @@ public class Polling<T> {
 
     private T result;
 
-    public Polling<T> duration(Long pollingIntervalMillis) {
-        return duration(null, pollingIntervalMillis);
-    }
-
-    public Polling<T> duration(Duration duration) {
-        return duration(duration, null);
-    }
-
     public Polling<T> duration(Duration pollingDuration, Long pollingIntervalMillis) {
         this.pollingDuration = pollingDuration != null ? pollingDuration : this.pollingDuration;
         this.pollingIntervalMillis = pollingIntervalMillis != null ? pollingIntervalMillis : this.pollingIntervalMillis;
