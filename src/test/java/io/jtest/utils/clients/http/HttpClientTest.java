@@ -22,7 +22,7 @@ public class HttpClientTest {
     private final static Logger LOG = LogManager.getLogger(HttpClientTest.class);
 
     @Test
-    public void testNonEmptyHeader() {
+    public void testNonEmptyHeaderConstruct() {
         HttpClient.Builder builder = new HttpClient.Builder().address("test").method(Method.GET);
         builder.nonEmptyHeader("test1", "1");
         builder.nonEmptyHeader("test2", "");
@@ -36,7 +36,7 @@ public class HttpClientTest {
     }
 
     @Test
-    public void testDuplicatedHeaders() {
+    public void testDuplicatedHeadersConstruct() {
         HttpClient.Builder builder = new HttpClient.Builder().address("test").method(Method.POST);
         builder.nonEmptyHeader("test1", "1");
         builder.header("test1", "2");
@@ -53,7 +53,7 @@ public class HttpClientTest {
     }
 
     @Test
-    public void testHeaderOverride() {
+    public void testHeaderOverrideConstruct() {
         HttpClient.Builder builder = new HttpClient.Builder().address("test").method(Method.PUT);
         builder.header("test1", "0", true);
         builder.header("test1", "1");
@@ -78,7 +78,7 @@ public class HttpClientTest {
     }
 
     @Test
-    public void testNonEmptyHeaderOverride() {
+    public void testNonEmptyHeaderOverrideConstruct() {
         HttpClient.Builder builder = new HttpClient.Builder().address("test").method(Method.DELETE);
         builder.nonEmptyHeader("test1", "0", true);
         builder.nonEmptyHeader("test1", "1");
@@ -103,7 +103,7 @@ public class HttpClientTest {
     }
 
     @Test
-    public void testHeadersOverride() {
+    public void testHeadersOverrideConstruct() {
         HttpClient.Builder builder = new HttpClient.Builder().address("test").method(Method.PATCH);
         builder.header("test1", "0");
         Map<String, String> headers = new HashMap<>();
@@ -132,7 +132,7 @@ public class HttpClientTest {
     }
 
     @Test
-    public void testNonEmptyQueryParam() {
+    public void testNonEmptyQueryParamConstruct() {
         HttpClient.Builder builder = new HttpClient.Builder().address("test").method(Method.OPTIONS);
         builder.queryParam("test1", "1");
         builder.nonEmptyQueryParam("test2", "");
@@ -149,7 +149,7 @@ public class HttpClientTest {
     }
 
     @Test
-    public void testNullQueryParamsAndNullHeaders() {
+    public void testNullQueryParamsAndNullHeadersConstruct() {
         HttpClient.Builder builder = new HttpClient.Builder().address("test").method(Method.TRACE);
         builder.queryParams(null);
         builder.headers(null);
@@ -158,7 +158,7 @@ public class HttpClientTest {
     }
 
     @Test
-    public void testUnencodedUriPath() {
+    public void testUnencodedUriPathConstruct() {
         HttpClient.Builder builder = new HttpClient.Builder().address("https://some-address.io").path("/%2F/test?a=12")
                 .method(Method.GET).queryParam("b", "%2Ftest1").queryParam("c", "test2%2F");
         HttpClient client = builder.build();
@@ -166,13 +166,13 @@ public class HttpClientTest {
     }
 
     @Test
-    public void testTimeoutSetup() {
+    public void testTimeoutConstruct() {
         HttpClient client = new HttpClient.Builder().address("http://google.ro").method(Method.GET).timeout(11).build();
         assertEquals(11, client.getTimeout());
     }
 
     @Test
-    public void testProxySetup() {
+    public void testProxyConstruct() {
         HttpClient client = new HttpClient.Builder().address("http://google.ro")
                 .method(Method.GET).proxy("localhost", 8000, "https").build();
         assertEquals("localhost", client.getProxyHost().getHostName());
@@ -226,22 +226,29 @@ public class HttpClientTest {
     }
 
     @Test
-    public void testMissingAddress() {
-        assertTrue(assertThrows(IllegalStateException.class, () -> new HttpClient.Builder().method(Method.GET).build().execute())
+    public void testMissingAddressConstruct() {
+        assertTrue(assertThrows(IllegalStateException.class, () -> new HttpClient.Builder().method(Method.GET).build())
                 .getMessage().contains("HTTP Address missing"));
     }
 
     @Test
-    public void testMissingMethod() {
+    public void testMissingMethodConstruct() {
         assertTrue(assertThrows(IllegalStateException.class, () -> new HttpClient.Builder().address("http://localhost")
-                .build().execute())
+                .build())
                 .getMessage().contains("HTTP Method missing"));
     }
 
     @Test
-    public void testInvalidAddress() {
+    public void testInvalidAddressConstruct() {
         assertTrue(assertThrows(RuntimeException.class, () -> new HttpClient.Builder()
-                .address("https://test@#$%^&*()_+").method(Method.GET).build().execute())
+                .address("https://test@#$%^&*()_+").method(Method.GET).build())
                 .getMessage().contains("URISyntaxException"));
+    }
+
+    @Test
+    public void testDeleteMethodWithEntityConstruct() {
+        HttpClient client = new HttpClient.Builder().address("https://locahost").method(Method.DELETE)
+                .entity("some content").build();
+        assertEquals("some content", client.getRequestEntity());
     }
 }
