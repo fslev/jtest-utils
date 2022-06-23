@@ -156,6 +156,87 @@ public class HttpResponseMatcherTests {
     }
 
     @Test
+    public void doNotMatchHttpResponsesByReason() throws UnsupportedEncodingException, InvalidTypeException {
+        String expected = "{\"status\": 400, \"headers\":[{\"auth\":1}], \"reason\":\"lorem\",\"body\":{\"a\":\"~[val1] ipsum\"}}";
+        HttpResponse actual = new DefaultHttpResponseFactory()
+                .newHttpResponse(new BasicStatusLine(HttpVersion.HTTP_1_1, HttpStatus.SC_BAD_REQUEST, "ipsum"),
+                        HttpClientContext.adapt(new BasicHttpContext()));
+        actual.setEntity(new StringEntity("{\"a\":\"lorem ipsum\"}"));
+        actual.addHeader("auth", "1");
+        actual.addHeader("x-auth", "2");
+        Map<String, Object> props = new HttpResponseMatcher(null, expected, actual,
+                new HashSet<>(Arrays.asList(MatchCondition.DO_NOT_MATCH_HTTP_RESPONSE_BY_REASON))).match();
+        assertEquals("lorem", props.get("val1"));
+    }
+
+    @Test
+    public void doNotMatchHttpResponsesByReason_negative() throws UnsupportedEncodingException {
+        String expected = "{\"status\": 400, \"reason\":\"ipsum\",\"body\":{\"a\":\"~[val1] ipsum\"}}";
+        HttpResponse actual = new DefaultHttpResponseFactory()
+                .newHttpResponse(new BasicStatusLine(HttpVersion.HTTP_1_1, HttpStatus.SC_BAD_REQUEST, "ipsum"),
+                        HttpClientContext.adapt(new BasicHttpContext()));
+        actual.setEntity(new StringEntity("{\"a\":\"lorem ipsum\"}"));
+        assertTrue(assertThrows(AssertionError.class, () -> new HttpResponseMatcher(null, expected, actual,
+                new HashSet<>(Arrays.asList(MatchCondition.DO_NOT_MATCH_HTTP_RESPONSE_BY_REASON))).match())
+                .getMessage().contains("Objects match"));
+    }
+
+
+    @Test
+    public void doNotMatchHttpResponsesByReason_negative1() throws UnsupportedEncodingException {
+        String expected = "{\"status\": 400, \"reason\":\"bad request\",\"body\":{\"a\":\"~[val1] lorem\"}}";
+        HttpResponse actual = new DefaultHttpResponseFactory()
+                .newHttpResponse(new BasicStatusLine(HttpVersion.HTTP_1_1, HttpStatus.SC_BAD_REQUEST, "ipsum"),
+                        HttpClientContext.adapt(new BasicHttpContext()));
+        actual.setEntity(new StringEntity("{\"a\":\"lorem ipsum\"}"));
+        assertTrue(assertThrows(AssertionError.class, () -> new HttpResponseMatcher(null, expected, actual,
+                new HashSet<>(Arrays.asList(MatchCondition.DO_NOT_MATCH_HTTP_RESPONSE_BY_REASON))).match())
+                .getMessage().contains("HTTP Response bodies do not match"));
+    }
+
+    @Test
+    public void doNotMatchHttpResponsesByHeaders() throws UnsupportedEncodingException, InvalidTypeException {
+        String expected = "{\"status\": 400, \"headers\":[{\"auth\":2}], \"reason\":\"lorem\",\"body\":{\"a\":\"~[val1] ipsum\"}}";
+        HttpResponse actual = new DefaultHttpResponseFactory()
+                .newHttpResponse(new BasicStatusLine(HttpVersion.HTTP_1_1, HttpStatus.SC_BAD_REQUEST, "lorem"),
+                        HttpClientContext.adapt(new BasicHttpContext()));
+        actual.setEntity(new StringEntity("{\"a\":\"lorem ipsum\"}"));
+        actual.addHeader("auth", "1");
+        actual.addHeader("x-auth", "2");
+        Map<String, Object> props = new HttpResponseMatcher(null, expected, actual,
+                new HashSet<>(Arrays.asList(MatchCondition.DO_NOT_MATCH_HTTP_RESPONSE_BY_HEADERS))).match();
+        assertEquals("lorem", props.get("val1"));
+    }
+
+    @Test
+    public void doNotMatchHttpResponsesByHeaders_negative() throws UnsupportedEncodingException, InvalidTypeException {
+        String expected = "{\"status\": 400, \"headers\":[{\"x-auth\":2}], \"reason\":\"lorem\",\"body\":{\"a\":\"~[val1] ipsum\"}}";
+        HttpResponse actual = new DefaultHttpResponseFactory()
+                .newHttpResponse(new BasicStatusLine(HttpVersion.HTTP_1_1, HttpStatus.SC_BAD_REQUEST, "lorem"),
+                        HttpClientContext.adapt(new BasicHttpContext()));
+        actual.setEntity(new StringEntity("{\"a\":\"lorem ipsum\"}"));
+        actual.addHeader("auth", "1");
+        actual.addHeader("x-auth", "2");
+        assertTrue(assertThrows(AssertionError.class, () -> new HttpResponseMatcher(null, expected, actual,
+                new HashSet<>(Arrays.asList(MatchCondition.DO_NOT_MATCH_HTTP_RESPONSE_BY_HEADERS))).match())
+                .getMessage().contains("Objects match"));
+    }
+
+    @Test
+    public void doNotMatchHttpResponsesByHeaders_negative1() throws UnsupportedEncodingException, InvalidTypeException {
+        String expected = "{\"status\": 200, \"headers\":[{\"x-auth\":3}], \"reason\":\"lorem\",\"body\":{\"a\":\"~[val1] ipsum\"}}";
+        HttpResponse actual = new DefaultHttpResponseFactory()
+                .newHttpResponse(new BasicStatusLine(HttpVersion.HTTP_1_1, HttpStatus.SC_BAD_REQUEST, "lorem"),
+                        HttpClientContext.adapt(new BasicHttpContext()));
+        actual.setEntity(new StringEntity("{\"a\":\"lorem ipsum\"}"));
+        actual.addHeader("auth", "1");
+        actual.addHeader("x-auth", "2");
+        assertTrue(assertThrows(AssertionError.class, () -> new HttpResponseMatcher(null, expected, actual,
+                new HashSet<>(Arrays.asList(MatchCondition.DO_NOT_MATCH_HTTP_RESPONSE_BY_HEADERS))).match())
+                .getMessage().contains("HTTP Response statuses do not match"));
+    }
+
+    @Test
     public void matchHttpResponsesByJsonNonExtensibleObjectBody() throws UnsupportedEncodingException, InvalidTypeException {
         String expected = "{\"status\": 200, \"headers\":[{\"auth\":1},{\"x-auth\":2}], \"reason\":\"test\",\"body\":{\"a\":\"~[val1] ipsum\"}}";
         HttpResponse actual = new DefaultHttpResponseFactory()
