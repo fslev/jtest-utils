@@ -1,11 +1,10 @@
 package io.jtest.utils.matcher;
 
 import io.jtest.utils.exceptions.InvalidTypeException;
+import io.jtest.utils.matcher.condition.MatchCondition;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -49,6 +48,12 @@ public class StringMatcherTests {
         StringMatcher matcher = new StringMatcher(null, expected, actual, null);
         Map<String, Object> symbols = matcher.match();
         assertTrue(symbols.isEmpty());
+    }
+
+    @Test
+    public void matchConditions() {
+        assertTrue(assertThrows(AssertionError.class, () -> new StringMatcher("Strings do match actually", "test", "test",
+                new HashSet<>(Arrays.asList(MatchCondition.DO_NOT_MATCH))).match()).getMessage().contains("Objects match!"));
     }
 
     @Test
