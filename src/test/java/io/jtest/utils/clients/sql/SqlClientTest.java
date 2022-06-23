@@ -24,7 +24,7 @@ import static org.powermock.api.mockito.PowerMockito.doNothing;
 import static org.powermock.api.mockito.PowerMockito.when;
 
 @RunWith(PowerMockRunner.class)
-@PowerMockIgnore({"javax.management.*", "com.sun.org.apache.xerces.*", "javax.xml.*", "org.xml.*", "org.w3c.dom.*", "com.sun.org.apache.xalan.*" })
+@PowerMockIgnore({"javax.management.*", "com.sun.org.apache.xerces.*", "javax.xml.*", "org.xml.*", "org.w3c.dom.*", "com.sun.org.apache.xalan.*"})
 public class SqlClientTest {
 
     @Mock
@@ -87,6 +87,17 @@ public class SqlClientTest {
         sqlClient.prepareStatement("test");
         assertEquals(expected, sqlClient.executeQueryAndGetRsAsList());
     }
+
+    @Test(expected = RuntimeException.class)
+    public void invalidClassName() {
+        new SqlClient("", "", "", "com.mssql.cj.jdbc.Driver");
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void clientNotConnected() throws SQLException {
+        new SqlClient("", "", "", "com.mysql.cj.jdbc.Driver").prepareStatement("test");
+    }
+
 
     @Test
     public void testQueryResult() throws SQLException {
