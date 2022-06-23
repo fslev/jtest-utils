@@ -38,7 +38,7 @@ public class HttpClientTest {
 
     @Test
     public void testDuplicatedHeaders() {
-        HttpClient.Builder builder = new HttpClient.Builder().address("test").method(Method.GET);
+        HttpClient.Builder builder = new HttpClient.Builder().address("test").method(Method.POST);
         builder.nonEmptyHeader("test1", "1");
         builder.header("test1", "2");
         HttpClient client = builder.build();
@@ -55,7 +55,7 @@ public class HttpClientTest {
 
     @Test
     public void testHeaderOverride() {
-        HttpClient.Builder builder = new HttpClient.Builder().address("test").method(Method.GET);
+        HttpClient.Builder builder = new HttpClient.Builder().address("test").method(Method.PUT);
         builder.header("test1", "0", true);
         builder.header("test1", "1");
         HttpClient client = builder.build();
@@ -80,7 +80,7 @@ public class HttpClientTest {
 
     @Test
     public void testNonEmptyHeaderOverride() {
-        HttpClient.Builder builder = new HttpClient.Builder().address("test").method(Method.GET);
+        HttpClient.Builder builder = new HttpClient.Builder().address("test").method(Method.DELETE);
         builder.nonEmptyHeader("test1", "0", true);
         builder.nonEmptyHeader("test1", "1");
         HttpClient client = builder.build();
@@ -105,7 +105,7 @@ public class HttpClientTest {
 
     @Test
     public void testHeadersOverride() {
-        HttpClient.Builder builder = new HttpClient.Builder().address("test").method(Method.GET);
+        HttpClient.Builder builder = new HttpClient.Builder().address("test").method(Method.PATCH);
         builder.header("test1", "0");
         Map<String, String> headers = new HashMap<>();
         headers.put("test1", "1");
@@ -134,7 +134,7 @@ public class HttpClientTest {
 
     @Test
     public void testNonEmptyQueryParam() {
-        HttpClient.Builder builder = new HttpClient.Builder().address("test").method(Method.GET);
+        HttpClient.Builder builder = new HttpClient.Builder().address("test").method(Method.OPTIONS);
         builder.queryParam("test1", "1");
         builder.nonEmptyQueryParam("test2", "");
         builder.nonEmptyQueryParam("test3", null);
@@ -151,7 +151,7 @@ public class HttpClientTest {
 
     @Test
     public void testNullQueryParamsAndNullHeaders() {
-        HttpClient.Builder builder = new HttpClient.Builder().address("test").method(Method.GET);
+        HttpClient.Builder builder = new HttpClient.Builder().address("test").method(Method.TRACE);
         builder.queryParams(null);
         builder.headers(null);
         assertTrue(builder.build().getHeaders().isEmpty());
