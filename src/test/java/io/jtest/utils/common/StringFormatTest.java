@@ -20,6 +20,16 @@ public class StringFormatTest {
     }
 
     @Test
+    public void testPropertiesReplace_with_prefixes() {
+        String source = "{\"a\":\"some #|var 1|\",\"b\":#|var2|}";
+        Map<String, Object> props = new HashMap<>();
+        props.put("var 1", "value here");
+        props.put("var2", "\"test\"");
+        String expected = "{\"a\":\"some value here\",\"b\":\"test\"}";
+        assertEquals(expected, StringFormat.replaceProps(source, props, "#|", "|"));
+    }
+
+    @Test
     public void testPropertiesReplaceWithNulls() {
         String source = "{\"a\":\"some #[var 1]\",\"b\":#[var2]}";
         Map<String, Object> props = new HashMap<>();
