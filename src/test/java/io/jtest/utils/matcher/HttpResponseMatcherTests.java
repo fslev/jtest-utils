@@ -17,8 +17,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class HttpResponseMatcherTests {
 
@@ -81,8 +80,9 @@ public class HttpResponseMatcherTests {
         actual.setEntity(new StringEntity("{\"a\":\"lorem ipsum\"}"));
         actual.addHeader("auth", "1");
         actual.addHeader("x-auth", "2");
-        assertThrows(AssertionError.class, () ->
-                new HttpResponseMatcher(null, expected, actual, new HashSet<>(Arrays.asList(MatchCondition.DO_NOT_MATCH_HTTP_RESPONSE_BY_STATUS))).match());
+        assertTrue(assertThrows(AssertionError.class, () ->
+                new HttpResponseMatcher(null, expected, actual, new HashSet<>(Arrays.asList(MatchCondition.DO_NOT_MATCH_HTTP_RESPONSE_BY_STATUS))).match())
+                .getMessage().contains("Objects match"));
     }
 
     @Test
