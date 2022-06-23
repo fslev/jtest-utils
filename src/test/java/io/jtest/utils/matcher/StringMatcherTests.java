@@ -20,7 +20,7 @@ public class StringMatcherTests {
 
     @Test
     public void compareWithNull() throws InvalidTypeException {
-        StringMatcher matcher = new StringMatcher(null, "~[prop]", null, null);
+        StringMatcher matcher = new StringMatcher("Match failed!", "~[prop]", null, null);
         Map<String, Object> props = matcher.match();
         assertEquals(1, props.size());
         assertNull(props.get("prop1"));
