@@ -3,6 +3,7 @@ package io.jtest.utils.matcher;
 import io.jtest.utils.matcher.condition.MatchCondition;
 import org.junit.jupiter.api.Test;
 
+import java.time.Duration;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -16,8 +17,26 @@ public class ObjectMatcherTest {
     }
 
     @Test
+    public void matchWithPolling() {
+        ObjectMatcher.match("Matching failed", "lorem", () -> "lorem", Duration.ofSeconds(1), 1000L, 1.5);
+    }
+
+    @Test
     public void doNotMatchWithNull() {
         ObjectMatcher.match(null, null, "val", MatchCondition.DO_NOT_MATCH);
+    }
+
+    @Test
+    public void matchWithInvalidJson() {
+        assertTrue(assertThrows(RuntimeException.class,
+                () -> ObjectMatcher.matchJson("match failed", "{\"a\":1}", "{a:1}"))
+                .getMessage().contains("Invalid JSON"));
+        assertTrue(assertThrows(RuntimeException.class,
+                () -> ObjectMatcher.matchJson("match failed", "{\"a\":1}", () -> "{a:1}", Duration.ofSeconds(1), 1000L, 1.5))
+                .getMessage().contains("Invalid JSON"));
+        assertTrue(assertThrows(RuntimeException.class,
+                () -> ObjectMatcher.matchJson("match failed", "{a:1}", "{\"a\":1}"))
+                .getMessage().contains("Invalid JSON"));
     }
 
     @Test
