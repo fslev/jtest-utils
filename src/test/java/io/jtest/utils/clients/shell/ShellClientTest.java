@@ -6,6 +6,7 @@ import org.junit.jupiter.api.condition.OS;
 
 import java.io.File;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ShellClientTest {
@@ -23,5 +24,11 @@ public class ShellClientTest {
     public void checkDirectory() {
         ShellClient client = new ShellClient(new ProcessBuilder().directory(new File("src/test/resources")));
         assertTrue(client.execute("bash", "-c", "pwd").trim().endsWith("/src/test/resources"));
+    }
+
+    @Test
+    public void invalidCommand() {
+        ShellClient client = new ShellClient();
+        assertThrows(RuntimeException.class, () -> client.execute("bashes", "-c", "ls"));
     }
 }
