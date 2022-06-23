@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
 import java.util.Map;
+import java.util.function.Supplier;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -19,11 +20,61 @@ public class ObjectMatcherTest {
     @Test
     public void matchWithPolling() {
         ObjectMatcher.match("Matching failed", "lorem", () -> "lorem", Duration.ofSeconds(1), 1000L, 1.5);
+        ObjectMatcher.matchString("Matching failed", "lorem", () -> "lorem", Duration.ofSeconds(1), 1000L, 1.5);
     }
 
     @Test
     public void doNotMatchWithNull() {
         ObjectMatcher.match(null, null, "val", MatchCondition.DO_NOT_MATCH);
+    }
+
+    @Test
+    public void matchJsonWithPolling() {
+        // match as JSONs
+        ObjectMatcher.matchJson("Matching failed", "{\"status\":\"UPDATE\"}", new Supplier<Object>() {
+            private int retry = 0;
+
+            @Override
+            public Object get() {
+                retry++;
+                return retry < 2 ? "{\"status\":\"UPDATING\"}" : "{\"status\":\"UPDATE\"}";
+            }
+        }, Duration.ofSeconds(1), 100L, 1.0);
+        // match as objects
+        ObjectMatcher.match("Matching failed", "{\"status\":\"UPDATE\"}", new Supplier<Object>() {
+            private int retry = 0;
+
+            @Override
+            public Object get() {
+                retry++;
+                return retry < 2 ? "{\"status\":\"UPDATING\"}" : "{\"status\":\"UPDATE\"}";
+            }
+        }, Duration.ofSeconds(1), 100L, 1.0);
+    }
+
+    @Test
+    public void matchJsonWithPolling_timeout() {
+        // match as JSONs
+        assertThrows(AssertionError.class, () -> ObjectMatcher.matchJson("Matching failed", "{\"status\":\"UPDATE\"}", new Supplier<Object>() {
+            private int retry = 0;
+
+            @Override
+            public Object get() {
+                retry++;
+                return retry < 200 ? "{\"status\":\"UPDATING\"}" : "{\"status\":\"UPDATE\"}";
+            }
+        }, Duration.ofSeconds(1), 100L, 1.0));
+
+        // match as objects
+        assertThrows(AssertionError.class, () -> ObjectMatcher.match("Matching failed", "{\"status\":\"UPDATE\"}", new Supplier<Object>() {
+            private int retry = 0;
+
+            @Override
+            public Object get() {
+                retry++;
+                return retry < 200 ? "{\"status\":\"UPDATING\"}" : "{\"status\":\"UPDATE\"}";
+            }
+        }, Duration.ofSeconds(1), 100L, 1.0));
     }
 
     @Test
@@ -67,6 +118,38 @@ public class ObjectMatcherTest {
         assertEquals("olAttrVal", symbols.get("sym2"));
         assertEquals("text", symbols.get("sym3"));
         assertEquals(3, symbols.size());
+    }
+
+    @Test
+    public void matchInvalidXMLs() {
+        assertTrue(assertThrows(RuntimeException.class, () ->
+                ObjectMatcher.matchXml(null, "<struct>true</struct>", "<struct>false<struct>"))
+                .getMessage().contains("Invalid XML"));
+        assertTrue(assertThrows(RuntimeException.class, () ->
+                ObjectMatcher.matchXml(null, "<struct>true<struct>", "<struct>false</struct>"))
+                .getMessage().contains("Invalid XML"));
+    }
+
+    @Test
+    public void matchXmlWithPolling() {
+        String expected =
+                "<struct><int a=\"~[sym1]\">some ~[sym3] here</int><boolean a=\"bo~[sym2]ue\">false</boolean></struct>";
+        String actual = "<struct>"
+                + "<int a=\"(attrValue1\">some text here</int><boolean a=\"boolAttrValue\">false</boolean><str a=\"some result\"><a>sub text</a></str></struct>";
+        Map<String, Object> symbols = ObjectMatcher.match(null, expected, () -> actual,
+                Duration.ofSeconds(1), 100L, 1.0, MatchCondition.XML_CHILD_NODELIST_SEQUENCE);
+        assertEquals("(attrValue1", symbols.get("sym1"));
+        assertEquals("olAttrVal", symbols.get("sym2"));
+        assertEquals("text", symbols.get("sym3"));
+        assertEquals(3, symbols.size());
+        symbols = ObjectMatcher.matchXml(null, expected, actual, MatchCondition.XML_CHILD_NODELIST_SEQUENCE);
+        assertEquals("(attrValue1", symbols.get("sym1"));
+        assertEquals("olAttrVal", symbols.get("sym2"));
+        assertEquals("text", symbols.get("sym3"));
+        assertEquals(3, symbols.size());
+        // match again directly as XMLs
+        ObjectMatcher.matchXml(null, expected, () -> actual,
+                Duration.ofSeconds(1), 100L, 1.0, MatchCondition.XML_CHILD_NODELIST_SEQUENCE);
     }
 
     @Test
@@ -174,6 +257,21 @@ public class ObjectMatcherTest {
         String expected = "{\"status\":\"\\\\d+\"}";
         String actual = "{\"status\":409}";
         ObjectMatcher.matchHttpResponse(null, expected, actual);
+    }
+
+    @Test
+    public void matchHttpResponses_withPolling() {
+        String expected = "{\"status\":\"\\\\d+\"}";
+        String actual = "{\"status\":409}";
+        ObjectMatcher.matchHttpResponse(null, expected, () -> actual, Duration.ofSeconds(1), 100L, 1.0);
+    }
+
+    @Test
+    public void matchHttpResponses_withPolling_negative() {
+        String expected = "{\"status\":\"\\\\d+\"}";
+        String actual = "{\"status\":\"invalid\"}";
+        assertThrows(AssertionError.class, () ->
+                ObjectMatcher.matchHttpResponse(null, expected, () -> actual, Duration.ofSeconds(1), 100L, 1.0));
     }
 
     @Test
