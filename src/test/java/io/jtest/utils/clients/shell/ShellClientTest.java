@@ -15,6 +15,7 @@ public class ShellClientTest {
     public void testSimpleShellCommand() {
         ShellClient client = new ShellClient();
         assertTrue(client.execute("bash", "-c", "ls -alh").contains("total"));
+        assertTrue(client.execute("bash", "-c", "cat i-don-t-exist").contains("No such file or directory"));
     }
 
     @Test
