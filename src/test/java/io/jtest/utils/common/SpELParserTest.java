@@ -25,6 +25,12 @@ public class SpELParserTest {
     }
 
     @Test
+    public void invalidSpelContent() {
+        String s = "T(invalid.net.IDN).toASCII('testá.com')";
+        assertEquals("T(invalid.net.IDN).toASCII('testá.com')", SpELParser.parseExpression(s));
+    }
+
+    @Test
     public void spELGeneratesNull() {
         assertNull(SpELParser.parse("#{T(io.jtest.utils.common.SpELParserTest).returnsNull()}"));
     }
