@@ -8,7 +8,6 @@ import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -159,12 +158,26 @@ public class HttpClientTest {
     }
 
     @Test
-    @Disabled
     public void testUnencodedUriPath() {
         HttpClient.Builder builder = new HttpClient.Builder().address("https://some-address.io").path("/%2F/test?a=12")
                 .method(Method.GET).queryParam("b", "%2Ftest1").queryParam("c", "test2%2F");
         HttpClient client = builder.build();
         assertEquals("https://some-address.io/%2F/test?a=12&b=%252Ftest1&c=test2%252F", client.getUri());
+    }
+
+    @Test
+    public void testTimeoutSetup() {
+        HttpClient client = new HttpClient.Builder().address("http://google.ro").method(Method.GET).timeout(11).build();
+        assertEquals(11, client.getTimeout());
+    }
+
+    @Test
+    public void testProxySetup() {
+        HttpClient client = new HttpClient.Builder().address("http://google.ro")
+                .method(Method.GET).proxy("localhost", 8000, "https").build();
+        assertEquals("localhost", client.getProxyHost().getHostName());
+        assertEquals(8000, client.getProxyHost().getPort());
+        assertEquals("https", client.getProxyHost().getSchemeName());
     }
 
     @Test
@@ -210,5 +223,25 @@ public class HttpClientTest {
         HttpClient client = builder.build();
         LOG.info(EntityUtils.toString(client.execute().getEntity()));
         client.close();
+    }
+
+    @Test
+    public void testMissingAddress() {
+        assertTrue(assertThrows(IllegalStateException.class, () -> new HttpClient.Builder().method(Method.GET).build().execute())
+                .getMessage().contains("HTTP Address missing"));
+    }
+
+    @Test
+    public void testMissingMethod() {
+        assertTrue(assertThrows(IllegalStateException.class, () -> new HttpClient.Builder().address("http://localhost")
+                .build().execute())
+                .getMessage().contains("HTTP Method missing"));
+    }
+
+    @Test
+    public void testInvalidAddress() {
+        assertTrue(assertThrows(RuntimeException.class, () -> new HttpClient.Builder()
+                .address("https://test@#$%^&*()_+").method(Method.GET).build().execute())
+                .getMessage().contains("URISyntaxException"));
     }
 }
