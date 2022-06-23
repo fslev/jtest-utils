@@ -6,6 +6,10 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.nio.file.NoSuchFileException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -13,8 +17,19 @@ import static org.junit.jupiter.api.Assertions.*;
 public class ResourceReadTests {
 
     @Test
-    public void testStringReadFromFile() throws IOException {
+    public void testReadFromInvalidFilePath() throws IOException {
+        assertTrue(assertThrows(IOException.class, () -> ResourceUtils.read("i/dont/exist"))
+                .getMessage().contains("not found"));
+    }
+
+    @Test
+    public void testStringReadFromRelativePathFile() throws IOException {
         assertEquals("some content 1\nsome content 2\n", ResourceUtils.read("foobar/file1.txt"));
+    }
+
+    @Test
+    public void testStringReadFromAbsolutePathFile() {
+        assertThrowsExactly(NoSuchFileException.class, () -> ResourceUtils.read("/i/dont/exist"));
     }
 
     @Test
@@ -74,5 +89,27 @@ public class ResourceReadTests {
         assertEquals("3", actualData.get("foobar/dir/foo/foo2.json"));
         assertEquals("4", actualData.get("foobar/dir/foo/bar/bar1.json"));
         assertEquals("5", actualData.get("foobar/dir/foo/bar/bar2.json"));
+    }
+
+    @Test
+    public void readFromInvalidDirectoryPath() {
+        assertTrue(assertThrows(IOException.class, () -> ResourceUtils.readDirectory("i/dont/exist"))
+                .getMessage().contains("not found"));
+    }
+
+    @Test
+    public void testReadFromYamlFile() throws IOException {
+        Map<String, Object> expected = new HashMap<>();
+        List<String> items = new ArrayList<>();
+        items.add("test");
+        items.add("test1");
+        items.add("test2");
+        expected.put("list", items);
+        assertEquals(expected, ResourceUtils.readYaml("yaml/config.yaml"));
+    }
+
+    @Test
+    public void testGetFileName() throws IOException, URISyntaxException {
+        assertEquals("config.yaml", ResourceUtils.getFileName("yaml/config.yaml"));
     }
 }
