@@ -4,6 +4,7 @@
 
 ### 2.3  
 Remove unused duration methods from Polling class  
+Refactor message when XML and String matching fails  
 Update Json-Compare dependency  
 
 ### 2.2  
