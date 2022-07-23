@@ -1,10 +1,10 @@
 package io.jtest.utils.matcher;
 
+import io.json.compare.util.MessageUtil;
 import io.jtest.utils.exceptions.InvalidTypeException;
 import io.jtest.utils.matcher.condition.MatchCondition;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import ro.skyah.util.MessageUtil;
 
 import java.util.HashSet;
 import java.util.Map;

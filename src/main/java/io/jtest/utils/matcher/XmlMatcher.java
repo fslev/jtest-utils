@@ -1,5 +1,6 @@
 package io.jtest.utils.matcher;
 
+import io.json.compare.util.MessageUtil;
 import io.jtest.utils.common.XmlUtils;
 import io.jtest.utils.exceptions.InvalidTypeException;
 import io.jtest.utils.matcher.comparators.xml.CustomXmlDiffEvaluator;
@@ -10,7 +11,6 @@ import org.xmlunit.diff.DefaultNodeMatcher;
 import org.xmlunit.diff.DifferenceEvaluators;
 import org.xmlunit.diff.ElementSelector;
 import org.xmlunit.diff.XPathContext;
-import ro.skyah.util.MessageUtil;
 
 import javax.xml.transform.TransformerException;
 import java.util.HashMap;

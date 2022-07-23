@@ -1,12 +1,12 @@
 package io.jtest.utils.matcher;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import io.json.compare.CompareMode;
+import io.json.compare.JSONCompare;
 import io.jtest.utils.common.JsonUtils;
 import io.jtest.utils.exceptions.InvalidTypeException;
 import io.jtest.utils.matcher.comparators.json.CustomJsonComparator;
 import io.jtest.utils.matcher.condition.MatchCondition;
-import ro.skyah.comparator.CompareMode;
-import ro.skyah.comparator.JSONCompare;
 
 import java.util.HashMap;
 import java.util.HashSet;
