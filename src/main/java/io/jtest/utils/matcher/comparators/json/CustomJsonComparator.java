@@ -1,9 +1,9 @@
 package io.jtest.utils.matcher.comparators.json;
 
+import io.json.compare.JsonComparator;
 import io.jtest.utils.exceptions.InvalidTypeException;
 import io.jtest.utils.matcher.StringMatcher;
 import io.jtest.utils.matcher.condition.MatchCondition;
-import ro.skyah.comparator.JsonComparator;
 
 import java.util.*;
 

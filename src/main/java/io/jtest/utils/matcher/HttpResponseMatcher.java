@@ -1,10 +1,10 @@
 package io.jtest.utils.matcher;
 
 
+import io.json.compare.util.MessageUtil;
 import io.jtest.utils.clients.http.PlainHttpResponse;
 import io.jtest.utils.exceptions.InvalidTypeException;
 import io.jtest.utils.matcher.condition.MatchCondition;
-import ro.skyah.util.MessageUtil;
 
 import java.util.HashMap;
 import java.util.Map;

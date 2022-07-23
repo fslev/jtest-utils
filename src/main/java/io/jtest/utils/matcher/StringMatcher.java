@@ -1,12 +1,12 @@
 package io.jtest.utils.matcher;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.json.compare.util.MessageUtil;
 import io.jtest.utils.common.RegexUtils;
 import io.jtest.utils.common.StringParser;
 import io.jtest.utils.exceptions.InvalidTypeException;
 import io.jtest.utils.matcher.condition.MatchCondition;
 import org.apache.commons.lang3.ClassUtils;
-import ro.skyah.util.MessageUtil;
 
 import java.util.HashMap;
 import java.util.List;
