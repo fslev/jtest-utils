@@ -1,6 +1,9 @@
 # Changelog
 
-### 2.4-SNAPSHOT
+### 2.5-SNAPSHOT
+
+### 2.4
+Upgrade dependencies (json-compare)  
 
 ### 2.3  
 Remove unused duration methods from Polling class  
