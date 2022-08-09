@@ -1,5 +1,6 @@
 package io.jtest.utils.common;
 
+import com.fasterxml.jackson.core.JsonParseException;
 import io.json.compare.util.JsonUtils;
 import org.junit.jupiter.api.Test;
 
@@ -41,8 +42,8 @@ public class JsonUtilsTest {
         assertEquals("{ }", JsonUtils.prettyPrint("{}"));
         assertEquals("[ ]", JsonUtils.prettyPrint("[]"));
         assertEquals("null", JsonUtils.prettyPrint("null"));
-        assertNull(JsonUtils.prettyPrint(null));
-        assertEquals("invalid", JsonUtils.prettyPrint("invalid"));
-        assertEquals("", JsonUtils.prettyPrint(""));
+        assertEquals("null", JsonUtils.prettyPrint(null));
+        assertThrows(JsonParseException.class, () -> JsonUtils.prettyPrint("invalid"));
+        assertNull(null, JsonUtils.prettyPrint(""));
     }
 }
