@@ -1,6 +1,12 @@
 # Changelog
 
-### 2.5-SNAPSHOT
+### 2.6-SNAPSHOT
+
+
+### 2.5
+Upgrade dependencies 
+Moved JsonUtils to json-compare library  
+
 
 ### 2.4
 Upgrade dependencies (json-compare)  

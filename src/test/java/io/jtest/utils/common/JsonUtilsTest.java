@@ -1,9 +1,9 @@
 package io.jtest.utils.common;
 
+import io.json.compare.util.JsonUtils;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,31 +44,5 @@ public class JsonUtilsTest {
         assertNull(JsonUtils.prettyPrint(null));
         assertEquals("invalid", JsonUtils.prettyPrint("invalid"));
         assertEquals("", JsonUtils.prettyPrint(""));
-    }
-
-    @Test
-    public void testSimpleJsonSpecialRegexCharacters() throws IOException {
-        String json = ResourceUtils.read("json/regex_chars/json1.json");
-        Map<String, List<String>> results = JsonUtils.walkJsonAndProcessNodes(json, extractSpecialRegexCharsFct);
-        assertEquals(Arrays.asList("."), results.get("foo.bar/{key}"));
-        assertTrue(Arrays.asList("?", "+").containsAll(results.get("foo.bar/a^b/{value}")));
-        assertTrue(Arrays.asList("^").containsAll(results.get("foo.bar/a^b/{key}")));
-        assertTrue(Arrays.asList(".").containsAll(results.get("foo.bar/array[2]/a/{value}")));
-        assertTrue(Arrays.asList(".").containsAll(results.get("foo.bar/array[2]/.a/{key}")));
-        assertTrue(Arrays.asList("+").containsAll(results.get("foo.bar/array[2]/b/array[1]/{value}")));
-        assertTrue(Arrays.asList("+").containsAll(results.get("foo.bar/array[2]/b/array[2]/ips+um/{key}")));
-        assertTrue(Arrays.asList("[").containsAll(results.get("foo.bar/array[2]/b/array[2]/ips+um/{value}")));
-        assertTrue(Arrays.asList(".", "$").containsAll(results.get("foo.bar/array[2]/b/array[6]/{value}")));
-        assertEquals(9, results.size());
-    }
-
-    @Test
-    public void testSimpleJsonSpecialRegexCharactersFromArray() throws IOException {
-        String json = "[\"te?st\", {\"^a..\":\"?\"}, false]";
-        Map<String, List<String>> results = JsonUtils.walkJsonAndProcessNodes(json, extractSpecialRegexCharsFct);
-        assertEquals(Arrays.asList("?"), results.get("[1]/{value}"));
-        assertTrue(Arrays.asList(".", "^").containsAll(results.get("[2]/^a../{key}")));
-        assertTrue(Arrays.asList("?").containsAll(results.get("[2]/^a../{value}")));
-        assertEquals(3, results.size());
     }
 }

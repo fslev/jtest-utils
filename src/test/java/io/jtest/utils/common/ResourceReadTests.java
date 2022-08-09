@@ -2,6 +2,7 @@ package io.jtest.utils.common;
 
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import io.json.compare.util.JsonUtils;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
