@@ -1,7 +1,9 @@
 # Changelog
 
-### 2.6-SNAPSHOT
+### 2.7-SNAPSHOT
 
+### 2.6
+Upgrade dependencies (update json-compare)     
 
 ### 2.5
 Upgrade dependencies 
