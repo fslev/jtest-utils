@@ -24,7 +24,7 @@
         <xmlunit.version>2.9.0</xmlunit.version>
         <surefire.version>3.0.0-M7</surefire.version>
         <jackson.version>2.13.3</jackson.version>
-        <jackson.databind.version>2.13.3</jackson.databind.version>
+        <jackson.databind.version>2.13.4</jackson.databind.version>
         <spring-expression-version>5.3.22</spring-expression-version>
         <log4j.version>2.18.0</log4j.version>
     </properties>
