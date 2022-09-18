@@ -238,9 +238,9 @@ public class StringMatcherTests {
         try {
             new StringMatcher(null, expected, actual, null).match();
         } catch (AssertionError | InvalidTypeException e) {
-            assertEquals("Strings do not match\n\nMatching is by default done using regular expressions.\n" +
-                    "If expected object contains any unintentional regexes, then quote them between \\Q and \\E delimiters.\n" +
-                    " ==> expected: <.* is regex ~[regex] [0-9]*> but was: <This is regex a|b|c|d [0-9]*>", e.getMessage());
+            assertTrue(e.getMessage().matches("(?s)Strings do not match\n\nMatching is by default done using regular expressions.\n" +
+                    "If expected object contains any unintentional regexes, then quote them between \\\\Q and \\\\E delimiters.\n" +
+                    ".*expected.*\\Q<.* is regex ~[regex] [0-9]*>\\E.*\\Q<This is regex a|b|c|d [0-9]*>\\E.*"));
             return;
         }
         fail("Values should not match ! But they do...");
@@ -253,11 +253,10 @@ public class StringMatcherTests {
         try {
             new StringMatcher(null, expected, actual, null).match();
         } catch (AssertionError | InvalidTypeException e) {
-            assertEquals("Strings do not match\n" +
-                    "\n" +
+            assertTrue(e.getMessage().matches("(?s)Strings do not match\n\n" +
                     "Matching is by default done using regular expressions.\n" +
-                    "If expected object contains any unintentional regexes, then quote them between \\Q and \\E delimiters.\n" +
-                    " ==> expected: <.* is regex ~[regex]lorem> but was: <This is regex a|b|c|d>", e.getMessage());
+                    "If expected object contains any unintentional regexes, then quote them between \\\\Q and \\\\E delimiters.\n" +
+                    ".*expected.*\\Q<.* is regex ~[regex]lorem>\\E.*\\Q<This is regex a|b|c|d>\\E.*"));
             return;
         }
         fail("Values should not match ! But they do...");
