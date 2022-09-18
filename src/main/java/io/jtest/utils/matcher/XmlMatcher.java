@@ -1,10 +1,10 @@
 package io.jtest.utils.matcher;
 
-import io.json.compare.util.MessageUtil;
 import io.jtest.utils.common.XmlUtils;
 import io.jtest.utils.exceptions.InvalidTypeException;
 import io.jtest.utils.matcher.comparators.xml.CustomXmlDiffEvaluator;
 import io.jtest.utils.matcher.condition.MatchCondition;
+import org.junit.jupiter.api.AssertionFailureBuilder;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.xmlunit.diff.DefaultNodeMatcher;
@@ -19,7 +19,6 @@ import java.util.Set;
 
 import static io.jtest.utils.common.XmlUtils.toNode;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.fail;
 import static org.xmlunit.matchers.CompareMatcher.isSimilarTo;
 
 public class XmlMatcher extends AbstractObjectMatcher<Node> {
@@ -28,9 +27,13 @@ public class XmlMatcher extends AbstractObjectMatcher<Node> {
 
     public XmlMatcher(String message, Object expected, Object actual, Set<MatchCondition> matchConditions) throws InvalidTypeException {
         super(message, expected, actual, matchConditions);
-        this.message += "\n\nXMLs do NOT match\n\nEXPECTED:\n" + MessageUtil.cropL(toString(this.expected))
-                + "\n\nBUT GOT ACTUAL:\n" + MessageUtil.cropL(toString(this.actual)) + "\n";
+        this.message += "XMLs do NOT match\n\n" + ASSERTION_ERROR_HINT_MESSAGE + "\n";
         this.diffEvaluator = new CustomXmlDiffEvaluator(this.matchConditions);
+    }
+
+    @Override
+    protected String negativeMatchMessage() {
+        return "\nXMLs match!\n" + ASSERTION_ERROR_HINT_MESSAGE + "\n";
     }
 
     @Override
@@ -64,7 +67,8 @@ public class XmlMatcher extends AbstractObjectMatcher<Node> {
             } catch (AssertionError e) {
                 return new HashMap<>();
             }
-            fail(negativeMatchMessage);
+            AssertionFailureBuilder.assertionFailure().message(negativeMatchMessage).expected(expected).actual(actual)
+                    .includeValuesInMessage(false).buildAndThrow();
         }
         return positiveMatch();
     }

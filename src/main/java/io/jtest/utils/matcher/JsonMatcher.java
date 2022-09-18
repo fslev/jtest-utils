@@ -7,13 +7,14 @@ import io.json.compare.util.JsonUtils;
 import io.jtest.utils.exceptions.InvalidTypeException;
 import io.jtest.utils.matcher.comparators.json.CustomJsonComparator;
 import io.jtest.utils.matcher.condition.MatchCondition;
+import org.junit.jupiter.api.AssertionFailureBuilder;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.fail;
+import static io.json.compare.JSONCompare.prettyPrint;
 
 
 public class JsonMatcher extends AbstractObjectMatcher<JsonNode> {
@@ -21,6 +22,7 @@ public class JsonMatcher extends AbstractObjectMatcher<JsonNode> {
 
     public JsonMatcher(String message, Object expected, Object actual, Set<MatchCondition> matchConditions) throws InvalidTypeException {
         super(message, expected, actual, matchConditions);
+        this.message += "JSONs do not match\n\n" + ASSERTION_ERROR_HINT_MESSAGE + "\n";
         this.comparator = new CustomJsonComparator(matchConditions);
     }
 
@@ -34,6 +36,11 @@ public class JsonMatcher extends AbstractObjectMatcher<JsonNode> {
     }
 
     @Override
+    protected String negativeMatchMessage() {
+        return "\nJSONs match!\n" + ASSERTION_ERROR_HINT_MESSAGE + "\n";
+    }
+
+    @Override
     public Map<String, Object> match() {
         if (matchConditions.remove(MatchCondition.DO_NOT_MATCH)) {
             try {
@@ -41,7 +48,8 @@ public class JsonMatcher extends AbstractObjectMatcher<JsonNode> {
             } catch (AssertionError e) {
                 return new HashMap<>();
             }
-            fail(negativeMatchMessage);
+            AssertionFailureBuilder.assertionFailure().message(negativeMatchMessage).includeValuesInMessage(false)
+                    .expected(prettyPrint(expected)).actual(prettyPrint(actual)).buildAndThrow();
         }
         return positiveMatch();
     }

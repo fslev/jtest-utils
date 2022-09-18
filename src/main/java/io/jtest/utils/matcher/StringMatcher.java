@@ -1,12 +1,12 @@
 package io.jtest.utils.matcher;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.json.compare.util.MessageUtil;
 import io.jtest.utils.common.RegexUtils;
 import io.jtest.utils.common.StringParser;
 import io.jtest.utils.exceptions.InvalidTypeException;
 import io.jtest.utils.matcher.condition.MatchCondition;
 import org.apache.commons.lang3.ClassUtils;
+import org.junit.jupiter.api.AssertionFailureBuilder;
 
 import java.util.HashMap;
 import java.util.List;
@@ -15,31 +15,29 @@ import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
-import static org.junit.jupiter.api.Assertions.fail;
-
 /**
  * Matches Objects as Strings
  */
 public class StringMatcher extends AbstractObjectMatcher<Object> {
-
     public static final String CAPTURE_PLACEHOLDER_PREFIX = "~[";
     public static final String CAPTURE_PLACEHOLDER_SUFFIX = "]";
-
     private static final Pattern captureGroupPattern = Pattern.compile(Pattern.quote(CAPTURE_PLACEHOLDER_PREFIX) + "(.*?)" + Pattern.quote(CAPTURE_PLACEHOLDER_SUFFIX),
             Pattern.CASE_INSENSITIVE | Pattern.DOTALL | Pattern.MULTILINE);
-
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
     public StringMatcher(String message, Object expected, Object actual, Set<MatchCondition> matchConditions) throws InvalidTypeException {
         super(message, expected, actual, matchConditions);
-        String defaultMessage = "\n\nStrings do NOT match\n\nEXPECTED:\n" + MessageUtil.cropL(toString(this.expected))
-                + "\n\nBUT GOT:\n" + MessageUtil.cropL(toString(this.actual)) + "\n\n";
-        this.message = this.message != null ? defaultMessage + this.message : defaultMessage;
+        this.message += "Strings do not match\n\n" + ASSERTION_ERROR_HINT_MESSAGE + "\n";
     }
 
     @Override
     Object convert(Object value) {
         return value;
+    }
+
+    @Override
+    protected String negativeMatchMessage() {
+        return "\nStrings match!\n" + ASSERTION_ERROR_HINT_MESSAGE + "\n";
     }
 
     @Override
@@ -50,7 +48,8 @@ public class StringMatcher extends AbstractObjectMatcher<Object> {
             } catch (AssertionError e) {
                 return new HashMap<>();
             }
-            fail(negativeMatchMessage);
+            AssertionFailureBuilder.assertionFailure().message(negativeMatchMessage).expected(expected).actual(actual)
+                    .includeValuesInMessage(false).buildAndThrow();
         }
         return positiveMatch();
     }
@@ -72,11 +71,11 @@ public class StringMatcher extends AbstractObjectMatcher<Object> {
             properties.put(standalonePlaceholder, actual);
             return properties;
         } else if (actual == null) {
-            fail(message);
+            AssertionFailureBuilder.assertionFailure().message(message).expected(expected).actual(null).buildAndThrow();
         } else if (!placeholderNames.isEmpty()) {
             List<String> capturedValues = StringParser.captureValues(actualString, patternWithPlaceholdersAsCaptureGroups(expectedString, placeholderNames), true);
             if (capturedValues.isEmpty()) {
-                fail(message);
+                AssertionFailureBuilder.assertionFailure().message(message).expected(expected).actual(actual).buildAndThrow();
             }
             for (int i = 0; i < capturedValues.size(); i++) {
                 if (i < placeholderNames.size()) {
@@ -89,11 +88,11 @@ public class StringMatcher extends AbstractObjectMatcher<Object> {
             try {
                 Pattern pattern = Pattern.compile(expectedString, Pattern.CASE_INSENSITIVE | Pattern.DOTALL | Pattern.MULTILINE);
                 if (!pattern.matcher(actualString).matches()) {
-                    fail(message);
+                    AssertionFailureBuilder.assertionFailure().message(message).expected(expected).actual(actual).buildAndThrow();
                 }
             } catch (PatternSyntaxException e) {
                 if (!expectedString.equals(actual)) {
-                    fail(message);
+                    AssertionFailureBuilder.assertionFailure().message(message).expected(expected).actual(actual).buildAndThrow();
                 }
             }
         }
@@ -103,7 +102,7 @@ public class StringMatcher extends AbstractObjectMatcher<Object> {
     private boolean matchesWithNull() {
         if (expected == null) {
             if (actual != null) {
-                fail(message);
+                AssertionFailureBuilder.assertionFailure().message(message).expected(null).actual(actual).buildAndThrow();
             } else {
                 return true;
             }

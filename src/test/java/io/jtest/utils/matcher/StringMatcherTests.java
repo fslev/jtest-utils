@@ -53,7 +53,7 @@ public class StringMatcherTests {
     @Test
     public void matchConditions() {
         assertTrue(assertThrows(AssertionError.class, () -> new StringMatcher("Strings do match actually", "test", "test",
-                new HashSet<>(Arrays.asList(MatchCondition.DO_NOT_MATCH))).match()).getMessage().contains("Objects match!"));
+                new HashSet<>(Arrays.asList(MatchCondition.DO_NOT_MATCH))).match()).getMessage().contains("Strings match!"));
     }
 
     @Test
@@ -238,14 +238,9 @@ public class StringMatcherTests {
         try {
             new StringMatcher(null, expected, actual, null).match();
         } catch (AssertionError | InvalidTypeException e) {
-            assertEquals("\n" +
-                    "\n" +
-                    "Strings do NOT match\n" +
-                    "\nEXPECTED:\n" +
-                    ".* is regex ~[regex] [0-9]*\n\n" +
-                    "BUT GOT:\n" +
-                    "This is regex a|b|c|d [0-9]*\n\n\nMatching is by default done using regular expressions.\n" +
-                    "If expected object contains any unintentional regexes, then quote them between \\Q and \\E delimiters.\n", e.getMessage());
+            assertEquals("Strings do not match\n\nMatching is by default done using regular expressions.\n" +
+                    "If expected object contains any unintentional regexes, then quote them between \\Q and \\E delimiters.\n" +
+                    " ==> expected: <.* is regex ~[regex] [0-9]*> but was: <This is regex a|b|c|d [0-9]*>", e.getMessage());
             return;
         }
         fail("Values should not match ! But they do...");
@@ -258,14 +253,11 @@ public class StringMatcherTests {
         try {
             new StringMatcher(null, expected, actual, null).match();
         } catch (AssertionError | InvalidTypeException e) {
-            assertEquals("\n" +
+            assertEquals("Strings do not match\n" +
                     "\n" +
-                    "Strings do NOT match\n" +
-                    "\nEXPECTED:\n" +
-                    ".* is regex ~[regex]lorem\n\n" +
-                    "BUT GOT:\n" +
-                    "This is regex a|b|c|d\n\n\nMatching is by default done using regular expressions.\n" +
-                    "If expected object contains any unintentional regexes, then quote them between \\Q and \\E delimiters.\n", e.getMessage());
+                    "Matching is by default done using regular expressions.\n" +
+                    "If expected object contains any unintentional regexes, then quote them between \\Q and \\E delimiters.\n" +
+                    " ==> expected: <.* is regex ~[regex]lorem> but was: <This is regex a|b|c|d>", e.getMessage());
             return;
         }
         fail("Values should not match ! But they do...");

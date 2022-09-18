@@ -1,6 +1,10 @@
 # Changelog
 
-### 2.7-SNAPSHOT
+### 2.8-SNAPSHOT
+
+### 2.7
+Refactor Assertion error messages (enable assertion error difference support)  
+Upgrade dependencies  
 
 ### 2.6
 Upgrade dependencies (update json-compare)     

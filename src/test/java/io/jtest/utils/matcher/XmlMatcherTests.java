@@ -41,7 +41,7 @@ public class XmlMatcherTests {
         String actual = "<struct><boolean a=\"boolAttrValue\">false</boolean>"
                 + "<int a=\"(attrValue1\">some text here</int><str a=\"some result\"><a>sub text</a></str></struct>";
         XmlMatcher matcher = new XmlMatcher(null, expected, actual, null);
-        assertThrows(AssertionError.class, () -> matcher.match());
+        assertThrows(AssertionError.class, matcher::match);
     }
 
     @Test
@@ -82,13 +82,9 @@ public class XmlMatcherTests {
         try {
             new XmlMatcher(null, expected, actual, new HashSet<>(Arrays.asList(MatchCondition.DO_NOT_MATCH))).match();
         } catch (AssertionError e) {
-            assertEquals("\nObjects match!\nEXPECTED:\n" + "<struct>\n" +
-                    "    <int>test</int>\n" +
-                    "    <boolean>false</boolean>\n" +
-                    "</struct>" + "\n\n\nACTUAL:\n" + "<struct>\n" +
-                    "    <boolean>false</boolean>\n" +
-                    "    <int>test</int>\n" +
-                    "</struct>" + "\n\n", e.getMessage());
+            assertEquals("\nXMLs match!\n" +
+                    "Matching is by default done using regular expressions.\n" +
+                    "If expected object contains any unintentional regexes, then quote them between \\Q and \\E delimiters.\n", e.getMessage());
             return;
         }
         fail("Negative test failed");
@@ -103,13 +99,11 @@ public class XmlMatcherTests {
         try {
             new XmlMatcher("Should not match", expected, actual, new HashSet<>(Arrays.asList(MatchCondition.DO_NOT_MATCH))).match();
         } catch (AssertionError e) {
-            assertEquals("Should not match\n\nObjects match!\nEXPECTED:\n" + "<struct>\n" +
-                    "    <int>test</int>\n" +
-                    "    <boolean>false</boolean>\n" +
-                    "</struct>" + "\n\n\nACTUAL:\n" + "<struct>\n" +
-                    "    <boolean>false</boolean>\n" +
-                    "    <int>test</int>\n" +
-                    "</struct>" + "\n\n", e.getMessage());
+            assertEquals("Should not match\n" +
+                    "\n" +
+                    "XMLs match!\n" +
+                    "Matching is by default done using regular expressions.\n" +
+                    "If expected object contains any unintentional regexes, then quote them between \\Q and \\E delimiters.\n", e.getMessage());
             return;
         }
         fail("Negative test failed");
@@ -149,7 +143,7 @@ public class XmlMatcherTests {
     }
 
     @Test
-    public void checkMessageFromXmlCompare() throws InvalidTypeException {
+    public void checkMessageFromXmlCompare() {
         String expected = "<struct>test</struct>";
         String actual = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?><struct></struct>";
         assertThrows(AssertionError.class, () -> {
@@ -177,7 +171,7 @@ public class XmlMatcherTests {
     }
 
     @Test
-    public void compareXmlChildLength_negative() throws InvalidTypeException {
+    public void compareXmlChildLength_negative() {
         String expected = "<struct><int a=\"2\">3da</int><boolean>.*</boolean></struct>";
         String actual = "<struct><int a=\"2\">3da</int><boolean>false</boolean><x>test</x></struct>";
         assertThrows(AssertionError.class, () ->
@@ -199,7 +193,7 @@ public class XmlMatcherTests {
     }
 
     @Test
-    public void compareXmlChildOrder_negative() throws InvalidTypeException {
+    public void compareXmlChildOrder_negative() {
         String expected = "<struct><list><int>3da</int><int>0da</int></list><boolean>.*</boolean></struct>";
         String actual = "<struct><list><int>0da</int><int>3da</int></list><boolean>false</boolean></struct>";
         assertThrows(AssertionError.class, () ->
@@ -221,7 +215,7 @@ public class XmlMatcherTests {
     }
 
     @Test
-    public void compareXmlAttributesInclusion_negative() throws InvalidTypeException {
+    public void compareXmlAttributesInclusion_negative() {
         String expected = "<struct><int a=\"[0-9]*\" c=\"2\">3da</int><boolean>.*</boolean></struct>";
         String actual = "<struct><boolean>false</boolean><int a=\"2\" b=\"3\">3da</int></struct>";
         assertThrows(AssertionError.class, () -> new XmlMatcher("", expected, actual, null).match());
@@ -249,7 +243,7 @@ public class XmlMatcherTests {
     }
 
     @Test
-    public void doNotMatchXmlAttributesWithLength_negative() throws InvalidTypeException {
+    public void doNotMatchXmlAttributesWithLength_negative() {
         String expected = "<struct><int a=\"[0-9]*\">3da</int><boolean>.*</boolean></struct>";
         String actual = "<struct><boolean>false</boolean><int a=\"2\" b=\"3\">3da</int></struct>";
         assertThrows(AssertionError.class, () ->
@@ -257,7 +251,7 @@ public class XmlMatcherTests {
     }
 
     @Test
-    public void compareXmlAttributesWithLength_negative() throws InvalidTypeException {
+    public void compareXmlAttributesWithLength_negative() {
         String expected = "<struct><int a=\"[0-9]*\">3da</int><boolean>.*</boolean></struct>";
         String actual = "<struct><boolean>false</boolean><int a=\"2\" b=\"3\">3da</int></struct>";
         assertThrows(AssertionError.class, () ->
@@ -298,7 +292,7 @@ public class XmlMatcherTests {
     }
 
     @Test
-    public void matchInnerLists_strict_size() throws InvalidTypeException {
+    public void matchInnerLists_strict_size() {
         String expected = "<config>\n" +
                 "    <protocols>\n" +
                 "      <ldp>" +
@@ -324,7 +318,7 @@ public class XmlMatcherTests {
     }
 
     @Test
-    public void matchInnerLists_strict_order() throws InvalidTypeException {
+    public void matchInnerLists_strict_order() {
         String expected = "<config>\n" +
                 "    <protocols>\n" +
                 "      <ldp>" +

@@ -1,16 +1,14 @@
 package io.jtest.utils.matcher;
 
 
-import io.json.compare.util.MessageUtil;
 import io.jtest.utils.clients.http.PlainHttpResponse;
 import io.jtest.utils.exceptions.InvalidTypeException;
 import io.jtest.utils.matcher.condition.MatchCondition;
+import org.junit.jupiter.api.AssertionFailureBuilder;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-
-import static org.junit.jupiter.api.Assertions.fail;
 
 class HttpResponseMatcher extends AbstractObjectMatcher<PlainHttpResponse> {
 
@@ -25,9 +23,6 @@ class HttpResponseMatcher extends AbstractObjectMatcher<PlainHttpResponse> {
         this.expectedReason = this.expected.getReasonPhrase();
         this.expectedHeaders = this.expected.getHeaders();
         this.expectedEntity = this.expected.getEntity();
-        String defaultMessage = "\n\nHTTP Responses do NOT match\n\nEXPECTED HTTP Response:\n" + MessageUtil.cropL(toString(this.expected))
-                + "\n\nBUT GOT HTTP Response:\n" + MessageUtil.cropL(toString(this.actual)) + "\n";
-        this.message = this.message != null ? this.message + defaultMessage : defaultMessage;
     }
 
     @Override
@@ -56,10 +51,12 @@ class HttpResponseMatcher extends AbstractObjectMatcher<PlainHttpResponse> {
                         error = true;
                     }
                     if (!error) {
-                        fail(negativeMatchMessage);
+                        AssertionFailureBuilder.assertionFailure().message(this.message + "\nHTTP response statuses match!\n")
+                                .expected(expectedStatus).actual(actual.getStatus())
+                                .includeValuesInMessage(false).buildAndThrow();
                     }
                 } else {
-                    properties.putAll(new StringMatcher("\nHTTP Response statuses do not match!\n" + message,
+                    properties.putAll(new StringMatcher("HTTP Response statuses do not match!\n" + message,
                             expectedStatus, actual.getStatus(), matchConditions).match());
                 }
             }
@@ -73,10 +70,12 @@ class HttpResponseMatcher extends AbstractObjectMatcher<PlainHttpResponse> {
                         error = true;
                     }
                     if (!error) {
-                        fail(negativeMatchMessage);
+                        AssertionFailureBuilder.assertionFailure().message(this.message + "\nHTTP response reasons match!\n")
+                                .expected(expectedReason).actual(actual.getReasonPhrase())
+                                .includeValuesInMessage(false).buildAndThrow();
                     }
                 } else {
-                    properties.putAll(new StringMatcher("\nHTTP Response reasons do not match!\n" + message,
+                    properties.putAll(new StringMatcher("HTTP Response reasons do not match!\n" + message,
                             expectedReason, actual.getReasonPhrase(), matchConditions).match());
                 }
             }
@@ -93,10 +92,12 @@ class HttpResponseMatcher extends AbstractObjectMatcher<PlainHttpResponse> {
                         error = true;
                     }
                     if (!error) {
-                        fail(negativeMatchMessage);
+                        AssertionFailureBuilder.assertionFailure().message(this.message + "\nHTTP response headers match!\n")
+                                .expected(expectedHeaders).actual(actual.getHeaders())
+                                .includeValuesInMessage(false).buildAndThrow();
                     }
                 } else {
-                    properties.putAll(new JsonMatcher("\nHTTP Response headers do not match!\n" + message,
+                    properties.putAll(new JsonMatcher("HTTP Response headers do not match!\n" + message,
                             expectedHeaders, actual.getHeaders(), headersMatchConditions).match());
                 }
             }
@@ -110,10 +111,12 @@ class HttpResponseMatcher extends AbstractObjectMatcher<PlainHttpResponse> {
                         error = true;
                     }
                     if (!error) {
-                        fail(negativeMatchMessage);
+                        AssertionFailureBuilder.assertionFailure().message(this.message + "\nHTTP response bodies match!\n")
+                                .expected(expectedEntity).actual(actual.getEntity())
+                                .includeValuesInMessage(false).buildAndThrow();
                     }
                 } else {
-                    properties.putAll(new FlowMatcher().match("\nHTTP Response bodies do not match!\n" + message,
+                    properties.putAll(new FlowMatcher().match("HTTP Response bodies do not match!\n" + message,
                             expectedEntity, actual.getEntity(), matchConditions));
                 }
             }
