@@ -110,6 +110,21 @@ public class ResourceReadTests {
     }
 
     @Test
+    public void testReadFromInvalidYamlFile() {
+        assertThrows(ClassCastException.class, () -> ResourceUtils.readYaml("foobar/file1.txt"));
+    }
+
+    @Test
+    public void testReadFromMissingYamlFile() {
+        assertThrows(IOException.class, () -> ResourceUtils.readYaml("i/do/not/exist"));
+    }
+
+    @Test
+    public void testReadFromEmptyYamlFile() throws IOException {
+        assertNull(ResourceUtils.readYaml("yaml/empty.yaml"));
+    }
+
+    @Test
     public void testGetFileName() throws IOException, URISyntaxException {
         assertEquals("config.yaml", ResourceUtils.getFileName("yaml/config.yaml"));
     }
