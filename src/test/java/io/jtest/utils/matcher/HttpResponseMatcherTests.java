@@ -384,7 +384,8 @@ public class HttpResponseMatcherTests {
         actual.addHeader("auth", "1");
         actual.addHeader("x-auth", "2");
         actual.addHeader("Authorization", "Bzasuiofrz====");
-        assertThrows(AssertionError.class, () -> new HttpResponseMatcher(null, expected, actual, null).match());
+        assertTrue(assertThrows(AssertionError.class, () -> new HttpResponseMatcher(null, expected, actual, null).match())
+                .getMessage().matches("(?s).*HTTP Response bodies do not match.*XMLs do not match.*"));
     }
 
     @Test
