@@ -314,8 +314,8 @@ public class HttpResponseMatcherTests {
         actual.addHeader("auth", "1");
         actual.addHeader("x-auth", "2");
         actual.addHeader("Authorization", "Bzasuiofrz====");
-        assertThrows(AssertionError.class, () -> new HttpResponseMatcher(null, expected, actual, new HashSet<>(Arrays.asList(MatchCondition.JSON_NON_EXTENSIBLE_OBJECT,
-                MatchCondition.DO_NOT_MATCH_HTTP_RESPONSE_BY_BODY))).match());
+        assertTrue(assertThrows(AssertionError.class, () -> new HttpResponseMatcher(null, expected, actual, new HashSet<>(Arrays.asList(MatchCondition.JSON_NON_EXTENSIBLE_OBJECT,
+                MatchCondition.DO_NOT_MATCH_HTTP_RESPONSE_BY_BODY))).match()).getMessage().contains("HTTP Response bodies match!"));
     }
 
     @Test
