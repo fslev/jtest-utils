@@ -82,7 +82,7 @@ public class HttpResponseMatcherTests {
         actual.addHeader("x-auth", "2");
         assertTrue(assertThrows(AssertionError.class, () ->
                 new HttpResponseMatcher(null, expected, actual, new HashSet<>(Arrays.asList(MatchCondition.DO_NOT_MATCH_HTTP_RESPONSE_BY_STATUS))).match())
-                .getMessage().contains("HTTP response statuses match"));
+                .getMessage().contains("HTTP Response statuses match"));
     }
 
     @Test
@@ -178,9 +178,8 @@ public class HttpResponseMatcherTests {
         actual.setEntity(new StringEntity("{\"a\":\"lorem ipsum\"}"));
         assertTrue(assertThrows(AssertionError.class, () -> new HttpResponseMatcher(null, expected, actual,
                 new HashSet<>(Arrays.asList(MatchCondition.DO_NOT_MATCH_HTTP_RESPONSE_BY_REASON))).match())
-                .getMessage().contains("HTTP response reasons match"));
+                .getMessage().contains("HTTP Response reasons match"));
     }
-
 
     @Test
     public void doNotMatchHttpResponsesByReason_negative1() throws UnsupportedEncodingException {
@@ -192,6 +191,17 @@ public class HttpResponseMatcherTests {
         assertTrue(assertThrows(AssertionError.class, () -> new HttpResponseMatcher(null, expected, actual,
                 new HashSet<>(Arrays.asList(MatchCondition.DO_NOT_MATCH_HTTP_RESPONSE_BY_REASON))).match())
                 .getMessage().contains("HTTP Response bodies do not match"));
+    }
+
+    @Test
+    public void doNotMatchHttpResponsesByReason_negative2() throws UnsupportedEncodingException {
+        String expected = "{\"status\": 400, \"reason\":\"ipsum\",\"body\":{\"a\":\"~[val1] ipsum\"}}";
+        HttpResponse actual = new DefaultHttpResponseFactory()
+                .newHttpResponse(new BasicStatusLine(HttpVersion.HTTP_1_1, HttpStatus.SC_BAD_REQUEST, "bad request"),
+                        HttpClientContext.adapt(new BasicHttpContext()));
+        actual.setEntity(new StringEntity("{\"a\":\"lorem ipsum\"}"));
+        assertTrue(assertThrows(AssertionError.class, () -> new HttpResponseMatcher(null, expected, actual, null).match())
+                .getMessage().contains("HTTP Response reasons do not match"));
     }
 
     @Test
@@ -219,7 +229,7 @@ public class HttpResponseMatcherTests {
         actual.addHeader("x-auth", "2");
         assertTrue(assertThrows(AssertionError.class, () -> new HttpResponseMatcher(null, expected, actual,
                 new HashSet<>(Arrays.asList(MatchCondition.DO_NOT_MATCH_HTTP_RESPONSE_BY_HEADERS))).match())
-                .getMessage().contains("HTTP response headers match!"));
+                .getMessage().contains("HTTP Response headers match!"));
     }
 
     @Test
@@ -234,6 +244,19 @@ public class HttpResponseMatcherTests {
         assertTrue(assertThrows(AssertionError.class, () -> new HttpResponseMatcher(null, expected, actual,
                 new HashSet<>(Arrays.asList(MatchCondition.DO_NOT_MATCH_HTTP_RESPONSE_BY_HEADERS))).match())
                 .getMessage().contains("HTTP Response statuses do not match"));
+    }
+
+    @Test
+    public void doNotMatchHttpResponsesByHeaders_negative2() throws UnsupportedEncodingException {
+        String expected = "{\"status\": 400, \"headers\":[{\"x-auth\":2}], \"reason\":\"lorem\",\"body\":{\"a\":\"~[val1] ipsum\"}}";
+        HttpResponse actual = new DefaultHttpResponseFactory()
+                .newHttpResponse(new BasicStatusLine(HttpVersion.HTTP_1_1, HttpStatus.SC_BAD_REQUEST, "lorem"),
+                        HttpClientContext.adapt(new BasicHttpContext()));
+        actual.setEntity(new StringEntity("{\"a\":\"lorem ipsum\"}"));
+        actual.addHeader("auth", "1");
+        actual.addHeader("x-auth", "3");
+        assertTrue(assertThrows(AssertionError.class, () -> new HttpResponseMatcher(null, expected, actual, null).match())
+                .getMessage().contains("HTTP Response headers do not match!"));
     }
 
     @Test
@@ -331,7 +354,8 @@ public class HttpResponseMatcherTests {
         actual.addHeader("auth", "1");
         actual.addHeader("x-auth", "2");
         actual.addHeader("Authorization", "Bzasuiofrz====");
-        assertThrows(AssertionError.class, () -> new HttpResponseMatcher(null, expected, actual, null).match());
+        AssertionError error = assertThrows(AssertionError.class, () -> new HttpResponseMatcher(null, expected, actual, null).match());
+        assertTrue(error.getMessage().matches(("(?s).*HTTP Response bodies do not match!.*Strings do not match.*\\Q~[val1]\\E ipsum.*lorem other.*")));
     }
 
     @Test

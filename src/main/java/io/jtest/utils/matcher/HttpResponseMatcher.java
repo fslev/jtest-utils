@@ -51,7 +51,7 @@ class HttpResponseMatcher extends AbstractObjectMatcher<PlainHttpResponse> {
                         error = true;
                     }
                     if (!error) {
-                        AssertionFailureBuilder.assertionFailure().message(this.message + "\nHTTP response statuses match!\n")
+                        AssertionFailureBuilder.assertionFailure().message(this.message + "\nHTTP Response statuses match!\n")
                                 .expected(expectedStatus).actual(actual.getStatus())
                                 .includeValuesInMessage(false).buildAndThrow();
                     }
@@ -70,7 +70,7 @@ class HttpResponseMatcher extends AbstractObjectMatcher<PlainHttpResponse> {
                         error = true;
                     }
                     if (!error) {
-                        AssertionFailureBuilder.assertionFailure().message(this.message + "\nHTTP response reasons match!\n")
+                        AssertionFailureBuilder.assertionFailure().message(this.message + "\nHTTP Response reasons match!\n")
                                 .expected(expectedReason).actual(actual.getReasonPhrase())
                                 .includeValuesInMessage(false).buildAndThrow();
                     }
@@ -92,7 +92,7 @@ class HttpResponseMatcher extends AbstractObjectMatcher<PlainHttpResponse> {
                         error = true;
                     }
                     if (!error) {
-                        AssertionFailureBuilder.assertionFailure().message(this.message + "\nHTTP response headers match!\n")
+                        AssertionFailureBuilder.assertionFailure().message(this.message + "\nHTTP Response headers match!\n")
                                 .expected(expectedHeaders).actual(actual.getHeaders())
                                 .includeValuesInMessage(false).buildAndThrow();
                     }
@@ -111,7 +111,7 @@ class HttpResponseMatcher extends AbstractObjectMatcher<PlainHttpResponse> {
                         error = true;
                     }
                     if (!error) {
-                        AssertionFailureBuilder.assertionFailure().message(this.message + "\nHTTP response bodies match!\n")
+                        AssertionFailureBuilder.assertionFailure().message(this.message + "\nHTTP Response bodies match!\n")
                                 .expected(expectedEntity).actual(actual.getEntity())
                                 .includeValuesInMessage(false).buildAndThrow();
                     }
