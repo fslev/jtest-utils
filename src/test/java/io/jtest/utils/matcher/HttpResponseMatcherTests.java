@@ -190,7 +190,7 @@ public class HttpResponseMatcherTests {
         actual.setEntity(new StringEntity("{\"a\":\"lorem ipsum\"}"));
         assertTrue(assertThrows(AssertionError.class, () -> new HttpResponseMatcher(null, expected, actual,
                 new HashSet<>(Arrays.asList(MatchCondition.DO_NOT_MATCH_HTTP_RESPONSE_BY_REASON))).match())
-                .getMessage().contains("HTTP Response bodies do not match"));
+                .getMessage().matches("(?s).*HTTP Response bodies do not match.*JSONs do not match.*"));
     }
 
     @Test
