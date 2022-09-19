@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
@@ -55,5 +56,11 @@ public class XmlUtilsTest {
     public void testXmlSpecialRegexChars_fromXmlWithNone() throws IOException, SAXException, ParserConfigurationException {
         Map<String, List<String>> result = XmlUtils.walkXmlAndProcessNodes(XmlUtils.toNode("<a><b>lorem ips'um</b></a>"), extractSpecialRegexCharsFct);
         assertTrue(result.isEmpty());
+    }
+
+    @Test
+    public void testToString() throws ParserConfigurationException, IOException, SAXException, TransformerException {
+        assertTrue(XmlUtils.toString(XmlUtils.toNode("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><a>test<b>test</b></a>"))
+                .matches("(?s).*<a>.*test.*<b>.*test.*</b>.*</a>.*"));
     }
 }
