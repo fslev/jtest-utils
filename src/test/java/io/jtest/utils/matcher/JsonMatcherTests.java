@@ -2,10 +2,12 @@ package io.jtest.utils.matcher;
 
 import com.fasterxml.jackson.databind.node.IntNode;
 import com.fasterxml.jackson.databind.node.TextNode;
+import io.jtest.utils.common.ResourceUtils;
 import io.jtest.utils.exceptions.InvalidTypeException;
 import io.jtest.utils.matcher.condition.MatchCondition;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Map;
@@ -224,6 +226,24 @@ public class JsonMatcherTests {
         assertEquals("1", symbols.get("friendId"));
         assertEquals("-90.447286", symbols.get("longitude"));
         assertEquals(2, symbols.size());
+    }
+
+    @Test
+    public void compareVeryBigJsonWithAssignSymbols() throws IOException, InvalidTypeException {
+        String expected = ResourceUtils.read("props/bigJsons/expectedLargeJson.json");
+        String actual = ResourceUtils.read("props/bigJsons/actualLargeJson.json");
+        JsonMatcher matcher = new JsonMatcher(null, expected, actual, null);
+        Map<String, Object> symbols = matcher.match();
+        assertEquals("67360d7500f9e9df142af8d0ad645d15afff84ab63d0e3517476a6873feca9e1_1582022731479", symbols.get("proof_of_token"));
+    }
+
+    @Test
+    public void compareVeryBigJsonWithAssignSymbols_negative() throws IOException, InvalidTypeException {
+        String expected = "{\"status\":200,\"body\":{\"events\":[{\"payloadInvalid\":{}}]}}";
+        String actual = ResourceUtils.read("props/bigJsons/actualLargeJson.json");
+        JsonMatcher matcher = new JsonMatcher(null, expected, actual, null);
+        AssertionError assertionError = assertThrows(AssertionError.class, matcher::match);
+        assertTrue(assertionError.getMessage().matches("(?s).*\"payloadInvalid\".*JSONs do not match.*"));
     }
 
     @Test

@@ -15,7 +15,7 @@
                 "proxy_subname": "somesub.com",
                 "proxy_ip": ".*",
                 "redirect_ipv4": ".*",
-                "proof_own_token": ".*"
+                "proof_own_token": "~[proof_of_token]"
               },
               "sub": "h1-158202273047258785",
               "long": "h1-158202273047258785.bigtest.com",
