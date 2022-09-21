@@ -84,7 +84,7 @@ public class XmlMatcherTests {
         } catch (AssertionError e) {
             assertEquals("\nXMLs match!\n" +
                     "Matching is by default done using regular expressions.\n" +
-                    "If expected object contains any unintentional regexes, then quote them between \\Q and \\E delimiters.\n", e.getMessage());
+                    "If expected object contains any unintentional regexes, then quote them between \\Q and \\E delimiters.\n\n", e.getMessage());
             return;
         }
         fail("Negative test failed");
@@ -103,7 +103,7 @@ public class XmlMatcherTests {
                     "\n" +
                     "XMLs match!\n" +
                     "Matching is by default done using regular expressions.\n" +
-                    "If expected object contains any unintentional regexes, then quote them between \\Q and \\E delimiters.\n", e.getMessage());
+                    "If expected object contains any unintentional regexes, then quote them between \\Q and \\E delimiters.\n\n", e.getMessage());
             return;
         }
         fail("Negative test failed");

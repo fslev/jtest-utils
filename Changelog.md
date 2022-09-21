@@ -1,6 +1,7 @@
 # Changelog
 
 ### 2.8-SNAPSHOT
+Reformat Assertion error message  
 
 ### 2.7
 Refactor Assertion error messages (enable assertion error difference support)  
