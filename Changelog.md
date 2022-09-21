@@ -2,6 +2,7 @@
 
 ### 2.8-SNAPSHOT
 Reformat Assertion error message  
+Update dependencies  
 
 ### 2.7
 Refactor Assertion error messages (enable assertion error difference support)  
