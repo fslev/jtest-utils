@@ -19,7 +19,9 @@ public class HttpResponseLoggerInterceptor implements HttpResponseInterceptor {
 
     @Override
     public void process(HttpResponse response, HttpContext context) {
-        LOG.debug("\n--- HTTP RESPONSE ---\nResponse STATUS: {}\nResponse HEADERS: {}\nResponse BODY:\n{}\n",
+        LOG.debug(System.lineSeparator() + "--- HTTP RESPONSE ---" + System.lineSeparator() + "Response STATUS: {}" +
+                        System.lineSeparator() + "Response HEADERS: {}" + System.lineSeparator() + "Response BODY:" +
+                        System.lineSeparator() + "{}" + System.lineSeparator(),
                 response::getStatusLine, () -> Arrays.asList(response.getAllHeaders()), () -> {
                     HttpEntity entity = response.getEntity();
                     if (entity == null) {

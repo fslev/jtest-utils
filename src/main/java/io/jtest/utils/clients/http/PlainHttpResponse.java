@@ -53,9 +53,10 @@ public class PlainHttpResponse {
             try {
                 return fromObject(object);
             } catch (Exception e) {
-                throw new PlainHttpResponseParseException("Cannot convert to PlainHttpResponse:\n" + MessageUtil.cropS(object.toString()) +
-                        "\n\nObject should either be of type org.apache.http.HttpPResponse or of any other JSON convertible types with the format:\n"
-                        + PlainHttpResponseParseException.EXPECTED_FORMAT + "\n", e);
+                throw new PlainHttpResponseParseException("Cannot convert to PlainHttpResponse:" + System.lineSeparator() +
+                        MessageUtil.cropS(object.toString()) + System.lineSeparator() + System.lineSeparator() +
+                        "Object should either be of type org.apache.http.HttpPResponse or of any other JSON convertible types with the format:" +
+                        System.lineSeparator() + PlainHttpResponseParseException.EXPECTED_FORMAT + System.lineSeparator(), e);
             }
         }
     }

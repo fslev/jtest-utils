@@ -27,7 +27,8 @@ public class StringMatcher extends AbstractObjectMatcher<Object> {
 
     public StringMatcher(String message, Object expected, Object actual, Set<MatchCondition> matchConditions) throws InvalidTypeException {
         super(message, expected, actual, matchConditions);
-        this.message += "Strings do not match\n\n" + ASSERTION_ERROR_HINT_MESSAGE + "\n\n";
+        this.message += "Strings do not match" + System.lineSeparator() + System.lineSeparator() + ASSERTION_ERROR_HINT_MESSAGE +
+                System.lineSeparator() + System.lineSeparator();
     }
 
     @Override
@@ -37,7 +38,8 @@ public class StringMatcher extends AbstractObjectMatcher<Object> {
 
     @Override
     protected String negativeMatchMessage() {
-        return "\nStrings match!\n" + ASSERTION_ERROR_HINT_MESSAGE + "\n\n";
+        return System.lineSeparator() + "Strings match!" + System.lineSeparator() + ASSERTION_ERROR_HINT_MESSAGE +
+                System.lineSeparator() + System.lineSeparator();
     }
 
     @Override

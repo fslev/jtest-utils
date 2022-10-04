@@ -27,13 +27,15 @@ public class XmlMatcher extends AbstractObjectMatcher<Node> {
 
     public XmlMatcher(String message, Object expected, Object actual, Set<MatchCondition> matchConditions) throws InvalidTypeException {
         super(message, expected, actual, matchConditions);
-        this.message += "XMLs do not match\n\n" + ASSERTION_ERROR_HINT_MESSAGE + "\n\n";
+        this.message += "XMLs do not match" + System.lineSeparator() + System.lineSeparator() + ASSERTION_ERROR_HINT_MESSAGE +
+                System.lineSeparator() + System.lineSeparator();
         this.diffEvaluator = new CustomXmlDiffEvaluator(this.matchConditions);
     }
 
     @Override
     protected String negativeMatchMessage() {
-        return "\nXMLs match!\n" + ASSERTION_ERROR_HINT_MESSAGE + "\n\n";
+        return System.lineSeparator() + "XMLs match!" + System.lineSeparator() + ASSERTION_ERROR_HINT_MESSAGE +
+                System.lineSeparator() + System.lineSeparator();
     }
 
     @Override

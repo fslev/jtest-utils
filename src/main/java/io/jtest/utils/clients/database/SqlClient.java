@@ -34,7 +34,7 @@ public class SqlClient {
     }
 
     public void connect() throws SQLException {
-        LOG.debug("---- DB SETUP ----\nDriver: {}\nDatabase url: {}", driverClassName, url);
+        LOG.debug("---- DB SETUP ----" + System.lineSeparator() + "Driver: {}" + System.lineSeparator() + "Database url: {}", driverClassName, url);
         conn = DriverManager.getConnection(url, user, pwd);
     }
 

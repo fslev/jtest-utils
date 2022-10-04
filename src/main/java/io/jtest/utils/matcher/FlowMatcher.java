@@ -24,12 +24,16 @@ class FlowMatcher {
                 LOG.debug("Match as JSONs");
                 return new JsonMatcher(message, expected, actual, matchConditions).match();
             } catch (InvalidTypeException e1) {
-                LOG.debug("Objects are NOT JSONs:\nEXPECTED:\n{}\nACTUAL:\n{}\n--> proceed to XML matching", expected, actual);
+                LOG.debug("Objects are NOT JSONs:" + System.lineSeparator() + "EXPECTED:" + System.lineSeparator() + "{}" +
+                        System.lineSeparator() + "ACTUAL:" + System.lineSeparator() + "{}" + System.lineSeparator() +
+                        "--> proceed to XML matching", expected, actual);
                 try {
                     LOG.debug("Match as XMLs");
                     return new XmlMatcher(message, expected, actual, matchConditions).match();
                 } catch (InvalidTypeException e2) {
-                    LOG.debug("Objects are NOT XMLs:\nEXPECTED:\n{}\nACTUAL:\n{}\n--> proceed to string matching", expected, actual);
+                    LOG.debug("Objects are NOT XMLs:" + System.lineSeparator() + "EXPECTED:" + System.lineSeparator() + "{}" +
+                            System.lineSeparator() + "ACTUAL:" + System.lineSeparator() + "{}" + System.lineSeparator() +
+                            "--> proceed to string matching", expected, actual);
                 }
             }
         }

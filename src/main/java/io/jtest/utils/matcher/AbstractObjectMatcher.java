@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 abstract class AbstractObjectMatcher<T> {
 
     protected static final Logger LOG = LogManager.getLogger();
-    protected static final String ASSERTION_ERROR_HINT_MESSAGE = "Matching is by default done using regular expressions.\n" +
+    protected static final String ASSERTION_ERROR_HINT_MESSAGE = "Matching is by default done using regular expressions." + System.lineSeparator() +
             "If expected object contains any unintentional regexes, then quote them between \\Q and \\E delimiters.";
 
     protected String message;
@@ -28,11 +28,11 @@ abstract class AbstractObjectMatcher<T> {
         this.actual = convert(actual);
         this.matchConditions = matchConditions != null ? matchConditions : new HashSet<>();
         this.message = message != null ? message : "";
-        this.negativeMatchMessage = message == null ? negativeMatchMessage() : message + "\n" + negativeMatchMessage();
+        this.negativeMatchMessage = message == null ? negativeMatchMessage() : message + System.lineSeparator() + negativeMatchMessage();
     }
 
     protected String negativeMatchMessage() {
-        return "\nObjects match!\n";
+        return System.lineSeparator() + "Objects match!" + System.lineSeparator();
     }
 
     protected String toString(T value) {

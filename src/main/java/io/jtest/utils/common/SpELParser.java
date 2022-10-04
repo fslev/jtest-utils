@@ -45,7 +45,7 @@ public class SpELParser {
             new SpelExpressionParser().parseExpression(expression).getValue(Object.class);
             return true;
         } catch (Exception e) {
-            LOG.warn("SpEL expression '{}' is not valid:\n{}", expression, e.getMessage());
+            LOG.warn("SpEL expression '{}' is not valid:" + System.lineSeparator() + "{}", expression, e.getMessage());
             return false;
         }
     }

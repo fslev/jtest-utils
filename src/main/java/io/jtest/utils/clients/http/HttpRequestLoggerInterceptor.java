@@ -19,7 +19,9 @@ public class HttpRequestLoggerInterceptor implements HttpRequestInterceptor {
 
     @Override
     public void process(HttpRequest request, HttpContext context) {
-        LOG.debug("\n---- HTTP REQUEST ----\n{}: {}{}\nPROXY host: {}\nRequest HEADERS: {}\nRequest BODY:\n{}\n",
+        LOG.debug(System.lineSeparator() + "---- HTTP REQUEST ----" + System.lineSeparator() + "{}: {}{}" + System.lineSeparator() +
+                        "PROXY host: {}" + System.lineSeparator() + "Request HEADERS: {}" + System.lineSeparator() + "Request BODY:" +
+                        System.lineSeparator() + "{}" + System.lineSeparator(),
                 () -> request.getRequestLine().getMethod(), () -> HttpClientContext.adapt(context).getTargetHost().toURI(),
                 () -> request.getRequestLine().getUri(), () -> {
                     RequestConfig config = HttpClientContext.adapt(context).getRequestConfig();
