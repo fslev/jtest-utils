@@ -6,12 +6,14 @@
   - Remove interceptors from HttpClient  
 
 ### 2.9 (2022-10-05)
-- Update dependencies
+- #### Changed
+  - Update dependencies
 
 ### 2.8 (2022-10-04)
-- Reformat Assertion error message
-- Update dependencies
-- Upgrade to new major version of json-compare (differences support)
+- #### Changed
+  - Reformat Assertion error message
+  - Update dependencies
+  - Upgrade to new major version of json-compare (differences support)
 
 ### 2.7
 Refactor Assertion error messages (enable assertion error difference support)  
