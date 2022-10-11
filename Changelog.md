@@ -1,6 +1,9 @@
 # Changelog
 
 ### 2.10-SNAPSHOT
+- #### Removed
+  - Remove unnecessary loggers  
+  - Remove interceptors from HttpClient  
 
 ### 2.9 (2022-10-05)
 - Update dependencies

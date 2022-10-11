@@ -1,8 +1,5 @@
 package io.jtest.utils.clients.database;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 
 public class SqlClient {
-    private static final Logger LOG = LogManager.getLogger();
     private static final int MAX_ROWS = 100;
     private final String url;
     private final String user;
@@ -34,7 +30,6 @@ public class SqlClient {
     }
 
     public void connect() throws SQLException {
-        LOG.debug("---- DB SETUP ----" + System.lineSeparator() + "Driver: {}" + System.lineSeparator() + "Database url: {}", driverClassName, url);
         conn = DriverManager.getConnection(url, user, pwd);
     }
 
@@ -52,7 +47,6 @@ public class SqlClient {
     }
 
     public List<Map<String, Object>> executeQueryAndGetRsAsList() throws SQLException {
-        LOG.debug("SQL query: '{}'", sql);
         List<Map<String, Object>> tableData = new ArrayList<>();
         ResultSet rs = null;
         try {
@@ -72,8 +66,6 @@ public class SqlClient {
                 if (rs != null) {
                     rs.close();
                 }
-                LOG.debug("SQL result: {}", tableData);
-                LOG.debug("-----------------------");
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -81,20 +73,13 @@ public class SqlClient {
     }
 
     public ResultSet executeQuery() throws SQLException {
-        LOG.debug("SQL query: '{}'", sql);
         return pst.executeQuery();
     }
 
     public int executeUpdate() throws SQLException {
-        LOG.debug("SQL update: '{}'", sql);
         int affected = 0;
-        try {
-            affected = pst.executeUpdate();
-            return affected;
-        } finally {
-            LOG.debug("SQL affected rows: {}", affected);
-            LOG.debug("-----------------------");
-        }
+        affected = pst.executeUpdate();
+        return affected;
     }
 
     public Connection getConnection() {

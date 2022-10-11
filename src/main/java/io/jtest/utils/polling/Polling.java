@@ -1,16 +1,12 @@
 package io.jtest.utils.polling;
 
 import io.jtest.utils.exceptions.PollingTimeoutException;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.time.Duration;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 public class Polling<T> {
-    private static final Logger LOG = LogManager.getLogger();
-
     private Duration pollingDuration = Duration.ofSeconds(30);
     private Long pollingIntervalMillis = 3000L;
     private Double exponentialBackOff = 1.0;
@@ -48,7 +44,6 @@ public class Polling<T> {
     }
 
     public T get() throws PollingTimeoutException {
-        LOG.debug("Polling for result...");
         boolean success = false;
         long interval = pollingIntervalMillis;
         long start = System.currentTimeMillis();
@@ -61,7 +56,6 @@ public class Polling<T> {
                     if (pollingDuration.minusMillis(elapsed).toMillis() <= 0) {
                         throw new PollingTimeoutException();
                     }
-                    LOG.debug("Polling failed, I'll take another shot after {}ms", interval);
                     Thread.sleep(interval);
                     interval = (long) (interval * exponentialBackOff);
                 } catch (InterruptedException e) {

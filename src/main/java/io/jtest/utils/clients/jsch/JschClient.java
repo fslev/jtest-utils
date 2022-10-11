@@ -1,15 +1,12 @@
 package io.jtest.utils.clients.jsch;
 
 import com.jcraft.jsch.*;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
 public class JschClient {
-    private static final Logger LOG = LogManager.getLogger();
     private static final int TIMEOUT_SECONDS = 60000;
     private final String host;
     private final int port;
@@ -37,13 +34,10 @@ public class JschClient {
     }
 
     public void connect() throws JSchException {
-        LOG.info("Connecting over SSH to \"{}:{}\" with user \"{}\" and privateKey \"{}\"", host, port, user, privateKey);
         this.session.connect();
-        LOG.info("Connected");
     }
 
     public String sendCommand(String cmd) throws IOException, JSchException {
-        LOG.info("Execute command over SSH: \"{}\"", cmd);
         Channel channel = this.session.openChannel("exec");
         ((ChannelExec) channel).setCommand(cmd);
         InputStream commandOutput = channel.getInputStream();
@@ -61,12 +55,10 @@ public class JschClient {
             readByte = commandErrOutput.read();
         }
         channel.disconnect();
-        LOG.debug("Output over SSH: {}", outputBuffer.toString());
         return outputBuffer.toString();
     }
 
     public void disconnect() {
         this.session.disconnect();
-        LOG.debug("SSH connection closed");
     }
 }

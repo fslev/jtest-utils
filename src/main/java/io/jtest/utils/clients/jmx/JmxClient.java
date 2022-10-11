@@ -1,8 +1,5 @@
 package io.jtest.utils.clients.jmx;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import javax.management.MBeanServerConnection;
 import javax.management.MBeanServerInvocationHandler;
 import javax.management.MalformedObjectNameException;
@@ -15,9 +12,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class JmxClient {
-
-    private static final Logger LOG = LogManager.getLogger();
-
     private final JMXConnector jmxConnector;
     private final MBeanServerConnection mbsConnection;
 
@@ -31,7 +25,6 @@ public class JmxClient {
                 this.jmxConnector = JMXConnectorFactory.connect(new JMXServiceURL(url));
             }
             this.mbsConnection = jmxConnector.getMBeanServerConnection();
-            LOG.info("Initialised JMX Connection to {}", url);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

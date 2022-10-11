@@ -1,7 +1,5 @@
 package io.jtest.utils.common;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.expression.Expression;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 
@@ -10,7 +8,6 @@ import java.util.regex.Pattern;
 
 public class SpELParser {
 
-    private static final Logger LOG = LogManager.getLogger();
     public static final String PREFIX = "#{";
     public static final String SUFFIX = "}";
 
@@ -31,7 +28,6 @@ public class SpELParser {
             Expression exp = new SpelExpressionParser().parseExpression(expression);
             return exp.getValue(Object.class);
         } catch (Exception e) {
-            LOG.warn("Could not parse SpEL expression: {}", e.getMessage());
             return expression;
         }
     }
@@ -45,7 +41,6 @@ public class SpELParser {
             new SpelExpressionParser().parseExpression(expression).getValue(Object.class);
             return true;
         } catch (Exception e) {
-            LOG.warn("SpEL expression '{}' is not valid:" + System.lineSeparator() + "{}", expression, e.getMessage());
             return false;
         }
     }

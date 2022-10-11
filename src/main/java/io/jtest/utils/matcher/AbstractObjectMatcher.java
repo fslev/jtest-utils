@@ -2,8 +2,6 @@ package io.jtest.utils.matcher;
 
 import io.jtest.utils.exceptions.InvalidTypeException;
 import io.jtest.utils.matcher.condition.MatchCondition;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.util.HashSet;
 import java.util.Map;
@@ -12,8 +10,6 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 abstract class AbstractObjectMatcher<T> {
-
-    protected static final Logger LOG = LogManager.getLogger();
     protected static final String ASSERTION_ERROR_HINT_MESSAGE = "Matching is by default done using regular expressions." + System.lineSeparator() +
             "If expected object contains any unintentional regexes, then quote them between \\Q and \\E delimiters.";
 

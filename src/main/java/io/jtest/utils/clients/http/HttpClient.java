@@ -140,8 +140,7 @@ public class HttpClient {
         if (cookieStore != null) {
             clientBuilder.setDefaultCookieStore(cookieStore);
         }
-        return clientBuilder.addInterceptorLast(new HttpResponseLoggerInterceptor())
-                .addInterceptorLast(new HttpRequestLoggerInterceptor()).build();
+        return clientBuilder.build();
     }
 
     private SSLContext defaultSslContext() {
