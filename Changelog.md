@@ -7,7 +7,7 @@
 
 ### 2.9 (2022-10-05)
 - Update dependencies
-- 
+
 ### 2.8 (2022-10-04)
 - Reformat Assertion error message
 - Update dependencies
