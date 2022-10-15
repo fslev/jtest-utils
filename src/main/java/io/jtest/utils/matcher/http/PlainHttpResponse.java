@@ -65,6 +65,10 @@ public class PlainHttpResponse {
                 "  \"reason\": \"<text>\"" + System.lineSeparator() +
                 "}";
 
+        public ParseException(String msg) {
+            this(msg, null);
+        }
+
         public ParseException(String msg, Throwable t) {
             super(msg + System.lineSeparator() + "Expected format:" + System.lineSeparator() + EXPECTED_FORMAT, t);
         }
