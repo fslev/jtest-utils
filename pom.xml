@@ -5,7 +5,7 @@
 
     <groupId>io.github.fslev</groupId>
     <artifactId>jtest-utils</artifactId>
-    <version>2.10-SNAPSHOT</version>
+    <version>3.0-SNAPSHOT</version>
 
     <name>JTest Utils</name>
     <description>Java Utilities for testing</description>
