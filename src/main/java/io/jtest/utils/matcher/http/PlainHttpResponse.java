@@ -15,6 +15,16 @@ public class PlainHttpResponse {
     @JsonProperty(value = "headers")
     private List<Map.Entry<String, String>> headers;
 
+    public PlainHttpResponse() {
+    }
+
+    public PlainHttpResponse(Object status, Object entity, String reasonPhrase, List<Map.Entry<String, String>> headers) {
+        this.status = status;
+        this.entity = entity;
+        this.reasonPhrase = reasonPhrase;
+        this.headers = headers;
+    }
+
     public Object getStatus() {
         return status;
     }
