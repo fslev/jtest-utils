@@ -1,23 +1,24 @@
 package io.jtest.utils.matcher;
 
 
-import io.jtest.utils.clients.http.PlainHttpResponse;
 import io.jtest.utils.exceptions.InvalidTypeException;
 import io.jtest.utils.matcher.condition.MatchCondition;
+import io.jtest.utils.matcher.http.PlainHttpResponse;
 import org.junit.jupiter.api.AssertionFailureBuilder;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 class HttpResponseMatcher extends AbstractObjectMatcher<PlainHttpResponse> {
 
-    private final String expectedStatus;
+    private final Object expectedStatus;
     private final String expectedReason;
-    private final Set<Map.Entry<String, String>> expectedHeaders;
+    private final List<Map.Entry<String, String>> expectedHeaders;
     private final Object expectedEntity;
 
-    public HttpResponseMatcher(String message, Object expected, Object actual, Set<MatchCondition> matchConditions) throws InvalidTypeException {
+    public HttpResponseMatcher(String message, PlainHttpResponse expected, PlainHttpResponse actual, Set<MatchCondition> matchConditions) throws InvalidTypeException {
         super(message, expected, actual, matchConditions);
         this.expectedStatus = this.expected.getStatus();
         this.expectedReason = this.expected.getReasonPhrase();
@@ -26,14 +27,7 @@ class HttpResponseMatcher extends AbstractObjectMatcher<PlainHttpResponse> {
     }
 
     @Override
-    PlainHttpResponse convert(Object value) throws InvalidTypeException {
-        if (!(value instanceof PlainHttpResponse)) {
-            try {
-                return PlainHttpResponse.from(value);
-            } catch (Exception e) {
-                throw new InvalidTypeException("Cannot convert HTTP Response", e);
-            }
-        }
+    PlainHttpResponse convert(Object value) {
         return (PlainHttpResponse) value;
     }
 
