@@ -8,20 +8,20 @@ import java.util.Map;
 public class PlainHttpResponse {
     @JsonProperty(value = "status")
     private Object status;
-    @JsonProperty(value = "body")
-    private Object entity;
     @JsonProperty(value = "reason")
     private String reasonPhrase;
+    @JsonProperty(value = "body")
+    private Object entity;
     @JsonProperty(value = "headers")
     private List<Map.Entry<String, String>> headers;
 
     public PlainHttpResponse() {
     }
 
-    public PlainHttpResponse(Object status, Object entity, String reasonPhrase, List<Map.Entry<String, String>> headers) {
+    public PlainHttpResponse(Object status, String reasonPhrase, Object entity, List<Map.Entry<String, String>> headers) {
         this.status = status;
-        this.entity = entity;
         this.reasonPhrase = reasonPhrase;
+        this.entity = entity;
         this.headers = headers;
     }
 
