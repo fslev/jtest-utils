@@ -3,7 +3,7 @@
 ### 3.0-SNAPSHOT
 - #### Removed
   - Unnecessary loggers were removed  
-  - HttpClient support was entirely removed. Test frameworks should define their own clients  
+  - HTTP, SQL, JSCH And Shell client support was entirely removed. Test frameworks should define their own clients  
   
 - #### Changed
   - Update dependencies 
