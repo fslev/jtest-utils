@@ -7,6 +7,7 @@ import java.time.Duration;
 import java.util.Map;
 import java.util.function.Supplier;
 
+import static io.jtest.utils.PlainHttpResponseUtils.from;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ObjectMatcherTest {
@@ -256,14 +257,15 @@ public class ObjectMatcherTest {
     public void matchHttpResponses() {
         String expected = "{\"status\":\"\\\\d+\"}";
         String actual = "{\"status\":409}";
-        ObjectMatcher.matchHttpResponse(null, expected, actual);
+        ObjectMatcher.matchHttpResponse(null, from(expected), from(actual));
     }
 
     @Test
     public void matchHttpResponses_withPolling() {
         String expected = "{\"status\":\"\\\\d+\"}";
         String actual = "{\"status\":409}";
-        ObjectMatcher.matchHttpResponse(null, expected, () -> actual, Duration.ofSeconds(1), 100L, 1.0);
+        ObjectMatcher.matchHttpResponse(null, from(expected),
+                () -> from(actual), Duration.ofSeconds(1), 100L, 1.0);
     }
 
     @Test
@@ -271,12 +273,6 @@ public class ObjectMatcherTest {
         String expected = "{\"status\":\"\\\\d+\"}";
         String actual = "{\"status\":\"invalid\"}";
         assertThrows(AssertionError.class, () ->
-                ObjectMatcher.matchHttpResponse(null, expected, () -> actual, Duration.ofSeconds(1), 100L, 1.0));
-    }
-
-    @Test
-    public void matchNullHttpResponse() {
-        String expected = "{\"status\":\"\\\\d+\"}";
-        assertThrows(Exception.class, () -> ObjectMatcher.matchHttpResponse(null, expected, null));
+                ObjectMatcher.matchHttpResponse(null, from(expected), () -> from(actual), Duration.ofSeconds(1), 100L, 1.0));
     }
 }

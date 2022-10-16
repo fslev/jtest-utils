@@ -10,7 +10,6 @@ Java Utilities for testing
 # Summary
 It takes over the usual dependencies and features needed inside a Java test framework, such as:  
 * Matching mechanisms: match XMLs, JSONs, and other types of Java objects  
-* Customized clients for accessing various resources, i.e _databases_, _HTTP services_, etc  
 * Other utility classes           
 
 #### Maven Central

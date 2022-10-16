@@ -1,9 +1,12 @@
 # Changelog
 
-### 2.10-SNAPSHOT
+### 3.0-SNAPSHOT
 - #### Removed
-  - Remove unnecessary loggers  
-  - Remove interceptors from HttpClient  
+  - Unnecessary loggers were removed  
+  - HTTP, SQL, JSCH And Shell client support was entirely removed. Test frameworks should define their own clients  
+  
+- #### Changed
+  - Update dependencies 
 
 ### 2.9 (2022-10-05)
 - #### Changed
