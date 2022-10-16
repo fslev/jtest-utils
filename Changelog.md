@@ -1,6 +1,8 @@
 # Changelog
 
-### 3.0-SNAPSHOT
+### 3.1-SNAPSHOT
+
+### 3.0 (2022-10-16)
 - #### Removed
   - Unnecessary loggers were removed  
   - HTTP, SQL, JSCH And Shell client support was entirely removed. Test frameworks should define their own clients  
