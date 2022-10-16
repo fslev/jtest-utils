@@ -14,6 +14,30 @@ import static org.junit.jupiter.api.Assertions.*;
 public class HttpResponseMatcherTests {
 
     @Test
+    public void checkPlainHttpResponseToString() {
+        String expected = "{\"status\": 200, \"headers\":[{\"auth\":1},{\"x-auth\":2}], \"reason\":\"test\",\"body\":{\"a\":\"~[val1] ipsum\"}}";
+        assertTrue(from(expected).toString().matches("(?s).*status.*200.*reason.*test.*body.*ipsum.*headers.*auth.*"));
+    }
+
+    @Test
+    public void matchInvalidHttpResponses() {
+        String expected = "{\"status\": 200, \"headers\":{\"auth\":1}, \"reason\":\"test\",\"body\":{\"a\":\"~[val1] ipsum\"}}";
+
+        PlainHttpResponse actual = new PlainHttpResponse();
+        actual.setStatus(200);
+        List<Map.Entry<String, String>> headers = new ArrayList<>();
+        headers.add(new AbstractMap.SimpleEntry<>("auth", "1"));
+        headers.add(new AbstractMap.SimpleEntry<>("x-auth", "2"));
+        actual.setHeaders(headers);
+        actual.setEntity("{\"a\":\"lorem ipsum\"}");
+        actual.setReasonPhrase("test");
+
+        assertTrue(assertThrows(PlainHttpResponse.ParseException.class, () ->
+                new HttpResponseMatcher(null, from(expected), actual, null).match())
+                .getMessage().contains(PlainHttpResponse.ParseException.EXPECTED_FORMAT));
+    }
+
+    @Test
     public void matchSimpleHttpResponses() throws InvalidTypeException {
         String expected = "{\"status\": 200, \"headers\":[{\"auth\":1},{\"x-auth\":2}], \"reason\":\"test\",\"body\":{\"a\":\"~[val1] ipsum\"}}";
 
@@ -35,13 +59,9 @@ public class HttpResponseMatcherTests {
     public void matchSimpleHttpResponses_negative() {
         String expected = "{\"status\": 200, \"headers\":[{\"auth\":1},{\"x-auth\":2}], \"reason\":\"test\",\"body\":{\"a\":\"~[val1] ipsum\"}}";
 
-        PlainHttpResponse actual = new PlainHttpResponse();
-        actual.setStatus(200);
-        actual.setReasonPhrase("test");
         List<Map.Entry<String, String>> headers = new ArrayList<>();
         headers.add(new AbstractMap.SimpleEntry<>("auth", "2"));
-        actual.setHeaders(headers);
-        actual.setEntity("{\"a\":\"lorem ipsum\"}");
+        PlainHttpResponse actual = new PlainHttpResponse(200, "test", "{\"a\":\"lorem ipsum\"}", headers);
 
         assertThrows(AssertionError.class, () -> new HttpResponseMatcher(null, from(expected), actual, null).match());
     }
