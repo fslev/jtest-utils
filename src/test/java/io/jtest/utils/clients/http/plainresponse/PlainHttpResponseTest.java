@@ -1,5 +1,6 @@
 package io.jtest.utils.clients.http.plainresponse;
 
+import io.json.compare.util.JsonUtils;
 import io.jtest.utils.clients.http.PlainHttpResponse;
 import io.jtest.utils.clients.http.PlainHttpResponseParseException;
 import org.apache.http.HttpResponse;
@@ -18,6 +19,13 @@ import java.util.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class PlainHttpResponseTest {
+
+    @Test
+    public void testPlainResponseFromBigDecimals() throws Exception {
+        String content = "{\"status\":200,\"reason\":\"some thing\",\"body\":{\"number\":10.00}}";
+        PlainHttpResponse response = PlainHttpResponse.from(content);
+        assertEquals("10.00", JsonUtils.toJson(response.getEntity()).get("number").asText());
+    }
 
     @Test
     public void testPlainResponseInitFromNull() {

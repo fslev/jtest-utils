@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import io.json.compare.util.MessageUtil;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
@@ -78,8 +79,11 @@ public class PlainHttpResponse {
     }
 
     private static PlainHttpResponse fromObject(Object content) throws JsonProcessingException {
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.enable(DeserializationFeature.FAIL_ON_TRAILING_TOKENS);
+        ObjectMapper mapper = new ObjectMapper().setNodeFactory(JsonNodeFactory.withExactBigDecimals(true))
+                .enable(DeserializationFeature.FAIL_ON_TRAILING_TOKENS)
+                .configure(DeserializationFeature.USE_BIG_DECIMAL_FOR_FLOATS, true)
+                .configure(DeserializationFeature.ACCEPT_FLOAT_AS_INT, false);
+
         return content instanceof String ?
                 mapper.readValue((String) content, PlainHttpResponse.class) :
                 content instanceof PlainHttpResponse ? (PlainHttpResponse) content :
