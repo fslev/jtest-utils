@@ -27,3 +27,7 @@ Gradle: compile("io.github.fslev:jtest-utils:${latest.version}")
 ```  
 
 # <a name="match"></a> Matching objects
+- Match JSONs
+- Match XMLs
+- Match texts
+... with regular expression support and other specific conditions
