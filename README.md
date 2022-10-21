@@ -32,3 +32,55 @@ Gradle: compile("io.github.fslev:jtest-utils:${latest.version}")
 - Match texts  
 
 _... with regular expression support and specific matching conditions_
+
+## Match JSONs
+based on [json-compare](https://github.com/fslev/json-compare)
+
+Example:  
+```javascript
+String expected = "{\n" +
+        "  \"copper\": [\n" +
+        "    {\n" +
+        "      \"beneath\": \"heard\",\n" +
+        "      \"jack\": false,\n" +
+        "      \"men\": -1365455482\n" +
+        "    },\n" +
+        "    \"equipment\",\n" +
+        "    false\n" +
+        "  ],\n" +
+        "  \"speak\": -263355062.75097084,\n" +
+        "  \"basis\": 1670107599\n" +
+        "}";
+String actual = "{\n" +
+        "  \"copper\": [\n" +
+        "    {\n" +
+        "      \"beneath\": \"heard\",\n" +
+        "      \"men\": -1365455482\n" +
+        "    },\n" +
+        "    \"equipment\",\n" +
+        "    false\n" +
+        "  ],\n" +
+        "  \"basis\": 1670107599\n" +
+        "}";
+ObjectMatcher.match("Seems that objects do not match", expected, actual); // assertion fails
+
+==>
+
+org.opentest4j.AssertionFailedError: FOUND 2 DIFFERENCE(S):
+
+
+_________________________DIFF__________________________
+copper -> 
+Expected element from position 1 was NOT FOUND:
+{
+  "beneath" : "heard",
+  "jack" : false,
+  "men" : -1365455482
+}
+
+_________________________DIFF__________________________
+Field 'speak' was NOT FOUND
+
+Seems that objects do not match
+JSONs do not match
+```

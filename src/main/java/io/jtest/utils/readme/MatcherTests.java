@@ -31,7 +31,7 @@ public class MatcherTests {
                 "  ],\n" +
                 "  \"basis\": 1670107599\n" +
                 "}";
-        ObjectMatcher.match("Seems that objects do not match", expected, actual);
+        ObjectMatcher.match("Seems that objects do not match", expected, actual); // assertion fails
     }
 
 }
