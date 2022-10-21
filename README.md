@@ -87,3 +87,30 @@ Field 'basis' was NOT FOUND
 Seems that objects do not match
 JSONs do not match
 ```
+## Match XMLs
+based on [xmlunit](https://github.com/xmlunit/xmlunit)
+
+Example:
+```javascript
+String expected = "<a id=\"1\"> <lorem>ipsum</lorem> </a>";
+String actual = "<a id=\"2\"> <lorem>ipsum</lorem> </a>";
+ObjectMatcher.matchXml("Seems that objects do not match", expected, actual); // assertion fails
+
+==> 
+
+java.lang.AssertionError: Seems that objects do not match
+XMLs do not match
+
+Matching is by default done using regular expressions.
+If expected object contains any unintentional regexes, then quote them between \Q and \E delimiters.
+
+
+Expected: Expected attribute name '/a[1]/@id' - comparing <a...> at /a[1]/@id to <a...> at /a[1]:
+<a id="1">
+  <lorem>ipsum</lorem>
+</a>
+     but: result was: 
+<a id="2">
+  <lorem>ipsum</lorem>
+</a>
+```

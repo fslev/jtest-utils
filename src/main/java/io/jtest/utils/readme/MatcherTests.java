@@ -35,4 +35,11 @@ public class MatcherTests {
                 "}";
         assertThrows(AssertionError.class, () -> ObjectMatcher.matchJson("Seems that objects do not match", expected, actual));
     }
+
+    @Test
+    public void testXmlMatcher() {
+        String expected = "<a id=\"1\"> <lorem>ipsum</lorem> </a>";
+        String actual = "<a id=\"2\"> <lorem>ipsum</lorem> </a>";
+        assertThrows(AssertionError.class, () -> ObjectMatcher.matchXml("Seems that objects do not match", expected, actual));
+    }
 }
