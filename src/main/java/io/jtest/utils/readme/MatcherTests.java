@@ -1,6 +1,7 @@
 package io.jtest.utils.readme;
 
 import io.jtest.utils.matcher.ObjectMatcher;
+import io.jtest.utils.matcher.condition.MatchCondition;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -31,9 +32,12 @@ public class MatcherTests {
                 "    \"equipment\",\n" +
                 "    false\n" +
                 "  ],\n" +
-                "  \"speak\": -263355062.750\n" +
+                "  \"speak\": -263355062.750,\n" +
+                "  \"nr1\": 62.750,\n" +
+                "  \"nr2\": 60.750\n" +
                 "}";
-        assertThrows(AssertionError.class, () -> ObjectMatcher.matchJson("Seems that objects do not match", expected, actual));
+        assertThrows(AssertionError.class, () -> ObjectMatcher.matchJson("Seems that objects do not match", expected, actual,
+                MatchCondition.JSON_NON_EXTENSIBLE_OBJECT, MatchCondition.JSON_STRICT_ORDER_ARRAY));
     }
 
     @Test

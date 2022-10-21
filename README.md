@@ -60,22 +60,25 @@ String actual = "{\n" +
         "    \"equipment\",\n" +
         "    false\n" +
         "  ],\n" +
-        "  \"speak\": -263355062.750\n" +
+        "  \"speak\": -263355062.750,\n" +
+        "  \"nr1\": 62.750,\n" +
+        "  \"nr2\": 60.750\n" +
         "}";
-ObjectMatcher.matchJson("Seems that objects do not match", expected, actual); // assertion fails
+ObjectMatcher.matchJson("Seems that objects do not match", expected, actual,
+                MatchCondition.JSON_NON_EXTENSIBLE_OBJECT, MatchCondition.JSON_STRICT_ORDER_ARRAY); // assertion fails
 ==>
 
-org.opentest4j.AssertionFailedError: FOUND 3 DIFFERENCE(S):
-
+org.opentest4j.AssertionFailedError: FOUND 4 DIFFERENCE(S):
 
 _________________________DIFF__________________________
-copper -> 
-Expected element from position 1 was NOT FOUND:
+copper -> JSON ARRAY elements differ at position 1:
 {
   "beneath" : "heard",
   "jack" : false,
   "men" : -1365455482
 }
+________diffs________
+Field 'jack' was NOT FOUND
 
 _________________________DIFF__________________________
 speak -> 
@@ -83,6 +86,9 @@ Expected value: -263355062.75097084 But got: -263355062.750
 
 _________________________DIFF__________________________
 Field 'basis' was NOT FOUND
+
+_________________________DIFF__________________________
+Actual JSON OBJECT has extra fields
 
 Seems that objects do not match
 JSONs do not match
