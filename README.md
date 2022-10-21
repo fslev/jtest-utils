@@ -5,12 +5,15 @@
 [![Coverage Status](https://coveralls.io/repos/github/fslev/jtest-utils/badge.svg?branch=main)](https://coveralls.io/github/fslev/jtest-utils?branch=main)
 
 
-Java Utilities for testing  
+A set of Java testing utilities  
 
-# Summary
-It takes over the usual dependencies and features needed inside a Java test framework, such as:  
-* Matching mechanisms: match XMLs, JSONs, and other types of Java objects  
-* Other utility classes           
+## Brief
+[JTest-Utils](https://github.com/fslev/jtest-utils) contains a set of utility classes which bump up your test framework by adding some extra basic features:  
+- **[Matching objects](#match)**
+- **[Polling](#polling)**
+- **[SpEL parser](#spel)**
+- **[Resource reader](#resource)**
+- and others...
 
 #### Maven Central
 ```
@@ -23,5 +26,4 @@ It takes over the usual dependencies and features needed inside a Java test fram
 Gradle: compile("io.github.fslev:jtest-utils:${latest.version}")
 ```  
 
-# Documentation
-Feature related documentation can be found [here](https://github.com/fslev/jtest-utils/wiki)
+# <a name="match"></a> Matching objects
