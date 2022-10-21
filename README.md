@@ -8,7 +8,7 @@
 A set of testing utilities for Java  
 
 ## Brief
-[JTest-Utils](https://github.com/fslev/jtest-utils) contains a set of utility classes which bump up your test framework by adding some extra useful features:  
+[JTest-Utils](https://github.com/fslev/jtest-utils) contains a set of utility classes which bump up your test framework by adding some powerful features:  
 - **[Matching objects](#match)**
 - **[Polling](#polling)**
 - **[SpEL parser](#spel)**
