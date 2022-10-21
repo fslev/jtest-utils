@@ -30,7 +30,9 @@ Gradle: compile("io.github.fslev:jtest-utils:${latest.version}")
 # <a name="match"></a> Matching objects
 - Match JSONs
 - Match XMLs
-- Match texts  
+- Match texts 
+- Match HTTP responses
+- Match general objects
 
 _... with specific matching conditions, regular expression, data capture and polling support_
 
