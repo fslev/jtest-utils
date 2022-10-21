@@ -5,7 +5,7 @@
 [![Coverage Status](https://coveralls.io/repos/github/fslev/jtest-utils/badge.svg?branch=main)](https://coveralls.io/github/fslev/jtest-utils?branch=main)
 
 
-A set of Java testing utilities  
+A set of testing utilities for Java  
 
 ## Brief
 [JTest-Utils](https://github.com/fslev/jtest-utils) contains a set of utility classes which bump up your test framework by adding some extra basic features:  
