@@ -60,13 +60,12 @@ String actual = "{\n" +
         "    \"equipment\",\n" +
         "    false\n" +
         "  ],\n" +
-        "  \"basis\": 1670107599\n" +
+        "  \"speak\": -263355062.750\n" +
         "}";
-ObjectMatcher.match("Seems that objects do not match", expected, actual); // assertion fails
-
+ObjectMatcher.matchJson("Seems that objects do not match", expected, actual); // assertion fails
 ==>
 
-org.opentest4j.AssertionFailedError: FOUND 2 DIFFERENCE(S):
+org.opentest4j.AssertionFailedError: FOUND 3 DIFFERENCE(S):
 
 
 _________________________DIFF__________________________
@@ -79,7 +78,11 @@ Expected element from position 1 was NOT FOUND:
 }
 
 _________________________DIFF__________________________
-Field 'speak' was NOT FOUND
+speak -> 
+Expected value: -263355062.75097084 But got: -263355062.750
+
+_________________________DIFF__________________________
+Field 'basis' was NOT FOUND
 
 Seems that objects do not match
 JSONs do not match

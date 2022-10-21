@@ -3,6 +3,8 @@ package io.jtest.utils.readme;
 import io.jtest.utils.matcher.ObjectMatcher;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 public class MatcherTests {
 
     @Test
@@ -29,9 +31,8 @@ public class MatcherTests {
                 "    \"equipment\",\n" +
                 "    false\n" +
                 "  ],\n" +
-                "  \"basis\": 1670107599\n" +
+                "  \"speak\": -263355062.750\n" +
                 "}";
-        ObjectMatcher.match("Seems that objects do not match", expected, actual); // assertion fails
+        assertThrows(AssertionError.class, () -> ObjectMatcher.matchJson("Seems that objects do not match", expected, actual));
     }
-
 }
