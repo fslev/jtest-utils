@@ -31,4 +31,4 @@ Gradle: compile("io.github.fslev:jtest-utils:${latest.version}")
 - Match XMLs
 - Match texts  
 
-_... with regular expression support and other specific conditions_
+_... with regular expression support and specific matching conditions_
