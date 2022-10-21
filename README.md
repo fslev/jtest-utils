@@ -100,8 +100,8 @@ Example:
 ```javascript
 String expected = "<a id=\"1\"> <lorem>ipsum</lorem> </a>";
 String actual = "<a id=\"2\"> <lorem>ipsum</lorem> </a>";
-assertThrows(AssertionError.class, () -> ObjectMatcher.matchXml("Seems that objects do not match",
-       expected, actual, MatchCondition.XML_CHILD_NODELIST_LENGTH)); // assertion fails
+ObjectMatcher.matchXml("Seems that objects do not match",
+        expected, actual, MatchCondition.XML_CHILD_NODELIST_LENGTH); // assertion fails
 ==> 
 
 java.lang.AssertionError: Seems that objects do not match
