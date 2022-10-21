@@ -65,7 +65,7 @@ String actual = "{\n" +
         "  \"nr2\": 60.750\n" +
         "}";
 ObjectMatcher.matchJson("Seems that objects do not match", expected, actual,
-                MatchCondition.JSON_NON_EXTENSIBLE_OBJECT, MatchCondition.JSON_STRICT_ORDER_ARRAY); // assertion fails
+        MatchCondition.JSON_NON_EXTENSIBLE_OBJECT, MatchCondition.JSON_STRICT_ORDER_ARRAY); // assertion fails
 ==>
 
 org.opentest4j.AssertionFailedError: FOUND 4 DIFFERENCE(S):
@@ -101,7 +101,7 @@ Example:
 String expected = "<a id=\"1\"> <lorem>ipsum</lorem> </a>";
 String actual = "<a id=\"2\"> <lorem>ipsum</lorem> </a>";
 assertThrows(AssertionError.class, () -> ObjectMatcher.matchXml("Seems that objects do not match",
-                expected, actual, MatchCondition.XML_CHILD_NODELIST_LENGTH)); // assertion fails
+       expected, actual, MatchCondition.XML_CHILD_NODELIST_LENGTH)); // assertion fails
 ==> 
 
 java.lang.AssertionError: Seems that objects do not match
