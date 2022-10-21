@@ -12,7 +12,7 @@ A set of testing utilities for Java
 - **[Matching objects](#match)**
 - **[Polling](#polling)**
 - **[SpEL parser](#spel)**
-- **[Resource reader](#resource)**
+- **[Resource reader](#resource)**  
 ...and others
 
 #### Maven Central
