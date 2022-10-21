@@ -32,7 +32,7 @@ Gradle: compile("io.github.fslev:jtest-utils:${latest.version}")
 - Match XMLs
 - Match texts  
 
-_... with regular expression support and specific matching conditions_
+_... with specific matching conditions, regular expression, data capture and polling support_
 
 ## Match JSONs
 Based on [json-compare](https://github.com/fslev/json-compare)
