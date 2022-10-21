@@ -34,7 +34,7 @@ Gradle: compile("io.github.fslev:jtest-utils:${latest.version}")
 _... with regular expression support and specific matching conditions_
 
 ## Match JSONs
-based on [json-compare](https://github.com/fslev/json-compare)
+Based on [json-compare](https://github.com/fslev/json-compare)
 
 Example:  
 ```javascript
@@ -94,7 +94,7 @@ Seems that objects do not match
 JSONs do not match
 ```
 ## Match XMLs
-based on [xmlunit](https://github.com/xmlunit/xmlunit)
+Based on [xmlunit](https://github.com/xmlunit/xmlunit)
 
 Example:
 ```javascript
