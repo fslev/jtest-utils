@@ -14,7 +14,7 @@ A set of testing utilities for Java
 - **[SpEL parser](#spel)**
 - **[Resource reader](#resource)**  
 
-...and others
+_...and others_
 
 #### Maven Central
 ```
