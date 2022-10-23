@@ -136,8 +136,8 @@ ObjectMatcher.matchString("Texts do match, actually", expected, actual, MatchCon
 ## Match Objects
 Match any two Objects using ObjectMatcher.match() and one of the matching mechanisms from above, in this order:  
 - if Objects can be converted to JSON, then match as JSONs
-  - if Objects are XML strings, then match as XMLs
-    - otherwise, match objects as texts
+- if Objects are XML strings, then match as XMLs
+- otherwise, match objects as texts
 
 Example:
 ```javascript
