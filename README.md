@@ -170,3 +170,4 @@ ObjectMatcher.match("Objects were matched as texts", expected, actual); // asser
 ```
 
 ## Match HTTP responses
+If your test framework is querying REST services and checks the response data, then you might find this type of matching very useful.  
