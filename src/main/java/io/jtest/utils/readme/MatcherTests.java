@@ -53,5 +53,7 @@ public class MatcherTests {
         String expected = "lo.*sum \\Q(test)\\E";
         String actual = "lorem \n ipsum (test)";
         ObjectMatcher.matchString("Texts do not match", expected, actual); // assertion passes
+        assertThrows(AssertionError.class, () -> ObjectMatcher.matchString("Texts do not match",
+                expected, actual, MatchCondition.DO_NOT_MATCH)); // assertion fails
     }
 }

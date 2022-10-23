@@ -130,4 +130,5 @@ Match texts with regex support:
 String expected = "lo.*sum \\Q(test)\\E";
 String actual = "lorem \n ipsum (test)";
 ObjectMatcher.matchString("Texts do not match", expected, actual); // assertion passes
+ObjectMatcher.matchString("Texts do match, actually", expected, actual, MatchCondition.DO_NOT_MATCH); // assertion fails
 ```
