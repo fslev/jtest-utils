@@ -123,3 +123,12 @@ Expected: Expected attribute name '/a[1]/@id' - comparing <a...> at /a[1]/@id to
   <lorem>ipsum</lorem>
 </a>
 ```
+
+## Match texts
+Match any texts with regex support  
+Example:
+```javascript
+String expected = "lo.*sum";
+String actual = "lorem \n ipsum";
+ObjectMatcher.matchString("Texts do not match", expected, actual); // assertion passes
+```

@@ -47,4 +47,11 @@ public class MatcherTests {
         assertThrows(AssertionError.class, () -> ObjectMatcher.matchXml("Seems that objects do not match",
                 expected, actual, MatchCondition.XML_CHILD_NODELIST_LENGTH));
     }
+
+    @Test
+    public void testTextMatcher() {
+        String expected = "lo.*sum";
+        String actual = "lorem \n ipsum";
+        ObjectMatcher.matchString("Texts do not match", expected, actual); // assertion passes
+    }
 }
