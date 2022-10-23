@@ -9,7 +9,7 @@ A set of testing utilities for Java
 
 ## Brief
 [JTest-Utils](https://github.com/fslev/jtest-utils) contains a set of utility classes which bump up your test framework by adding some powerful features:  
-- **[Matching objects](#match)**
+- **[Matching](#match)**
 - **[Polling](#polling)**
 - **[SpEL parser](#spel)**
 - **[Resource reader](#resource)**  
@@ -27,7 +27,7 @@ _...and others_
 Gradle: compile("io.github.fslev:jtest-utils:${latest.version}")
 ```  
 
-# <a name="match"></a> Matching objects
+# <a name="match"></a> Matching
 - Match JSONs
 - Match XMLs
 - Match texts 
