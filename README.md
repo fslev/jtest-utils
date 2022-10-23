@@ -125,8 +125,7 @@ Expected: Expected attribute name '/a[1]/@id' - comparing <a...> at /a[1]/@id to
 ```
 
 ## Match texts
-Match any texts with regex support  
-Example:
+Match any texts with regex support:  
 ```javascript
 String expected = "lo.*sum";
 String actual = "lorem \n ipsum";
