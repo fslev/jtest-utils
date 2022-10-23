@@ -158,11 +158,11 @@ Example:
 ```javascript
 String expected = "{\"a\":1}";
 String actual = "{\"a\":1}";
-ObjectMatcher.match("Objects were converted to JSONs but they do not match", expected, actual); // assertion passes
+ObjectMatcher.match("Objects were converted to JSONs", expected, actual); // assertion passes
 
 expected = "<a>1</a>";
 actual = "<a>1</a>";
-ObjectMatcher.match("Objects were converted to XMLs but they do not match", expected, actual); // assertion passes
+ObjectMatcher.match("Objects were converted to XMLs", expected, actual); // assertion passes
 
 expected = "{\"a\":i am not a json}";
 actual = "{\"a\":i am not a json}";
