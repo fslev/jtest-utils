@@ -31,7 +31,7 @@ Gradle: compile("io.github.fslev:jtest-utils:${latest.version}")
 - Match JSONs
 - Match XMLs
 - Match texts 
-- Match general objects
+- Match Objects
 - Match HTTP responses
 
 _... with specific matching conditions, regular expression, data capture and polling support_
@@ -133,7 +133,7 @@ ObjectMatcher.matchString("Texts do not match", expected, actual); // assertion 
 ObjectMatcher.matchString("Texts do match, actually", expected, actual, MatchCondition.DO_NOT_MATCH); // assertion fails
 ```
 
-## Match any objects
+## Match Objects
 Match any two Objects using ObjectMatcher.match() and one of the matching mechanisms from above, in this order:  
 - if Objects can be converted to JSON, then match as JSONs
   - if Objects are XML strings, then match as XMLs
