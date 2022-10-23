@@ -59,18 +59,16 @@ public class MatcherTests {
 
     @Test
     public void testObjectMatcher() {
-        final String expected = "{\"a\":1}";
-        final String actual = "{\"a\":2}";
-        assertThrows(AssertionError.class, () ->
-                ObjectMatcher.match("Objects were converted to JSONs but they do not match", expected, actual));
+        String expected = "{\"a\":1}";
+        String actual = "{\"a\":1}";
+        ObjectMatcher.match("Objects were converted to JSONs but they do not match", expected, actual); // assertion passes
 
-        final String expected1 = "<a>1</a>";
-        final String actual1 = "<a>2</a>";
-        assertThrows(AssertionError.class, () ->
-                ObjectMatcher.match("Objects were converted to XMLs but they do not match", expected1, actual1));
+        expected = "<a>1</a>";
+        actual = "<a>1</a>";
+        ObjectMatcher.match("Objects were converted to XMLs but they do not match", expected, actual); // assertion passes
 
-        final String expected2 = "{a:1}";
-        final String actual2 = "{a:1}";
-        ObjectMatcher.match("Objects were matched as texts", expected2, actual2);
+        expected = "{\"a\":i am not a json}";
+        actual = "{\"a\":i am not a json}";
+        ObjectMatcher.match("Objects were matched as texts", expected, actual); // assertion passes
     }
 }
