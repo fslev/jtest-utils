@@ -36,7 +36,7 @@ public class MatcherTests {
                 "  \"nr1\": 62.750,\n" +
                 "  \"nr2\": 60.750\n" +
                 "}";
-        assertThrows(AssertionError.class, () -> ObjectMatcher.matchJson("Seems that objects do not match", expected, actual,
+        assertThrows(AssertionError.class, () -> ObjectMatcher.matchJson("Seems that JSONs do not match", expected, actual,
                 MatchCondition.JSON_NON_EXTENSIBLE_OBJECT, MatchCondition.JSON_STRICT_ORDER_ARRAY));
     }
 
@@ -44,7 +44,7 @@ public class MatcherTests {
     public void testXmlMatcher() {
         String expected = "<a id=\"1\"> <lorem>ipsum</lorem> </a>";
         String actual = "<a id=\"2\"> <lorem>ipsum</lorem> </a>";
-        assertThrows(AssertionError.class, () -> ObjectMatcher.matchXml("Seems that objects do not match",
+        assertThrows(AssertionError.class, () -> ObjectMatcher.matchXml("Seems that XMLs do not match",
                 expected, actual, MatchCondition.XML_CHILD_NODELIST_LENGTH));
     }
 
@@ -55,5 +55,22 @@ public class MatcherTests {
         ObjectMatcher.matchString("Texts do not match", expected, actual); // assertion passes
         assertThrows(AssertionError.class, () -> ObjectMatcher.matchString("Texts do not match",
                 expected, actual, MatchCondition.DO_NOT_MATCH)); // assertion fails
+    }
+
+    @Test
+    public void testObjectMatcher() {
+        final String expected = "{\"a\":1}";
+        final String actual = "{\"a\":2}";
+        assertThrows(AssertionError.class, () ->
+                ObjectMatcher.match("Objects were converted to JSONs but they do not match", expected, actual));
+
+        final String expected1 = "<a>1</a>";
+        final String actual1 = "<a>2</a>";
+        assertThrows(AssertionError.class, () ->
+                ObjectMatcher.match("Objects were converted to XMLs but they do not match", expected1, actual1));
+
+        final String expected2 = "{a:1}";
+        final String actual2 = "{a:1}";
+        ObjectMatcher.match("Objects were matched as texts", expected2, actual2);
     }
 }

@@ -31,8 +31,8 @@ Gradle: compile("io.github.fslev:jtest-utils:${latest.version}")
 - Match JSONs
 - Match XMLs
 - Match texts 
-- Match HTTP responses
 - Match general objects
+- Match HTTP responses
 
 _... with specific matching conditions, regular expression, data capture and polling support_
 
@@ -67,7 +67,7 @@ String actual = "{\n" +
         "  \"nr1\": 62.750,\n" +
         "  \"nr2\": 60.750\n" +
         "}";
-ObjectMatcher.matchJson("Seems that objects do not match", expected, actual,
+ObjectMatcher.matchJson("Seems that JSONs do not match", expected, actual,
         MatchCondition.JSON_NON_EXTENSIBLE_OBJECT, MatchCondition.JSON_STRICT_ORDER_ARRAY); // assertion fails
 ==>
 
@@ -93,7 +93,7 @@ Field 'basis' was NOT FOUND
 _________________________DIFF__________________________
 Actual JSON OBJECT has extra fields
 
-Seems that objects do not match
+Seems that JSONs do not match
 JSONs do not match
 ```
 ## Match XMLs
@@ -103,11 +103,11 @@ Example:
 ```javascript
 String expected = "<a id=\"1\"> <lorem>ipsum</lorem> </a>";
 String actual = "<a id=\"2\"> <lorem>ipsum</lorem> </a>";
-ObjectMatcher.matchXml("Seems that objects do not match",
+ObjectMatcher.matchXml("Seems that XMLs do not match",
         expected, actual, MatchCondition.XML_CHILD_NODELIST_LENGTH); // assertion fails
 ==> 
 
-java.lang.AssertionError: Seems that objects do not match
+java.lang.AssertionError: Seems that XMLs do not match
 XMLs do not match
 
 Matching is by default done using regular expressions.
@@ -131,4 +131,25 @@ String expected = "lo.*sum \\Q(test)\\E";
 String actual = "lorem \n ipsum (test)";
 ObjectMatcher.matchString("Texts do not match", expected, actual); // assertion passes
 ObjectMatcher.matchString("Texts do match, actually", expected, actual, MatchCondition.DO_NOT_MATCH); // assertion fails
+```
+
+## Match any objects
+Match any two Objects using ObjectMatcher.match() and one of the matching mechanisms from above, in this order:  
+- if Objects can be converted to JSON, then match as JSONs
+  - if Objects are XML strings, then match as XMLs
+    - otherwise, match objects as texts
+
+Example:
+```javascript
+String expected = "{\"a\":1}";
+String actual = "{\"a\":2}";
+ObjectMatcher.match("Objects were converted to JSONs but they do not match", expected, actual); // assertion fails
+
+expected = "<a>1</a>";
+actual = "<a>2</a>";
+ObjectMatcher.match("Objects were converted to XMLs but they do not match", expected, actual); // assertion fails
+
+expected = "{a:1}";
+actual = "{a:1}";
+ObjectMatcher.match("Objects were matched as texts", expected, actual); // assertion passes
 ```
