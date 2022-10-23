@@ -168,3 +168,5 @@ expected = "{\"a\":i am not a json}";
 actual = "{\"a\":i am not a json}";
 ObjectMatcher.match("Objects were matched as texts", expected, actual); // assertion passes
 ```
+
+## Match HTTP responses
