@@ -151,7 +151,7 @@ Strings match!
 
 ## Match Objects
 
-Match any two Objects using `ObjectMatcher.match()` and one of the matching mechanisms from [above](#match), in this
+While matching any two Objects using `ObjectMatcher.match()`, one of the matching mechanisms from [above](#match), in this
 order:
 
 > if Objects can be converted to JSON, then match as JSONs
