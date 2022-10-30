@@ -44,7 +44,7 @@ _... with specific matching conditions, regular expression, data capture and pol
 
 Based on [json-compare](https://github.com/fslev/json-compare)
 
-Example:
+_Example:_
 
 ```javascript
 String expected = "{\n" +
@@ -107,7 +107,7 @@ JSONs do not match
 
 Based on [xmlunit](https://github.com/xmlunit/xmlunit)
 
-Example:
+_Example:_
 
 ```javascript
 String expected = "<a id=\"1\"> <lorem>ipsum</lorem> </a>";
@@ -153,7 +153,7 @@ order:
 >> else, if Objects are XML strings, then match as XMLs
 >>> else, match objects as texts
 
-Example:
+_Example:_
 
 ```javascript
 String expected = "{\"a\":1}";
@@ -171,7 +171,7 @@ ObjectMatcher.match("Objects were matched as texts", expected, actual); // asser
 
 ## Match HTTP responses
 If your test framework is querying REST services and checks the response data, then you might find this type of matching very useful.  
-Example:
+_Example:_
 ```javascript
 String expected = "{\"status\": 200, \"headers\":[{\"Content-Length\":\"157\"}], \"body\":{\"employee\":\"John Johnson\"}}";
 String actual = "{\"status\": 200, \"headers\":[{\"Content-Length\":\"157\"}], \"body\":{\"employee\":\"John Johnny\"}}";
