@@ -211,13 +211,13 @@ public static PlainHttpResponse from(String content) {
     }
 }
 ```
-The beautiful part while matching HTTP responses is the fact that depending on the type of the response body, one of the matching mechanisms from above will be automatically applied.  
+The beautiful part while comparing HTTP responses is the fact that depending on the type of the response body, one of the matching mechanisms from above will be automatically applied.  
 In other words, the HTTP response bodies / entities might be matched as [JSONs](#match-jsons), [XMLs](#match-xmls) or [texts](#match-texts).  
-HTTP statuses and reasons are matched as [texts](#match-texts) and HTTP headers as [JSONs](#match-jsons).  
+HTTP statuses and reasons are compared as [texts](#match-texts) and HTTP headers as [JSONs](#match-jsons).  
 
 ## Match with Polling support
 All the matching mechanisms from above support polling.  
-The most used case is when we need to match HTTP responses from a service which delivers the desired data asynchronously.  
+The most used case is when we need to compare HTTP responses from a service which delivers the desired data asynchronously.  
 In this case we need to retry the execution of client request until the actual response is matched.  
 ```javascript
 String expected = "{\"status\": 200, \"body\":{\"employee\":\"John Johnson\"}}";
@@ -229,7 +229,7 @@ ObjectMatcher.matchHttpResponse("Result not found", from(expected),
   
 
 ## Match and Capture
-Only matching objects is not enough in the real world of testing. Often, we need to parse the results that we've just matched, extract specific data and use it inside the next test step. Writing code for this repeatedly, can be cumbersome.  
+Only comparing objects is not enough in the real world of testing. Often, we need to parse the results that we've just matched, extract specific data and use it inside the next test step. Writing code for this repeatedly, can be cumbersome.  
 So, in case of successful matching, we can extract the data we need by using custom placeholders delimited by  
 `~[` and `]` inside the __expected__ object: 
   
