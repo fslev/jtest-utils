@@ -233,5 +233,6 @@ Integer result = new Polling<Integer>()
         .exponentialBackOff(1.0)
         .supplier(() -> generateRandomFromInterval(4, 7))
         .until(number -> number == 6).get();
+        
 assertEquals(6, result);
 ```
