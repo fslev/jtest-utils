@@ -217,3 +217,9 @@ HTTP statuses and reasons are matched as [texts](#match-texts) and HTTP headers 
   
   
 # <a name="polling"></a> Polling
+Retry an operation until desired result or timeout is reached:  
+```javascript
+Integer result = new Polling<Integer>().duration(Duration.ofSeconds(30), 5L)
+        .supplier(() -> generateRandomFromInterval(4, 7)).until(number -> number == 6).get();
+assertEquals(6, result);
+```
