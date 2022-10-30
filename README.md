@@ -144,7 +144,7 @@ ObjectMatcher.matchString("Texts do not match", expected, actual); // successful
 ObjectMatcher.matchString("Texts do match, actually", expected, actual, MatchCondition.DO_NOT_MATCH); // matching fails
 
 -->
-org.opentest4j.AssertionFailedError: Texts do match
+org.opentest4j.AssertionFailedError: Texts do match, actually
 
 Strings match!
 ```
