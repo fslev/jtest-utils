@@ -213,4 +213,4 @@ public static PlainHttpResponse from(String content) {
 }
 ```
 The beautiful part while matching HTTP responses is the fact that depending on the type of the response body, one of the matching mechanisms from above will be automatically applied.  
-In other words, the response bodies/entities might be matched as JSONs, XMLs or texts. 
+In other words, the response bodies / entities might be matched as JSONs, XMLs or texts. 
