@@ -4,6 +4,7 @@ import io.jtest.utils.matcher.ObjectMatcher;
 import io.jtest.utils.matcher.condition.MatchCondition;
 import org.junit.jupiter.api.Test;
 
+import static io.jtest.utils.PlainHttpResponseUtils.from;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class MatcherTests {
@@ -70,5 +71,12 @@ public class MatcherTests {
         expected = "{\"a\":i am not a json}";
         actual = "{\"a\":i am not a json}";
         ObjectMatcher.match("Objects were matched as texts", expected, actual); // assertion passes
+    }
+
+    @Test
+    public void testHttpResponseMatcher() {
+        String expected = "{\"status\": 200, \"headers\":[{\"Content-Length\":\"157\"}], \"body\":{\"employee\":\"John Johnson\"}}";
+        String actual = "{\"status\": 200, \"headers\":[{\"Content-Length\":\"157\"}], \"body\":{\"employee\":\"John Johnson\"}}";
+        ObjectMatcher.matchHttpResponse("Matching failure", from(expected), from(actual));
     }
 }

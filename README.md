@@ -171,3 +171,24 @@ ObjectMatcher.match("Objects were matched as texts", expected, actual); // asser
 
 ## Match HTTP responses
 If your test framework is querying REST services and checks the response data, then you might find this type of matching very useful.  
+Example:
+```javascript
+String expected = "{\"status\": 200, \"headers\":[{\"Content-Length\":\"157\"}], \"body\":{\"employee\":\"John Johnson\"}}";
+String actual = "{\"status\": 200, \"headers\":[{\"Content-Length\":\"157\"}], \"body\":{\"employee\":\"John Johnny\"}}";
+ObjectMatcher.matchHttpResponse("Matching failure", from(expected), from(actual)); // matching fails
+
+-->
+org.opentest4j.AssertionFailedError: FOUND 1 DIFFERENCE(S):
+
+
+_________________________DIFF__________________________
+employee -> 
+Expected value: "John Johnson" But got: "John Johnny"
+
+HTTP Response bodies do not match!
+Matching failed
+
+JSONs do not match
+```
+First off, this is a show purpose example, where the actual HTTP response is represented as text, converted to `io.jtest.utils.matcher.http.PlainHttpResponse` and passed to the ObjectMatcher.matchHttpResponse() method.  
+Normally, the actual object is a real HTTP response received from server and may have many implementations, depending on the HTTP client you are using. For this you have to build the `PlainHttpResponse` object yourself, using its builder: `PlainHttpResponse.Builder.create()`.  
