@@ -23,14 +23,13 @@ public class HttpResponseMatcherTests {
     public void matchInvalidHttpResponses() {
         String expected = "{\"status\": 200, \"headers\":{\"auth\":1}, \"reason\":\"test\",\"body\":{\"a\":\"~[val1] ipsum\"}}";
 
-        PlainHttpResponse actual = new PlainHttpResponse();
-        actual.setStatus(200);
         List<Map.Entry<String, String>> headers = new ArrayList<>();
         headers.add(new AbstractMap.SimpleEntry<>("auth", "1"));
         headers.add(new AbstractMap.SimpleEntry<>("x-auth", "2"));
-        actual.setHeaders(headers);
-        actual.setEntity("{\"a\":\"lorem ipsum\"}");
-        actual.setReasonPhrase("test");
+        PlainHttpResponse actual = PlainHttpResponse.Builder.create().status(200)
+                .headers(headers)
+                .entity("{\"a\":\"lorem ipsum\"}")
+                .reasonPhrase("test").build();
 
         assertTrue(assertThrows(PlainHttpResponse.ParseException.class, () ->
                 new HttpResponseMatcher(null, from(expected), actual, null).match())
@@ -41,14 +40,14 @@ public class HttpResponseMatcherTests {
     public void matchSimpleHttpResponses() throws InvalidTypeException {
         String expected = "{\"status\": 200, \"headers\":[{\"auth\":1},{\"x-auth\":2}], \"reason\":\"test\",\"body\":{\"a\":\"~[val1] ipsum\"}}";
 
-        PlainHttpResponse actual = new PlainHttpResponse();
-        actual.setStatus(200);
         List<Map.Entry<String, String>> headers = new ArrayList<>();
         headers.add(new AbstractMap.SimpleEntry<>("auth", "1"));
         headers.add(new AbstractMap.SimpleEntry<>("x-auth", "2"));
-        actual.setHeaders(headers);
-        actual.setEntity("{\"a\":\"lorem ipsum\"}");
-        actual.setReasonPhrase("test");
+
+        PlainHttpResponse actual = PlainHttpResponse.Builder.create().status(200)
+                .headers(headers)
+                .entity("{\"a\":\"lorem ipsum\"}")
+                .reasonPhrase("test").build();
 
         Map<String, Object> props = new HttpResponseMatcher(null, from(expected), actual, null).match();
         assertEquals(1, props.size());
@@ -61,8 +60,10 @@ public class HttpResponseMatcherTests {
 
         List<Map.Entry<String, String>> headers = new ArrayList<>();
         headers.add(new AbstractMap.SimpleEntry<>("auth", "2"));
-        PlainHttpResponse actual = new PlainHttpResponse(200, "test", "{\"a\":\"lorem ipsum\"}", headers);
-
+        PlainHttpResponse actual = PlainHttpResponse.Builder.create().status(200)
+                .reasonPhrase("test")
+                .entity("{\"a\":\"lorem ipsum\"}")
+                .headers(headers).build();
         assertThrows(AssertionError.class, () -> new HttpResponseMatcher(null, from(expected), actual, null).match());
     }
 
