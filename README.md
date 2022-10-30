@@ -221,7 +221,8 @@ The most used case is when we need to match HTTP responses from a service which 
 In this case we need to retry the execution of client request until the actual response is matched.  
 ```javascript
 String expected = "{\"status\": 200, \"body\":{\"employee\":\"John Johnson\"}}";
-ObjectMatcher.matchHttpResponse("Result not found", from(expected), () -> from(client.execute()),
+ObjectMatcher.matchHttpResponse("Result not found", from(expected),
+        () -> from(client.execute()),
         Duration.ofSeconds(30),1000L);
 ```
 
