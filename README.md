@@ -74,7 +74,7 @@ String actual = "{\n" +
         "  \"nr2\": 60.750\n" +
         "}";
 ObjectMatcher.matchJson("Seems that JSONs do not match", expected, actual,
-        MatchCondition.JSON_NON_EXTENSIBLE_OBJECT, MatchCondition.JSON_STRICT_ORDER_ARRAY); // assertion fails
+        MatchCondition.JSON_NON_EXTENSIBLE_OBJECT, MatchCondition.JSON_STRICT_ORDER_ARRAY); // matching fails
 ==>
 
 org.opentest4j.AssertionFailedError: FOUND 4 DIFFERENCE(S):
@@ -113,7 +113,7 @@ _Example:_
 String expected = "<a id=\"1\"> <lorem>ipsum</lorem> </a>";
 String actual = "<a id=\"2\"> <lorem>ipsum</lorem> </a>";
 ObjectMatcher.matchXml("Seems that XMLs do not match",
-        expected, actual, MatchCondition.XML_CHILD_NODELIST_LENGTH); // assertion fails
+        expected, actual, MatchCondition.XML_CHILD_NODELIST_LENGTH); // matching fails
 ==> 
 
 java.lang.AssertionError: Seems that XMLs do not match
@@ -140,8 +140,8 @@ Match texts with regex support:
 ```javascript
 String expected = "lo.*sum \\Q(test)\\E";
 String actual = "lorem \n ipsum (test)";
-ObjectMatcher.matchString("Texts do not match", expected, actual); // assertion passes
-ObjectMatcher.matchString("Texts do match, actually", expected, actual, MatchCondition.DO_NOT_MATCH); // assertion fails
+ObjectMatcher.matchString("Texts do not match", expected, actual); // successful matching
+ObjectMatcher.matchString("Texts do match, actually", expected, actual, MatchCondition.DO_NOT_MATCH); // matching fails
 ```
 
 ## Match Objects
@@ -158,15 +158,15 @@ _Example:_
 ```javascript
 String expected = "{\"a\":1}";
 String actual = "{\"a\":1}";
-ObjectMatcher.match("Objects were converted and matched as JSONs", expected, actual); // assertion passes
+ObjectMatcher.match("Objects were converted and matched as JSONs", expected, actual); // successful matching
 
 expected = "<a>1</a>";
 actual = "<a>1</a>";
-ObjectMatcher.match("Objects were converted and matched as XMLs", expected, actual); // assertion passes
+ObjectMatcher.match("Objects were converted and matched as XMLs", expected, actual); // successful matching
 
 expected = "{\"a\":i am not a json}";
 actual = "{\"a\":i am not a json}";
-ObjectMatcher.match("Objects were matched as texts", expected, actual); // assertion passes
+ObjectMatcher.match("Objects were matched as texts", expected, actual); // successful matching
 ```
 
 ## Match HTTP responses
