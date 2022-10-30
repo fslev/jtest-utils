@@ -252,7 +252,9 @@ String actual = "{\n" +
         "  \"speak\": -263355062.750,\n" +
         "  \"nr2\": 60.750\n" +
         "}";
+        
 Map<String, Object> capturedData = ObjectMatcher.matchJson(null, expected, actual);
+
 assertEquals("heard", capturedData.get("someValueForBeneath"));
 assertEquals("-263355062.750", capturedData.get("speakValue"));
 ```  
