@@ -223,7 +223,7 @@ In this case we need to retry the execution of client request until the actual r
 String expected = "{\"status\": 200, \"body\":{\"employee\":\"John Johnson\"}}";
 ObjectMatcher.matchHttpResponse("Result not found", from(expected),
         () -> from(client.execute()),
-        Duration.ofSeconds(30),1000L);
+        Duration.ofSeconds(30), 1000L);
 ```
 
 # <a name="polling"></a> Polling
