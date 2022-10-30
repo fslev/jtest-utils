@@ -214,8 +214,17 @@ public static PlainHttpResponse from(String content) {
 The beautiful part while matching HTTP responses is the fact that depending on the type of the response body, one of the matching mechanisms from above will be automatically applied.  
 In other words, the HTTP response bodies / entities might be matched as [JSONs](#match-jsons), [XMLs](#match-xmls) or [texts](#match-texts).  
 HTTP statuses and reasons are matched as [texts](#match-texts) and HTTP headers as [JSONs](#match-jsons).  
-  
-  
+
+## Match with Polling support
+All the matching mechanisms from above support polling.  
+The most used case is when we need to match HTTP responses from a service which delivers the desired data asynchronously.  
+In this case we need to retry the execution of client request until the actual response is matched.  
+```javascript
+String expected = "{\"status\": 200, \"body\":{\"employee\":\"John Johnson\"}}";
+ObjectMatcher.matchHttpResponse("Result not found", from(expected), ()->from(client.execute()),
+        Duration.ofSeconds(30),1000L);
+```
+
 # <a name="polling"></a> Polling
 Retry an operation until desired result or timeout is reached:  
 ```javascript
