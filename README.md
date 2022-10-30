@@ -202,6 +202,7 @@ The expected object is usually represented as text and can be simply converted t
 _Example:_
 ```javascript
 import io.jtest.utils.matcher.http.PlainHttpResponse;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public static PlainHttpResponse from(String content) {
     try {
