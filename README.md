@@ -142,6 +142,11 @@ String expected = "lo.*sum \\Q(test)\\E";
 String actual = "lorem \n ipsum (test)";
 ObjectMatcher.matchString("Texts do not match", expected, actual); // successful matching
 ObjectMatcher.matchString("Texts do match, actually", expected, actual, MatchCondition.DO_NOT_MATCH); // matching fails
+
+-->
+org.opentest4j.AssertionFailedError: Texts do match
+
+Strings match!
 ```
 
 ## Match Objects
