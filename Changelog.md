@@ -3,6 +3,7 @@
 ### 3.1-SNAPSHOT
 - #### Changed
   - reformat custom AssertionError message on matching
+  - update dependencies
 
 ### 3.0 (2022-10-16)
 - #### Removed
