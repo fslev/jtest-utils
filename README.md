@@ -151,8 +151,7 @@ Strings match!
 
 ## Match Objects
 
-While matching any two Objects using `ObjectMatcher.match()`, one of the matching mechanisms from [above](#match), in this
-order:
+While matching any two Objects using `ObjectMatcher.match()`, one of the matching mechanisms from [above](#match) will be applied in this order:  
 
 > if Objects can be converted to JSON, then match as JSONs
 >> else, if Objects are XML strings, then match as XMLs
