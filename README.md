@@ -225,7 +225,13 @@ ObjectMatcher.matchHttpResponse("Result not found", from(expected),
         () -> from(client.execute()),
         Duration.ofSeconds(30), 1000L);
 ```
+  
+  
 
+## Match and capture data
+
+  
+  
 # <a name="polling"></a> Polling
 Retry an operation until desired result or timeout is reached:  
 ```javascript
