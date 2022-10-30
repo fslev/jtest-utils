@@ -4,7 +4,10 @@ import io.jtest.utils.matcher.ObjectMatcher;
 import io.jtest.utils.matcher.condition.MatchCondition;
 import org.junit.jupiter.api.Test;
 
+import java.util.Map;
+
 import static io.jtest.utils.PlainHttpResponseUtils.from;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class MatcherTests {
@@ -39,6 +42,31 @@ public class MatcherTests {
                 "}";
         assertThrows(AssertionError.class, () -> ObjectMatcher.matchJson("Seems that JSONs do not match", expected, actual,
                 MatchCondition.JSON_NON_EXTENSIBLE_OBJECT, MatchCondition.JSON_STRICT_ORDER_ARRAY));
+    }
+
+    @Test
+    public void testJsonMatcherWithPlaceHolders() {
+        String expected = "{\n" +
+                "  \"copper\": [\n" +
+                "    {\n" +
+                "      \"beneath\": \"~[someValueForBeneath]\"\n" +
+                "    }\n" +
+                "  ],\n" +
+                "  \"speak\": \"~[speakValue]\"\n" +
+                "}";
+        String actual = "{\n" +
+                "  \"copper\": [\n" +
+                "    {\n" +
+                "      \"beneath\": \"heard\",\n" +
+                "      \"men\": -1365455482\n" +
+                "    }\n" +
+                "  ],\n" +
+                "  \"speak\": -263355062.750,\n" +
+                "  \"nr2\": 60.750\n" +
+                "}";
+        Map<String, Object> capturedData = ObjectMatcher.matchJson(null, expected, actual);
+        assertEquals("heard", capturedData.get("someValueForBeneath"));
+        assertEquals("-263355062.750", capturedData.get("speakValue"));
     }
 
     @Test

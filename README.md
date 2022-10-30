@@ -230,10 +230,30 @@ ObjectMatcher.matchHttpResponse("Result not found", from(expected),
 
 ## Match and capture data
 Only matching objects is not enough in the real world of testing. Often, we need to parse the results that we've just matched in order to extract specific data needed inside the next test step. Writing code for this repeatedly can be cumbersome.  
-In case of successful matching, we can extract the data we need by using custom placeholders delimited by `~[` and `]`.  
+So, in case of successful matching, we can extract the data we need by using custom placeholders delimited by `~[` and `]`.  
 __Example__:
 ```javascript
-
+String expected = "{\n" +
+        "  \"copper\": [\n" +
+        "    {\n" +
+        "      \"beneath\": \"~[someValueForBeneath]\"\n" +
+        "    }\n" +
+        "  ],\n" +
+        "  \"speak\": \"~[speakValue]\"\n" +
+        "}";
+String actual = "{\n" +
+        "  \"copper\": [\n" +
+        "    {\n" +
+        "      \"beneath\": \"heard\",\n" +
+        "      \"men\": -1365455482\n" +
+        "    }\n" +
+        "  ],\n" +
+        "  \"speak\": -263355062.750,\n" +
+        "  \"nr2\": 60.750\n" +
+        "}";
+Map<String, Object> capturedData = ObjectMatcher.matchJson(null, expected, actual);
+assertEquals("heard", capturedData.get("someValueForBeneath"));
+assertEquals("-263355062.750", capturedData.get("speakValue"));
 ```  
   
 # <a name="polling"></a> Polling
