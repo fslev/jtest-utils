@@ -195,7 +195,7 @@ Matching failed
 
 JSONs do not match
 ```
-First off, this is a show purpose example, where the actual HTTP response is represented as text, converted to `io.jtest.utils.matcher.http.PlainHttpResponse` and passed to the ObjectMatcher.matchHttpResponse() method.  
+First off, this is a show purpose example, where the actual HTTP response is represented as text, converted to `io.jtest.utils.matcher.http.PlainHttpResponse` and passed to the _ObjectMatcher.matchHttpResponse()_ method.  
 Normally, the actual object is a real HTTP response received from server and may have many implementations, depending on the HTTP client you are using. For this, you have to build the `PlainHttpResponse` object yourself, using its builder: `PlainHttpResponse.Builder.create()`.  
 The expected object is usually represented as text and can be simply converted to `io.jtest.utils.matcher.http.PlainHttpResponse` by using any deserialization library:  
   
