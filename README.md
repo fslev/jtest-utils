@@ -232,6 +232,7 @@ ObjectMatcher.matchHttpResponse("Result not found", from(expected),
 Only matching objects is not enough in the real world of testing. Often, we need to parse the results that we've just matched in order to extract specific data needed inside the next test step. Writing code for this repeatedly can be cumbersome.  
 So, in case of successful matching, we can extract the data we need by using custom placeholders delimited by  
 `~[` and `]`  
+  
 __Example__:
 ```javascript
 String expected = "{\n" +
