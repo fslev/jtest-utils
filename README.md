@@ -258,6 +258,7 @@ Map<String, Object> capturedData = ObjectMatcher.matchJson(null, expected, actua
 assertEquals("heard", capturedData.get("someValueForBeneath"));
 assertEquals("-263355062.750", capturedData.get("speakValue"));
 ```  
+This feature can be used with any flavour of matching.    
   
 # <a name="polling"></a> Polling
 Retry an operation until desired result or timeout is reached:  
