@@ -229,8 +229,7 @@ ObjectMatcher.matchHttpResponse("Result not found", from(expected),
   
 
 ## Match and capture data
-Only matching objects is not enough in the real world of testing. Often, we need to parse the results that we've just matched in order to extract specific data needed inside the next test step.   
-Repeatedly writing code in order to extract data can be cumbersome.
+Only matching objects is not enough in the real world of testing. Often, we need to parse the results that we've just matched in order to extract specific data needed inside the next test step. Repeatedly writing code for this can be cumbersome.
   
   
 # <a name="polling"></a> Polling
