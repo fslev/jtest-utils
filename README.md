@@ -215,4 +215,5 @@ The beautiful part while matching HTTP responses is the fact that depending on t
 In other words, the HTTP response bodies / entities might be matched as [JSONs](#match-jsons), [XMLs](#match-xmls) or [texts](#match-texts).  
 HTTP statuses and reasons are matched as [texts](#match-texts) and HTTP headers as [JSONs](#match-jsons).  
   
+  
 # <a name="polling"></a> Polling
