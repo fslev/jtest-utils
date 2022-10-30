@@ -40,7 +40,7 @@ Gradle: compile("io.github.fslev:jtest-utils:${latest.version}")
 
 _... with specific matching conditions, regular expression, data capture and polling support_
 
-## Match JSONs
+## <a name="match-jsons"></a> Match JSONs
 
 Based on [json-compare](https://github.com/fslev/json-compare)
 
@@ -103,7 +103,7 @@ Seems that JSONs do not match
 JSONs do not match
 ```
 
-## Match XMLs
+## <a name="match-xmls"></a> Match XMLs
 
 Based on [xmlunit](https://github.com/xmlunit/xmlunit)
 
@@ -133,7 +133,7 @@ Expected: Expected attribute name '/a[1]/@id' - comparing <a...> at /a[1]/@id to
 </a>
 ```
 
-## Match texts
+## <a name="match-texts"></a> Match texts
 
 Match texts with regex support:
 
@@ -212,4 +212,5 @@ public static PlainHttpResponse from(String content) {
 }
 ```
 The beautiful part while matching HTTP responses is the fact that depending on the type of the response body, one of the matching mechanisms from above will be automatically applied.  
-In other words, the response bodies / entities might be matched as JSONs, XMLs or texts. 
+In other words, the response bodies / entities might be matched as [JSONs](#match-jsons), [XMLs](#match-xmls) or [texts](#match-texts).  
+Statuses and reasons are matched as [texts](#match-texts) and headers as [JSONs](#match-jsons)
