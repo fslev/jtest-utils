@@ -16,8 +16,8 @@ by adding some powerful features:
 - **[SpEL parser](#spel-parser)**
 - **[Resource reader](#resource)**
   
-  _...and others_
-- **[Real world examples](#real-world)**
+  _...and others_  
+**[Real world examples](#real-world)**
 
 #### Maven Central
 
