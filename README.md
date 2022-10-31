@@ -282,7 +282,7 @@ System.out.println(SpELParser.parse(text));
 // prints:
 Current time is: Mon Oct 31 14:50:00 EET 2022
 ```
-This feature can be used together with matching. _For example:_  
+This feature can be used together with matching, _for example:_  
 ```javascript
 String expected = SpELParser.parse("{\"name\": \"#{'David Jones'.toLowerCase()}\"}").toString();
 String actual = "{\"name\": \"david jones\"}";
