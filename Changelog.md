@@ -1,6 +1,9 @@
 # Changelog
 
 ### 3.1-SNAPSHOT
+- #### Changed
+  - reformat the custom AssertionError message from a failed object matching  
+  - update dependencies
 
 ### 3.0 (2022-10-16)
 - #### Removed

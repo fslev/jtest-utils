@@ -2,6 +2,7 @@ package io.jtest.utils.matcher.http;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -18,7 +19,7 @@ public class PlainHttpResponse {
     public PlainHttpResponse() {
     }
 
-    public PlainHttpResponse(Object status, String reasonPhrase, Object entity, List<Map.Entry<String, String>> headers) {
+    private PlainHttpResponse(Object status, String reasonPhrase, Object entity, List<Map.Entry<String, String>> headers) {
         this.status = status;
         this.reasonPhrase = reasonPhrase;
         this.entity = entity;
@@ -29,32 +30,16 @@ public class PlainHttpResponse {
         return status;
     }
 
-    public void setStatus(Object status) {
-        this.status = status;
-    }
-
     public Object getEntity() {
         return entity;
-    }
-
-    public void setEntity(Object entity) {
-        this.entity = entity;
     }
 
     public String getReasonPhrase() {
         return reasonPhrase;
     }
 
-    public void setReasonPhrase(String reasonPhrase) {
-        this.reasonPhrase = reasonPhrase;
-    }
-
     public List<Map.Entry<String, String>> getHeaders() {
         return headers;
-    }
-
-    public void setHeaders(List<Map.Entry<String, String>> headers) {
-        this.headers = headers;
     }
 
     @Override
@@ -65,6 +50,44 @@ public class PlainHttpResponse {
                 (entity != null ? ", body='" + entity + '\'' : "") +
                 (headers != null ? ", headers=" + headers : "") +
                 '}';
+    }
+
+    public static class Builder {
+        private Object status;
+        private String reasonPhrase;
+        private Object entity;
+        private List<Map.Entry<String, String>> headers;
+
+        private Builder() {
+        }
+
+        public static Builder create() {
+            return new Builder();
+        }
+
+        public Builder status(Object status) {
+            this.status = status;
+            return this;
+        }
+
+        public Builder reasonPhrase(String reasonPhrase) {
+            this.reasonPhrase = reasonPhrase;
+            return this;
+        }
+
+        public Builder entity(Object entity) {
+            this.entity = entity;
+            return this;
+        }
+
+        public Builder headers(List<Map.Entry<String, String>> headers) {
+            this.headers = Collections.unmodifiableList(headers);
+            return this;
+        }
+
+        public PlainHttpResponse build() {
+            return new PlainHttpResponse(status, reasonPhrase, entity, headers);
+        }
     }
 
     public static class ParseException extends RuntimeException {

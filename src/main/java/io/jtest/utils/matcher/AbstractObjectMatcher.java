@@ -23,7 +23,7 @@ abstract class AbstractObjectMatcher<T> {
         this.expected = convert(expected);
         this.actual = convert(actual);
         this.matchConditions = matchConditions != null ? matchConditions : new HashSet<>();
-        this.message = message != null ? message : "";
+        this.message = message != null ? message + System.lineSeparator() : "";
         this.negativeMatchMessage = message == null ? negativeMatchMessage() : message + System.lineSeparator() + negativeMatchMessage();
     }
 
