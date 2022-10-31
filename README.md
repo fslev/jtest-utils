@@ -174,7 +174,7 @@ ObjectMatcher.match("Objects were matched as texts", expected, actual); // succe
 ```
 
 ## Match HTTP responses
-If your test framework is querying REST services and checks the response data, then you might find this type of matching very useful.  
+If your test framework is querying REST services and makes assertions on the response data, then you might find this type of matching very useful.  
 _Example:_
 ```javascript
 String expected = "{\"status\": 200, \"headers\":[{\"Content-Length\":\"157\"}], \"body\":{\"employee\":\"John Johnson\"}}";
