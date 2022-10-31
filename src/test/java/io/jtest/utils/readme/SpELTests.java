@@ -18,6 +18,6 @@ public class SpELTests {
     public void parseSpELAndMatch() {
         String expected = SpELParser.parse("{\"name\": \"#{'David Jones'.toLowerCase()}\"}").toString();
         String actual = "{\"name\": \"david jones\"}";
-        ObjectMatcher.match(null, expected, actual);
+        ObjectMatcher.match(null, expected, actual);  // successful matching
     }
 }

@@ -286,5 +286,5 @@ This feature can be used together with matching, _for example:_
 ```javascript
 String expected = SpELParser.parse("{\"name\": \"#{'David Jones'.toLowerCase()}\"}").toString();
 String actual = "{\"name\": \"david jones\"}";
-ObjectMatcher.match(null, expected, actual);
+ObjectMatcher.match(null, expected, actual); // successful matching
 ```
