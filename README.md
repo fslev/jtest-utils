@@ -306,4 +306,4 @@ assertEquals("{\"elephants\" : 1}", data.get("features/data/zoo/animals.json"));
 ```
 
 # <a name="real-world"></a> Real world examples
-Explore [cucumber-jutils-tutorial](https://github.com/fslev/cucumber-jutils-tutorial) to discover how most of the features are used.  
+Explore [cucumber-jutils-tutorial](https://github.com/fslev/cucumber-jutils-tutorial) to discover how most of the features are used in real life scenarios.  
