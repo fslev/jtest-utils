@@ -1,6 +1,8 @@
 # Changelog
 
-### 3.1-SNAPSHOT
+### 3.2-SNAPSHOT
+
+### 3.1
 - #### Changed
   - reformat the custom AssertionError message from a failed object matching  
   - update dependencies
