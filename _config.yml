@@ -6,7 +6,7 @@ plugins:
 
 title: "JTest Utils"
 tagline: "A set of testing utilities for Java"
-description: "Match JSON, XML and simple texts using matching conditions, regex and polling support, parse text for SpEL expressions, recursively read files from directories. Other utility classes included"
+description: "Match JSON, XML and simple texts using matching conditions, regex and polling support. Parse text for SpEL expressions, recursively read files from directories and so on..."
 author: "Florin Slevoaca"
 url: "https://fslev.github.io/jtest-utils"
 permalink: pretty
