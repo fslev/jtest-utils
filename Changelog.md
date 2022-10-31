@@ -1,6 +1,6 @@
 # Changelog
 
-### 3.2-SNAPSHOT
+## 3.2-SNAPSHOT
 
 ## 3.1 (2022-10-31)
 - #### Changed
