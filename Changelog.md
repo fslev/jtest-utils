@@ -2,12 +2,12 @@
 
 ### 3.2-SNAPSHOT
 
-### 3.1 (2022-10-31)
+## 3.1 (2022-10-31)
 - #### Changed
   - reformat the custom AssertionError message from a failed object matching  
   - update dependencies
 
-### 3.0 (2022-10-16)
+## 3.0 (2022-10-16)
 - #### Removed
   - Unnecessary loggers were removed  
   - HTTP, SQL, JSCH And Shell client support was entirely removed. Test frameworks should define their own clients  
@@ -15,11 +15,11 @@
 - #### Changed
   - Update dependencies 
 
-### 2.9 (2022-10-05)
+## 2.9 (2022-10-05)
 - #### Changed
   - Update dependencies
 
-### 2.8 (2022-10-04)
+## 2.8 (2022-10-04)
 - #### Changed
   - Reformat Assertion error message
   - Update dependencies
