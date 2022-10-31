@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class ResourceReadTests {
 
     @Test
-    public void testReadFromInvalidFilePath() throws IOException {
+    public void testReadFromInvalidFilePath() {
         assertTrue(assertThrows(IOException.class, () -> ResourceUtils.read("i/dont/exist"))
                 .getMessage().contains("not found"));
     }
