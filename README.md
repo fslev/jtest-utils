@@ -41,7 +41,7 @@ Gradle: compile("io.github.fslev:jtest-utils:${latest.version}")
 
 _... with specific matching conditions, regular expression, data capture and polling support_
 
-## <a name="match-jsons"></a> Match JSONs
+## <a name="match-jsons"></a> 1.1 Match JSONs
 
 Based on [json-compare](https://github.com/fslev/json-compare)
 
@@ -104,7 +104,7 @@ Seems that JSONs do not match
 JSONs do not match
 ```
 
-## <a name="match-xmls"></a> Match XMLs
+## <a name="match-xmls"></a> 1.2 Match XMLs
 
 Based on [xmlunit](https://github.com/xmlunit/xmlunit)
 
@@ -134,7 +134,7 @@ Expected: Expected attribute name '/a[1]/@id' - comparing <a...> at /a[1]/@id to
 </a>
 ```
 
-## <a name="match-texts"></a> Match texts
+## <a name="match-texts"></a> 1.3 Match texts
 
 Match texts with regex support:
 
@@ -150,7 +150,7 @@ org.opentest4j.AssertionFailedError: Texts do match, actually
 Strings match!
 ```
 
-## Match Objects
+## 1.4 Match Objects
 
 While matching any two Objects using `ObjectMatcher.match()`, one of the matching mechanisms from [above](#match) will be applied in this order:  
 
@@ -174,7 +174,7 @@ actual = "{\"a\":i am not a json}";
 ObjectMatcher.match("Objects were matched as texts", expected, actual); // successful matching
 ```
 
-## Match HTTP responses
+## 1.5 Match HTTP responses
 If your test framework is querying REST services and makes assertions on the response data, then you might find this type of matching very useful.  
 _Example:_
 ```javascript
@@ -216,7 +216,7 @@ The beautiful part while comparing HTTP responses is the fact that depending on 
 In other words, the HTTP response bodies / entities might be matched as [JSONs](#match-jsons), [XMLs](#match-xmls) or [texts](#match-texts).  
 HTTP statuses and reasons are compared as [texts](#match-texts) while HTTP headers as [JSONs](#match-jsons).  
 
-## Match with Polling support
+## 1.6 Match with Polling support
 All the matching mechanisms from above support polling.  
 The most used case is when we need to compare HTTP responses from a service which delivers the desired data asynchronously.  
 In this case we need to retry the execution of client request until the actual response is matched.  
@@ -229,7 +229,7 @@ ObjectMatcher.matchHttpResponse("Result not found", from(expected),
   
   
 
-## Match and Capture
+## 1.7 Match and Capture
 Only comparing objects is not enough in the real world of testing. Often, we need to parse the results that we've just matched, extract specific data and use it inside the next test step. Writing code for this, repeatedly, can be cumbersome.  
 So, in case of successful matching, we can extract the data we need by using custom placeholders delimited by  
 `~[` and `]` inside the __expected__ object: 
@@ -261,7 +261,7 @@ assertEquals("-263355062.750", capturedData.get("speakValue"));
 ```  
 This feature is available for any flavour of object matching.    
   
-# <a name="polling"></a> Polling
+# <a name="polling"></a> 2. Polling
 Retry an operation until desired result or timeout is reached:  
 ```javascript
 Integer result = new Polling<Integer>()
@@ -273,7 +273,7 @@ Integer result = new Polling<Integer>()
 assertEquals(6, result);
 ```
 
-# <a name="spel-parser"></a> SpEL parser
+# <a name="spel-parser"></a> 3. SpEL parser
 Parse texts for [SpEL](https://docs.spring.io/spring-framework/docs/3.2.x/spring-framework-reference/html/expressions.html) expressions delimited by `#{` and `}`.  
 ```javascript
 String text = "Current time is: #{new java.util.Date()}";
@@ -289,7 +289,7 @@ String actual = "{\"name\": \"david jones\"}";
 ObjectMatcher.match(null, expected, actual); // successful matching
 ```
 
-# <a name="resource-reader"></a> Resource reader
+# <a name="resource-reader"></a> 4. Resource reader
 
 Read resource as String from either classpath or absolute path:
 ```javascript
@@ -305,5 +305,5 @@ assertEquals("<html>text</html>", data.get("features/data/bar.html"));
 assertEquals("{\"elephants\" : 1}", data.get("features/data/zoo/animals.json"));
 ```
 
-# <a name="real-world"></a> Real world examples
+# <a name="real-world"></a> 5. Real world examples
 Explore [cucumber-jutils-tutorial](https://github.com/fslev/cucumber-jutils-tutorial) to discover how most of the features are used in real life test scenarios.  
