@@ -274,7 +274,7 @@ assertEquals(6, result);
 ```
 
 # <a name="spel-parser"></a> 3. SpEL parser
-Parse texts for [SpEL](https://docs.spring.io/spring-framework/docs/3.2.x/spring-framework-reference/html/expressions.html) expressions delimited by `#{` and `}`.  
+Parse text for [SpEL](https://docs.spring.io/spring-framework/docs/3.2.x/spring-framework-reference/html/expressions.html) expressions delimited by `#{` and `}`.  
 ```javascript
 String text = "Current time is: #{new java.util.Date()}";
 System.out.println(SpELParser.parse(text));
