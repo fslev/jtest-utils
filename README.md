@@ -296,7 +296,7 @@ Read resource as String from either classpath or absolute paths:
 ResourceUtils.read("features/file.txt") // relative to classpath
 ResourceUtils.read("/opt/project/hello/src/test/resources/features/file.txt") // absolute path
 ```
-Recursively read all files from a directory: 
+Recursively read all files from a directory, using extension filter: 
 ```javascript
 Map<String, String> data = ResourceUtils.readDirectory("features/data", ".properties", ".txt", ".html", ".json");
 
