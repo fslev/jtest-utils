@@ -190,7 +190,7 @@ employee ->
 Expected value: "John Johnson" But got: "John Johnny"
 
 HTTP Response bodies do not match!
-Matching failed
+Matching failure
 
 JSONs do not match
 ```
