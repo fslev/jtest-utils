@@ -282,3 +282,9 @@ System.out.println(SpELParser.parse(text));
 // prints:
 Current time is: Mon Oct 31 14:50:00 EET 2022
 ```
+This feature can be used together with matching. For example:  
+```javascript
+String expected = SpELParser.parse("{\"name\": \"#{'David Jones'.toLowerCase()}\"}").toString();
+String actual = "{\"name\": \"david jones\"}";
+ObjectMatcher.match(null, expected, actual);
+```
