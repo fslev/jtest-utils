@@ -31,7 +31,7 @@ by adding some powerful features:
 Gradle: compile("io.github.fslev:jtest-utils:${latest.version}")
 ```  
 
-# <a name="match"></a> Matching
+# <a name="match"></a> 1. Matching
 
 - Match JSONs
 - Match XMLs
