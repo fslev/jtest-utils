@@ -298,9 +298,9 @@ ResourceUtils.read("/opt/project/hello/src/test/resources/features/file.txt") //
 ```
 Recursively read all files from a directory: 
 ```javascript
-Map<String, String> actualData = ResourceUtils.readDirectory("features/data");
+Map<String, String> data = ResourceUtils.readDirectory("features/data");
 
-assertEquals("lorem content", actualData.get("features/data/foo.txt"));
-assertEquals("<html>text</html>", actualData.get("features/data/bar.html"));
-assertEquals("{\"elephants\" : 1}", actualData.get("features/data/zoo/animals.json"));
+assertEquals("lorem content", data.get("features/data/foo.txt"));
+assertEquals("<html>text</html>", data.get("features/data/bar.html"));
+assertEquals("{\"elephants\" : 1}", data.get("features/data/zoo/animals.json"));
 ```
