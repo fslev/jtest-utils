@@ -296,3 +296,10 @@ Read resource as String from either classpath or absolute paths:
 ResourceUtils.read("features/file.txt") // relative to classpath
 ResourceUtils.read("/opt/project/hello/src/test/resources/features/file.txt") // absolute path
 ```
+Recursively read all files from a directory: 
+```javascript
+Map<String, String> actualData = ResourceUtils.readDirectory("features/data");
+assertEquals("lorem content", actualData.get("features/data/foo.txt"));
+assertEquals("<html>text</html>", actualData.get("features/data/bar.html"));
+assertEquals("{\"elephants\" : 1}", actualData.get("features/data/zoo/animals.json"));
+```
