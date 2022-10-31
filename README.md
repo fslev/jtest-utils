@@ -14,7 +14,7 @@ by adding some powerful features:
 - **[Matching](#match)**
 - **[Polling](#polling)**
 - **[SpEL parser](#spel-parser)**
-- **[Resource reader](#resource)**
+- **[Resource reader](#resource-reader)**
 - _...and others_  
 
 **[Real world examples](#real-world)**
@@ -287,4 +287,12 @@ This feature can be used together with matching, _for example:_
 String expected = SpELParser.parse("{\"name\": \"#{'David Jones'.toLowerCase()}\"}").toString();
 String actual = "{\"name\": \"david jones\"}";
 ObjectMatcher.match(null, expected, actual); // successful matching
+```
+
+# <a name="resource-reader"></a> Resource reader
+
+Read resources as String from either classpath or absolute paths:
+```javascript
+ResourceUtils.read("features/file.txt") // relative to classpath
+ResourceUtils.read("/opt/project/hello/src/test/resources/features/file.txt") // absolute path
 ```
