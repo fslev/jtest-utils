@@ -291,7 +291,7 @@ ObjectMatcher.match(null, expected, actual); // successful matching
 
 # <a name="resource-reader"></a> Resource reader
 
-Read resource as String from either classpath or absolute paths:
+Read resource as String from either classpath or absolute path:
 ```javascript
 ResourceUtils.read("features/file.txt") // relative to classpath
 ResourceUtils.read("/opt/project/hello/src/test/resources/features/file.txt") // absolute path
