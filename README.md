@@ -13,10 +13,10 @@ by adding some powerful features:
 
 - **[Matching](#match)**
 - **[Polling](#polling)**
-- **[SpEL parser](#spel)**
+- **[SpEL parser](#spel-parser)**
 - **[Resource reader](#resource)**
-
 _...and others_
+- **[Real world examples](#real-world)**
 
 #### Maven Central
 
@@ -270,4 +270,10 @@ Integer result = new Polling<Integer>()
         .until(number -> number == 6).get();
         
 assertEquals(6, result);
+```
+
+# <a name="spel-parser"></a> SpEL parser
+Parse texts for [SpEL](https://docs.spring.io/spring-framework/docs/3.2.x/spring-framework-reference/html/expressions.html) expressions delimited by `#{` and `}`.  
+```javascript
+
 ```
