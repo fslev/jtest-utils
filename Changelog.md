@@ -1,7 +1,12 @@
 # Changelog
 
-## 3.2-SNAPSHOT
+## 3.3-SNAPSHOT
 
+## 3.2 (2022-11-11)
+- #### Changed
+  - performance: make SpelExpressionParser static
+  - update Jackson dependencies
+  
 ## 3.1 (2022-10-31)
 - #### Changed
   - reformat the custom AssertionError message from a failed object matching  
