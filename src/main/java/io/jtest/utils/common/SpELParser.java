@@ -7,10 +7,9 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 public class SpELParser {
-
+    private static final SpelExpressionParser SPEL_EXPRESSION_PARSER = new SpelExpressionParser();
     public static final String PREFIX = "#{";
     public static final String SUFFIX = "}";
-
     private static final Pattern captureGroupPattern = Pattern.compile("(?<!\\\\)" + Pattern.quote(PREFIX) + "(.*?)"
             + "(?<!\\\\)" + Pattern.quote(SUFFIX), Pattern.CASE_INSENSITIVE | Pattern.DOTALL | Pattern.MULTILINE);
 
@@ -25,7 +24,7 @@ public class SpELParser {
 
     public static Object parseExpression(String expression) {
         try {
-            Expression exp = new SpelExpressionParser().parseExpression(expression);
+            Expression exp = SPEL_EXPRESSION_PARSER.parseExpression(expression);
             return exp.getValue(Object.class);
         } catch (Exception e) {
             return expression;
@@ -38,7 +37,7 @@ public class SpELParser {
 
     public static Boolean isExpressionValid(String expression) {
         try {
-            new SpelExpressionParser().parseExpression(expression).getValue(Object.class);
+            SPEL_EXPRESSION_PARSER.parseExpression(expression).getValue(Object.class);
             return true;
         } catch (Exception e) {
             return false;
