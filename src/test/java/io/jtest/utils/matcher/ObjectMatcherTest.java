@@ -275,4 +275,15 @@ public class ObjectMatcherTest {
         assertThrows(AssertionError.class, () ->
                 ObjectMatcher.matchHttpResponse(null, from(expected), () -> from(actual), Duration.ofSeconds(1), 100L, 1.0));
     }
+
+    @Test
+    public void matchCaseSensitiveTexts() {
+        String expected = "Lorem Ipsum";
+        String actual = "Lorem Ipsum";
+        ObjectMatcher.match("Texts are not matching", expected, actual);
+        String expected1 = "lorem ipsum";
+        assertThrows(AssertionError.class, () -> ObjectMatcher.match("Texts are not matching", expected1, actual));
+        String expected2 = "(?i)Lorem I(?-i)psum";
+        ObjectMatcher.match("Texts are not matching", expected2, actual);
+    }
 }

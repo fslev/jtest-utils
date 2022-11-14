@@ -1,6 +1,11 @@
 # Changelog
 
-## 3.3-SNAPSHOT
+## 4.1-SNAPSHOT
+
+## 4.0 (2022-11-14)
+- #### Changed
+  - Matched Objects are now case-sensitive  
+  - Update to next json-compare major version release  
 
 ## 3.2 (2022-11-11)
 - #### Changed

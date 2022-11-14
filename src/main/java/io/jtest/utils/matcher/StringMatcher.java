@@ -22,7 +22,7 @@ public class StringMatcher extends AbstractObjectMatcher<Object> {
     public static final String CAPTURE_PLACEHOLDER_PREFIX = "~[";
     public static final String CAPTURE_PLACEHOLDER_SUFFIX = "]";
     private static final Pattern captureGroupPattern = Pattern.compile(Pattern.quote(CAPTURE_PLACEHOLDER_PREFIX) + "(.*?)" + Pattern.quote(CAPTURE_PLACEHOLDER_SUFFIX),
-            Pattern.CASE_INSENSITIVE | Pattern.DOTALL | Pattern.MULTILINE);
+            Pattern.DOTALL | Pattern.MULTILINE);
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
     public StringMatcher(String message, Object expected, Object actual, Set<MatchCondition> matchConditions) throws InvalidTypeException {
@@ -88,7 +88,7 @@ public class StringMatcher extends AbstractObjectMatcher<Object> {
 
         } else {
             try {
-                Pattern pattern = Pattern.compile(expectedString, Pattern.CASE_INSENSITIVE | Pattern.DOTALL | Pattern.MULTILINE);
+                Pattern pattern = Pattern.compile(expectedString, Pattern.DOTALL | Pattern.MULTILINE);
                 if (!pattern.matcher(actualString).matches()) {
                     AssertionFailureBuilder.assertionFailure().message(message).expected(expected).actual(actual).buildAndThrow();
                 }
@@ -128,6 +128,6 @@ public class StringMatcher extends AbstractObjectMatcher<Object> {
         for (String key : placeholderNames) {
             s = s.replace(CAPTURE_PLACEHOLDER_PREFIX + key + CAPTURE_PLACEHOLDER_SUFFIX, regex ? "(.*)" : "\\E(.*)\\Q");
         }
-        return Pattern.compile(regex ? s : "\\Q" + s + "\\E", Pattern.CASE_INSENSITIVE | Pattern.DOTALL | Pattern.MULTILINE);
+        return Pattern.compile(regex ? s : "\\Q" + s + "\\E", Pattern.DOTALL | Pattern.MULTILINE);
     }
 }

@@ -11,7 +11,7 @@ public class SpELParser {
     public static final String PREFIX = "#{";
     public static final String SUFFIX = "}";
     private static final Pattern captureGroupPattern = Pattern.compile("(?<!\\\\)" + Pattern.quote(PREFIX) + "(.*?)"
-            + "(?<!\\\\)" + Pattern.quote(SUFFIX), Pattern.CASE_INSENSITIVE | Pattern.DOTALL | Pattern.MULTILINE);
+            + "(?<!\\\\)" + Pattern.quote(SUFFIX), Pattern.DOTALL | Pattern.MULTILINE);
 
     public static Object parse(String source) {
         List<String> expressions = extractExpressions(source);
