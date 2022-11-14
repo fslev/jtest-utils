@@ -5,7 +5,7 @@
 ## 4.0 (2022-11-14)
 - #### Changed
   - Matched Objects are now case-sensitive  
-  - Update to next json-compare major version release  
+  - Update json-compare to next major version release  
 
 ## 3.2 (2022-11-11)
 - #### Changed
