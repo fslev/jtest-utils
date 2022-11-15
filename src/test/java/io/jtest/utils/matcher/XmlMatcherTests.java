@@ -83,8 +83,9 @@ public class XmlMatcherTests {
             new XmlMatcher(null, expected, actual, new HashSet<>(Arrays.asList(MatchCondition.DO_NOT_MATCH))).match();
         } catch (AssertionError e) {
             assertEquals("\nXMLs match!\n" +
-                    "Matching is by default done using regular expressions.\n" +
-                    "If expected object contains any unintentional regexes, then quote them between \\Q and \\E delimiters.\n\n", e.getMessage());
+                    "Matching is by default case-sensitive and uses regular expressions.\n" +
+                    "If expected object contains any unintentional regexes, then quote them between \\Q and \\E delimiters.\n" +
+                    "For disabling case-sensitivity, use (?i) and (?-i) modifiers.\n\n", e.getMessage());
             return;
         }
         fail("Negative test failed");
@@ -102,8 +103,9 @@ public class XmlMatcherTests {
             assertEquals("Should not match\n" +
                     "\n" +
                     "XMLs match!\n" +
-                    "Matching is by default done using regular expressions.\n" +
-                    "If expected object contains any unintentional regexes, then quote them between \\Q and \\E delimiters.\n\n", e.getMessage());
+                    "Matching is by default case-sensitive and uses regular expressions.\n" +
+                    "If expected object contains any unintentional regexes, then quote them between \\Q and \\E delimiters.\n" +
+                    "For disabling case-sensitivity, use (?i) and (?-i) modifiers.\n\n", e.getMessage());
             return;
         }
         fail("Negative test failed");

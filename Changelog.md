@@ -1,6 +1,11 @@
 # Changelog
 
-## 4.1-SNAPSHOT
+## 4.2-SNAPSHOT
+
+## 4.1 (2022-11-15)
+- #### Changed
+  - Update json-compare
+  - Describe the default case-sensitive matching behaviour inside the AssertionError Hint message
 
 ## 4.0 (2022-11-14)
 - #### Changed

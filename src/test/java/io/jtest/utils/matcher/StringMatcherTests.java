@@ -238,8 +238,9 @@ public class StringMatcherTests {
         try {
             new StringMatcher(null, expected, actual, null).match();
         } catch (AssertionError | InvalidTypeException e) {
-            assertTrue(e.getMessage().matches("(?s)Strings do not match\n\nMatching is by default done using regular expressions.\n" +
+            assertTrue(e.getMessage().matches("(?s)Strings do not match\n\nMatching is by default case-sensitive and uses regular expressions.\n" +
                     "If expected object contains any unintentional regexes, then quote them between \\\\Q and \\\\E delimiters.\n" +
+                    "For disabling case-sensitivity, use \\Q(?i)\\E and \\Q(?-i)\\E modifiers.\n" +
                     ".*expected.*\\Q<.* is regex ~[regex] [0-9]*>\\E.*\\Q<This is regex a|b|c|d [0-9]*>\\E.*"));
             return;
         }
@@ -254,8 +255,9 @@ public class StringMatcherTests {
             new StringMatcher(null, expected, actual, null).match();
         } catch (AssertionError | InvalidTypeException e) {
             assertTrue(e.getMessage().matches("(?s)Strings do not match\n\n" +
-                    "Matching is by default done using regular expressions.\n" +
+                    "Matching is by default case-sensitive and uses regular expressions.\n" +
                     "If expected object contains any unintentional regexes, then quote them between \\\\Q and \\\\E delimiters.\n" +
+                    "For disabling case-sensitivity, use \\Q(?i)\\E and \\Q(?-i)\\E modifiers.\n" +
                     ".*expected.*\\Q<.* is regex ~[regex]lorem>\\E.*\\Q<This is regex a|b|c|d>\\E.*"));
             return;
         }
