@@ -277,14 +277,14 @@ assertEquals(6, result);
 Parse text for [SpEL](https://docs.spring.io/spring-framework/docs/5.3.x/reference/html/core.html#expressions) expressions delimited by `#{` and `}`  
 ```javascript
 String text = "Current time is: #{new java.util.Date()}";
-System.out.println(SpELParser.parse(text));
+System.out.println(SpELParser.parseQuietly(text));
 
 // prints:
 Current time is: Mon Oct 31 14:50:00 EET 2022
 ```
 This feature can be used together with matching, _for example:_  
 ```javascript
-String expected = SpELParser.parse("{\"name\": \"#{'David Jones'.toLowerCase()}\"}").toString();
+String expected = SpELParser.parseQuietly("{\"name\": \"#{'David Jones'.toLowerCase()}\"}").toString();
 String actual = "{\"name\": \"david jones\"}";
 ObjectMatcher.match(null, expected, actual); // successful matching
 ```
