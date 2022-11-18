@@ -11,12 +11,12 @@ public class SpELTests {
     @Test
     public void parseSpEL() {
         String text = "Current time is: #{new java.util.Date()}";
-        assertTrue(SpELParser.parse(text).toString().matches("Current time is:.*"));
+        assertTrue(SpELParser.parseQuietly(text).toString().matches("Current time is:.*"));
     }
 
     @Test
     public void parseSpELAndMatch() {
-        String expected = SpELParser.parse("{\"name\": \"#{'David Jones'.toLowerCase()}\"}").toString();
+        String expected = SpELParser.parseQuietly("{\"name\": \"#{'David Jones'.toLowerCase()}\"}").toString();
         String actual = "{\"name\": \"david jones\"}";
         ObjectMatcher.match(null, expected, actual);  // successful matching
     }
