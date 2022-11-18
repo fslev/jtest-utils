@@ -24,7 +24,7 @@
         <surefire.version>3.0.0-M7</surefire.version>
         <jackson.version>2.14.0</jackson.version>
         <jackson.databind.version>2.14.0</jackson.databind.version>
-        <spring-expression-version>5.3.24</spring-expression-version>
+        <spring-expression-version>6.0.0</spring-expression-version>
         <log4j.version>2.19.0</log4j.version>
     </properties>
 
