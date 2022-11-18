@@ -1,6 +1,11 @@
 # Changelog
 
-## 4.2-SNAPSHOT
+## 4.3-SNAPSHOT
+
+## 4.2 (2022-11-18)
+- #### Changed
+  - SpELParser refactoring: parse content using the Spring SpelExpressionParser class  
+  - Update dependencies
 
 ## 4.1 (2022-11-15)
 - #### Changed
