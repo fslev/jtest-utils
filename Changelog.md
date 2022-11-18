@@ -1,16 +1,12 @@
 # Changelog
 
-## 4.3-SNAPSHOT
+## 4.2-SNAPSHOT
 
-## 4.2 (2022-11-18)
+## 4.1 (2022-11-18)
 - #### Changed
-  - SpELParser refactoring: parse content using the Spring SpelExpressionParser class  
-  - Update dependencies
-
-## 4.1 (2022-11-15)
-- #### Changed
-  - Update json-compare
+  - SpELParser refactoring: parse content using the Spring SpelExpressionParser class
   - Describe the default case-sensitive matching behaviour inside the AssertionError Hint message
+  - Update dependencies  
 
 ## 4.0 (2022-11-14)
 - #### Changed
