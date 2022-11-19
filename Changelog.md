@@ -1,6 +1,10 @@
 # Changelog
 
-## 4.2-SNAPSHOT
+## 5.1-SNAPSHOT
+
+## 5.0 (2022-11-19)
+- #### Removed
+  - Removed SpEL support  
 
 ## 4.1 (2022-11-18)
 - #### Changed

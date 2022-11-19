@@ -13,7 +13,6 @@ by adding some powerful features:
 
 - **[Matching](#match)**
 - **[Polling](#polling)**
-- **[SpEL parser](#spel-parser)**
 - **[Resource reader](#resource-reader)**
 - _...and others_  
 
@@ -273,23 +272,7 @@ Integer result = new Polling<Integer>()
 assertEquals(6, result);
 ```
 
-# <a name="spel-parser"></a> 3. SpEL parser
-Parse text for [SpEL](https://docs.spring.io/spring-framework/docs/5.3.x/reference/html/core.html#expressions) expressions delimited by `#{` and `}`  
-```javascript
-String text = "Current time is: #{new java.util.Date()}";
-System.out.println(SpELParser.parseQuietly(text));
-
-// prints:
-Current time is: Mon Oct 31 14:50:00 EET 2022
-```
-This feature can be used together with matching, _for example:_  
-```javascript
-String expected = SpELParser.parseQuietly("{\"name\": \"#{'David Jones'.toLowerCase()}\"}").toString();
-String actual = "{\"name\": \"david jones\"}";
-ObjectMatcher.match(null, expected, actual); // successful matching
-```
-
-# <a name="resource-reader"></a> 4. Resource reader
+# <a name="resource-reader"></a> 3. Resource reader
 
 Read resource as String from either classpath or absolute path:
 ```javascript
@@ -305,7 +288,7 @@ assertEquals("<html>text</html>", data.get("features/data/bar.html"));
 assertEquals("{\"elephants\" : 1}", data.get("features/data/zoo/animals.json"));
 ```
 
-# <a name="real-world"></a> 5. Real world examples
+# <a name="real-world"></a> 4. Real world examples
 Explore [cucumber-jutils-tutorial](https://github.com/fslev/cucumber-jutils-tutorial) to discover how most of the features are used in real life test scenarios.
 
 # Website
