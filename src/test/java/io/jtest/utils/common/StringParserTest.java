@@ -2,6 +2,7 @@ package io.jtest.utils.common;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -22,5 +23,16 @@ public class StringParserTest {
 
         Object result = StringParser.replacePlaceholders(placeHolders, source, prefix, suffix, ph -> ph + "OK", ph -> true);
         assertEquals("test var1OK string parser var2OK. Ok ? $ Good.", result);
+    }
+
+    @Test
+    public void testValueCaptureAndReplaceStandalonePlaceholder() {
+        String prefix = "#[";
+        String suffix = "]";
+        List<String> placeHolders = new ArrayList<>();
+        placeHolders.add("var1");
+        String source = "#[var1]";
+        Object result = StringParser.replacePlaceholders(placeHolders, source, prefix, suffix, ph -> 10.00, ph -> true);
+        assertEquals(10.00, result);
     }
 }
