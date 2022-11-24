@@ -1,7 +1,11 @@
 # Changelog
 
-## 5.1-SNAPSHOT
+## 5.2-SNAPSHOT
 
+## 5.1 (2022-11-24)
+- #### Changed
+  - Update dependencies (Jackson 2.14.1 & json-compare 6.3)
+  
 ## 5.0 (2022-11-19)
 - #### Removed
   - Removed SpEL support  
