@@ -20,7 +20,6 @@ public class PollingTest {
 
         int result = polling.get();
         assertEquals(3, result);
-        assertEquals(3, polling.getLastResult());
     }
 
     @Test
@@ -33,7 +32,6 @@ public class PollingTest {
         try {
             polling.get();
         } catch (PollingTimeoutException e) {
-            assertEquals(3, polling.getLastResult());
             return;
         }
         fail("Should fail with Polling timeout exception");
@@ -49,7 +47,6 @@ public class PollingTest {
         try {
             polling.get();
         } catch (PollingTimeoutException e) {
-            assertEquals(2, polling.getLastResult());
             return;
         }
         fail("Should fail with Polling timeout exception");
@@ -61,11 +58,10 @@ public class PollingTest {
         int result;
         Polling<Integer> polling = new Polling<Integer>()
                 .supplier(service::get)
-                .duration((Duration) null, 550L)
+                .duration(null, 550L)
                 .until(val -> val.equals(3));
         result = polling.get();
         assertEquals(3, result);
-        assertEquals(3, polling.getLastResult());
     }
 
     @Test
@@ -79,7 +75,6 @@ public class PollingTest {
         try {
             polling.get();
         } catch (PollingTimeoutException e) {
-            assertEquals(3, polling.getLastResult());
             return;
         }
         fail("Should fail with Polling timeout exception");

@@ -1,6 +1,10 @@
 # Changelog
 
-## 5.2-SNAPSHOT
+## 5.3-SNAPSHOT
+
+## 5.2 (2022-11-27)
+- #### Removed  
+  - Remove Polling`.getLastResult()` method     
 
 ## 5.1 (2022-11-24)
 - #### Changed

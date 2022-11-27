@@ -10,10 +10,8 @@ public class Polling<T> {
     private Duration pollingDuration = Duration.ofSeconds(30);
     private Long pollingIntervalMillis = 3000L;
     private Double exponentialBackOff = 1.0;
-
     private Supplier<T> supplier;
     private Predicate<T> until;
-
     private T result;
 
     public Polling<T> duration(Duration pollingDuration, Long pollingIntervalMillis) {
@@ -37,10 +35,6 @@ public class Polling<T> {
     public Polling<T> until(Predicate<T> predicate) {
         this.until = predicate;
         return this;
-    }
-
-    public T getLastResult() {
-        return result;
     }
 
     public T get() throws PollingTimeoutException {
