@@ -5,7 +5,11 @@ import io.jtest.utils.exceptions.InvalidTypeException;
 import io.jtest.utils.matcher.StringMatcher;
 import io.jtest.utils.matcher.condition.MatchCondition;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class CustomJsonComparator implements JsonComparator {
 

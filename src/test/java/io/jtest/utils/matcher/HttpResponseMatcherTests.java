@@ -6,7 +6,13 @@ import io.jtest.utils.matcher.http.PlainHttpResponse;
 import org.junit.jupiter.api.Test;
 
 import java.io.UnsupportedEncodingException;
-import java.util.*;
+import java.util.AbstractMap;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 
 import static io.jtest.utils.PlainHttpResponseUtils.from;
 import static org.junit.jupiter.api.Assertions.*;

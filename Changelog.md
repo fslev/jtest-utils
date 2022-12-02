@@ -1,7 +1,9 @@
 # Changelog
 
 ## 5.3-SNAPSHOT
-
+- #### Changed
+  - Refactoring - optimized imports  
+  
 ## 5.2 (2022-11-27)
 - #### Removed  
   - Remove Polling`.getLastResult()` method     
