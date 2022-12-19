@@ -154,6 +154,17 @@ public class ObjectMatcherTest {
     }
 
     @Test
+    public void matchXMLs_withDisabledRegex() {
+        ObjectMatcher.matchXml(null, "<struct>tr[ue</struct>", "<struct>tr[ue</struct>");
+        ObjectMatcher.matchXml(null, "<struct>tr[ue</struct>", "<struct>tr[ue</struct>", MatchCondition.REGEX_DISABLED);
+        ObjectMatcher.matchXml(null, "<struct>(true)</struct>", "<struct>(true)</struct>", MatchCondition.REGEX_DISABLED);
+        ObjectMatcher.matchXml(null, "<struct>(tr[ue)</struct>", "<struct>(tr[ue)</struct>", MatchCondition.REGEX_DISABLED);
+
+        assertThrows(AssertionError.class, () ->
+                ObjectMatcher.matchXml(null, "<struct>(true)</struct>", "<struct>(true)</struct>"));
+    }
+
+    @Test
     public void compareStringWithManyAssignSymbolsBetweenNewLines() {
         String expected = "~[prop1],\n This is a ~[prop2]\n ~[prop3]!";
         String actual = "Hello,\n This is a world of many nations \n And 7 continents...!";
@@ -285,5 +296,15 @@ public class ObjectMatcherTest {
         assertThrows(AssertionError.class, () -> ObjectMatcher.match("Texts are not matching", expected1, actual));
         String expected2 = "(?i)Lorem I(?-i)psum";
         ObjectMatcher.match("Texts are not matching", expected2, actual);
+    }
+
+    @Test
+    public void matchHttpResponses_withDisabledRegex() {
+        String expected = "{\"status\":200, \"body\":[1,\"te[st\", 3, {\"a\":\"(test)\", \"!.*\":\".*\"}, \"!.*\"]}";
+        String actual = "{\"status\":200, \"body\":[\"te[st\", 1, {\"a\":\"(test)\"}, 3 ]}";
+        ObjectMatcher.matchHttpResponse(null, from(expected), from(actual), MatchCondition.REGEX_DISABLED);
+
+        assertThrows(AssertionError.class, () ->
+                ObjectMatcher.matchHttpResponse(null, from(expected), from(actual)));
     }
 }

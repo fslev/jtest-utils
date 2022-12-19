@@ -1,7 +1,12 @@
 # Changelog
 
-## 5.3-SNAPSHOT
+## 5.4-SNAPSHOT
+
+
+## 5.3 (2022-12-19) 
 - #### Changed
+  - Added MatchCondition.REGEX_DISABLED
+    - While using this condition, the default regex based matching mechanism will be disabled. All present regexes will be treated as plain text.          
   - Refactoring - optimized imports  
   
 ## 5.2 (2022-11-27)

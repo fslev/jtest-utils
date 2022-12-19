@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Map;
 
@@ -456,5 +457,18 @@ public class JsonMatcherTests {
         assertEquals("87.106.0.246", props.get("ipAddress1"));
         assertEquals("87.106.0.247", props.get("ipAddress2"));
         assertEquals("someRequestId1000", props.get("requestId"));
+    }
+
+    @Test
+    public void compareJsonWithDisabledRegex() throws InvalidTypeException {
+        String expected = "{\"b\":\"(?=test) ~[sym1]\"}";
+        String actual = "{\"a\":1, \"b\":\"(?=test) me\"}";
+        JsonMatcher matcher = new JsonMatcher(null, expected, actual,
+                new HashSet<>(Collections.singletonList(MatchCondition.REGEX_DISABLED)));
+        Map<String, Object> symbols = matcher.match();
+        assertEquals("me", symbols.get("sym1"));
+        assertEquals(1, symbols.size());
+
+        assertThrows(AssertionError.class, () -> new JsonMatcher(null, expected, actual, null).match());
     }
 }

@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -579,5 +580,17 @@ public class StringMatcherTests {
         assertEquals("a", symbols.get("ipv4RecordId1"));
         assertEquals("b", symbols.get("ipv4RecordId2"));
         assertEquals("c", symbols.get("ipv6RecordId1"));
+    }
+
+    @Test
+    public void matchWithDisabledRegex() throws InvalidTypeException {
+        new StringMatcher(null, "test (zara) shop", "test (zara) shop",
+                new HashSet<>(Collections.singletonList(MatchCondition.REGEX_DISABLED))).match();
+    }
+
+    @Test
+    public void matchWithDisabledRegex_negative() throws InvalidTypeException {
+        assertThrows(AssertionError.class, () -> new StringMatcher(null, "test (zara shop", "test (zara) shop",
+                new HashSet<>(Collections.singletonList(MatchCondition.REGEX_DISABLED))).match());
     }
 }

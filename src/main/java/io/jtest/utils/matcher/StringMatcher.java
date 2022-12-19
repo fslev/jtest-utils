@@ -75,7 +75,8 @@ public class StringMatcher extends AbstractObjectMatcher<Object> {
         } else if (actual == null) {
             AssertionFailureBuilder.assertionFailure().message(message).expected(expected).actual(null).buildAndThrow();
         } else if (!placeholderNames.isEmpty()) {
-            List<String> capturedValues = StringParser.captureValues(actualString, patternWithPlaceholdersAsCaptureGroups(expectedString, placeholderNames), true);
+            List<String> capturedValues = StringParser.captureValues(actualString,
+                    patternWithPlaceholdersAsCaptureGroups(expectedString, placeholderNames, matchConditions.contains(MatchCondition.REGEX_DISABLED)), true);
             if (capturedValues.isEmpty()) {
                 AssertionFailureBuilder.assertionFailure().message(message).expected(expected).actual(actual).buildAndThrow();
             }
@@ -87,13 +88,19 @@ public class StringMatcher extends AbstractObjectMatcher<Object> {
             return properties;
 
         } else {
-            try {
-                Pattern pattern = Pattern.compile(expectedString, Pattern.DOTALL | Pattern.MULTILINE);
-                if (!pattern.matcher(actualString).matches()) {
-                    AssertionFailureBuilder.assertionFailure().message(message).expected(expected).actual(actual).buildAndThrow();
+            if (!matchConditions.contains(MatchCondition.REGEX_DISABLED)) {
+                try {
+                    Pattern pattern = Pattern.compile(expectedString, Pattern.DOTALL | Pattern.MULTILINE);
+                    if (!pattern.matcher(actualString).matches()) {
+                        AssertionFailureBuilder.assertionFailure().message(message).expected(expected).actual(actual).buildAndThrow();
+                    }
+                } catch (PatternSyntaxException e) {
+                    if (!expectedString.equals(actual)) {
+                        AssertionFailureBuilder.assertionFailure().message(message).expected(expected).actual(actual).buildAndThrow();
+                    }
                 }
-            } catch (PatternSyntaxException e) {
-                if (!expectedString.equals(actual)) {
+            } else {
+                if (!expectedString.equals(actualString)) {
                     AssertionFailureBuilder.assertionFailure().message(message).expected(expected).actual(actual).buildAndThrow();
                 }
             }
@@ -122,12 +129,12 @@ public class StringMatcher extends AbstractObjectMatcher<Object> {
         return value.toString();
     }
 
-    private static Pattern patternWithPlaceholdersAsCaptureGroups(String source, List<String> placeholderNames) {
+    private static Pattern patternWithPlaceholdersAsCaptureGroups(String source, List<String> placeholderNames, boolean regexDisabled) {
         String s = source;
-        boolean regex = RegexUtils.isRegex(source);
+        boolean allowOtherRegexes = RegexUtils.isRegex(source) && !regexDisabled;
         for (String key : placeholderNames) {
-            s = s.replace(CAPTURE_PLACEHOLDER_PREFIX + key + CAPTURE_PLACEHOLDER_SUFFIX, regex ? "(.*)" : "\\E(.*)\\Q");
+            s = s.replace(CAPTURE_PLACEHOLDER_PREFIX + key + CAPTURE_PLACEHOLDER_SUFFIX, allowOtherRegexes ? "(.*)" : "\\E(.*)\\Q");
         }
-        return Pattern.compile(regex ? s : "\\Q" + s + "\\E", Pattern.DOTALL | Pattern.MULTILINE);
+        return Pattern.compile(allowOtherRegexes ? s : "\\Q" + s + "\\E", Pattern.DOTALL | Pattern.MULTILINE);
     }
 }
