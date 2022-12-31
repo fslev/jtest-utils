@@ -22,6 +22,11 @@ import java.util.Map;
 import java.util.function.Function;
 
 public class XmlUtils {
+
+    private XmlUtils() {
+
+    }
+
     /**
      * @param xml
      * @return check is valid XML

@@ -16,6 +16,11 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class ObjectMatcher {
+
+    private ObjectMatcher() {
+
+    }
+
     /**
      * Matches objects as Json, Xml or String in that order
      *

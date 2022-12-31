@@ -10,6 +10,10 @@ import java.util.regex.Pattern;
 
 public class StringParser {
 
+    private StringParser() {
+
+    }
+
     public static List<String> captureValues(String source, Pattern captureGroupPattern) {
         return captureValues(source, captureGroupPattern, false);
     }

@@ -91,7 +91,7 @@ public class PlainHttpResponse {
     }
 
     public static class ParseException extends RuntimeException {
-        public final static String EXPECTED_FORMAT = "{" + System.lineSeparator() +
+        public static final String EXPECTED_FORMAT = "{" + System.lineSeparator() +
                 "  \"status\": <number> | \"<text>\"," + System.lineSeparator() +
                 "  \"body\": <object>," + System.lineSeparator() +
                 "  \"headers\": [{\"<name>\":<value>}, ...]," + System.lineSeparator() +

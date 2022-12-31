@@ -6,6 +6,10 @@ import java.util.Map;
 
 public class StringFormat {
 
+    private StringFormat() {
+
+    }
+
     public static final String REPLACE_PREFIX = "#[";
     public static final String REPLACE_SUFFIX = "]";
 

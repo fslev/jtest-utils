@@ -8,7 +8,12 @@ import java.util.regex.PatternSyntaxException;
 import java.util.stream.Collectors;
 
 public class RegexUtils {
-    final static List<String> specialRegexCharacters = Arrays.asList("\\", "^", "$", ".", "|", "?", "*", "+", "(", ")", "[", "{");
+
+    private RegexUtils() {
+
+    }
+
+    static final List<String> specialRegexCharacters = Arrays.asList("\\", "^", "$", ".", "|", "?", "*", "+", "(", ")", "[", "{");
 
     public static boolean isRegex(String str) {
         try {

@@ -10,6 +10,10 @@ import java.util.function.Function;
 
 class Xml {
 
+    private Xml() {
+
+    }
+
     static <R> void walkAndProcessNode(Node node, Function<String, R> processFct, String parentPath, Map<String, R> results) {
         String currentPath = getNodePath(node, parentPath);
         Map.Entry<String, R> result = processNode(currentPath, node, processFct);

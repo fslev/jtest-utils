@@ -1,6 +1,11 @@
 # Changelog
 
-## 5.5-SNAPSHOT
+## 5.6-SNAPSHOT
+
+## 5.5 (2022-12-31)
+- #### Changed
+  - Update dependencies (json-compare)  
+  - Code refactoring  
 
 ## 5.4 (2022-12-22)
 - #### Changed
