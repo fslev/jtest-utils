@@ -1,6 +1,10 @@
 # Changelog
 
-## 5.6-SNAPSHOT
+## 5.7-SNAPSHOT
+
+## 5.6 (2023-01-10)
+- #### Changed
+  - Update dependencies (json-compare:6.7, xmlunit-core:2.9.1)  
 
 ## 5.5 (2022-12-31)
 - #### Changed
