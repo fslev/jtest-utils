@@ -1,5 +1,6 @@
 package io.jtest.utils.matcher;
 
+import com.fasterxml.jackson.core.StreamReadConstraints;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jtest.utils.common.RegexUtils;
 import io.jtest.utils.common.StringParser;
@@ -24,6 +25,11 @@ public class StringMatcher extends AbstractObjectMatcher<Object> {
     private static final Pattern captureGroupPattern = Pattern.compile(Pattern.quote(CAPTURE_PLACEHOLDER_PREFIX) + "(.*?)" + Pattern.quote(CAPTURE_PLACEHOLDER_SUFFIX),
             Pattern.DOTALL | Pattern.MULTILINE);
     private static final ObjectMapper MAPPER = new ObjectMapper();
+
+    static {
+        MAPPER.getFactory().setStreamReadConstraints(StreamReadConstraints.builder()
+                .maxNestingDepth(Integer.MAX_VALUE).maxNumberLength(Integer.MAX_VALUE).maxStringLength(Integer.MAX_VALUE).build());
+    }
 
     public StringMatcher(String message, Object expected, Object actual, Set<MatchCondition> matchConditions) throws InvalidTypeException {
         super(message, expected, actual, matchConditions);

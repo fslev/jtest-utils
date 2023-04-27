@@ -1,6 +1,10 @@
 # Changelog
 
-## 5.8-SNAPSHOT
+## 5.9-SNAPSHOT
+
+## 5.8 (2023-04-27)
+- #### Changed
+  - Use Integer.MAX_VALUE for ObjectMapper max depth, number and String limits
 
 ## 5.7 (2023-04-26)
 - #### Changed
