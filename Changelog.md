@@ -3,7 +3,8 @@
 ## 5.8-SNAPSHOT
 
 ## 5.7 (2023-04-26)
-- Update dependencies (json-compare:6.8, Jackson:2.15.0, Log4j:2.20.0)
+- #### Changed
+  - Update dependencies (json-compare:6.8, Jackson:2.15.0, Log4j:2.20.0)
 
 ## 5.6 (2023-01-10)
 - #### Changed
