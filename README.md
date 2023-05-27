@@ -14,7 +14,6 @@ by adding some powerful features:
 - **[Matching](#match)**
 - **[Polling](#polling)**
 - **[Resource reader](#resource-reader)**
-- _...and others_  
 
 **[Real world examples](#real-world)**
 
