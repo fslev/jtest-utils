@@ -1,6 +1,10 @@
 # Changelog
 
-## 5.10-SNAPSHOT
+## 5.11-SNAPSHOT
+
+## 5.10 (2023-09-15)
+- #### Changed
+  - Update dependencies (json-compare)
 
 ## 5.9 (2023-06-06)
 - #### Changed
