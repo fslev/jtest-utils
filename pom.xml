@@ -21,7 +21,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <jsoncompare.version>6.11</jsoncompare.version>
         <xmlunit.version>2.9.1</xmlunit.version>
-        <surefire.version>3.2.1</surefire.version>
+        <surefire.version>3.2.2</surefire.version>
         <jackson.version>2.15.3</jackson.version>
         <jackson.databind.version>2.15.3</jackson.databind.version>
         <log4j.version>2.21.1</log4j.version>
