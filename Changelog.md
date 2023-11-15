@@ -1,6 +1,10 @@
 # Changelog
 
-## 5.11-SNAPSHOT
+## 5.12-SNAPSHOT
+
+## 5.11 (2023-11-15)
+- #### Changed
+  - Added progress bar while polling (https://github.com/ctongfei/progressbar)
 
 ## 5.10 (2023-09-15)
 - #### Changed

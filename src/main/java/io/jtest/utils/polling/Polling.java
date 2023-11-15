@@ -1,6 +1,7 @@
 package io.jtest.utils.polling;
 
 import io.jtest.utils.exceptions.PollingTimeoutException;
+import me.tongfei.progressbar.ProgressBar;
 
 import java.time.Duration;
 import java.util.function.Predicate;
@@ -41,19 +42,22 @@ public class Polling<T> {
         boolean success = false;
         long interval = pollingIntervalMillis;
         long start = System.currentTimeMillis();
-        while (!success) {
-            result = supplier.get();
-            success = until.test(result);
-            if (!success) {
-                try {
-                    long elapsed = System.currentTimeMillis() - start;
-                    if (pollingDuration.minusMillis(elapsed).toMillis() <= 0) {
-                        throw new PollingTimeoutException();
+        try (ProgressBar pb = new ProgressBar("Polling", Math.round(pollingDuration.getSeconds() * 1000 / (double) pollingIntervalMillis))) {
+            while (!success) {
+                result = supplier.get();
+                success = until.test(result);
+                if (!success) {
+                    try {
+                        long elapsed = System.currentTimeMillis() - start;
+                        pb.stepTo(Math.round(elapsed / pollingIntervalMillis));
+                        if (pollingDuration.minusMillis(elapsed).toMillis() <= 0) {
+                            throw new PollingTimeoutException();
+                        }
+                        Thread.sleep(interval);
+                        interval = (long) (interval * exponentialBackOff);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
                     }
-                    Thread.sleep(interval);
-                    interval = (long) (interval * exponentialBackOff);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
                 }
             }
         }
