@@ -1,6 +1,10 @@
 # Changelog
 
-## 5.12-SNAPSHOT
+## 5.13-SNAPSHOT
+
+## 5.12 (2023-11-16)
+- #### Removed
+  - Removed progress bar while polling. It can be integrated on a higher level via the Polling supplier. 
 
 ## 5.11 (2023-11-15)
 - #### Changed
