@@ -1,6 +1,10 @@
 # Changelog
 
-## 5.13-SNAPSHOT
+## 5.14-SNAPSHOT
+
+## 5.13 (2023-11-26)
+- #### Changed
+  - Upgrade dependencies (json-compare)  
 
 ## 5.12 (2023-11-16)
 - #### Removed
