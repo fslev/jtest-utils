@@ -12,7 +12,7 @@ A set of testing utilities for Java
 by adding some powerful features:
 
 - **[Matching](#match)**
-- **[Polling](#polling)**
+- **[Polling](#polling)** (Deprecated)
 - **[Resource reader](#resource-reader)**
 
 **[Real world examples](#real-world)**
@@ -37,7 +37,7 @@ Gradle: compile("io.github.fslev:jtest-utils:${latest.version}")
 - Match Objects
 - Match HTTP responses
 
-_... with specific matching conditions, regular expression, data capture and polling support_
+_... with specific matching conditions, regular expression data capture and polling support_
 
 ## <a name="match-jsons"></a> 1.1 Match JSONs
 
@@ -214,7 +214,7 @@ The beautiful part while comparing HTTP responses is the fact that depending on 
 In other words, the HTTP response bodies / entities might be matched as [JSONs](#match-jsons), [XMLs](#match-xmls) or [texts](#match-texts).  
 HTTP statuses and reasons are compared as [texts](#match-texts) while HTTP headers as [JSONs](#match-jsons).  
 
-## 1.6 Match with Polling support
+## 1.6 Match with Polling support (Deprecated)
 All the matching mechanisms from above support polling.  
 The most used case is when we need to compare HTTP responses from a service which delivers the desired data asynchronously.  
 In this case we need to retry the execution of client request until the actual response is matched.  
@@ -259,7 +259,7 @@ assertEquals("-263355062.750", capturedData.get("speakValue"));
 ```  
 This feature is available for any flavour of object matching.    
   
-# <a name="polling"></a> 2. Polling
+# <a name="polling"></a> 2. Polling (Deprecated)
 Retry an operation until desired result or timeout is reached:  
 ```javascript
 Integer result = new Polling<Integer>()
