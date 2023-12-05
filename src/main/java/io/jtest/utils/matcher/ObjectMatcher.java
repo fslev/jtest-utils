@@ -32,12 +32,10 @@ public class ObjectMatcher {
     }
 
     /**
-     * Matches objects as Json, Xml or String in that order<br>
-     * Expected is compared against a supplier value until values match or timeout is reached
-     *
-     * @return properties captured after the match
-     * Expected object can contain placeholders for capturing values from the actual object: ~[placeholder_name]
+     * @deprecated This method will be removed from the next major version release.
+     * <p> Use <a href="https://github.com/awaitility/awaitility">Awaitility</a> instead.
      */
+    @Deprecated
     public static Map<String, Object> match(String message, Object expected, Supplier<Object> actualObjectSupplier, Duration pollingDuration,
                                             Long pollingIntervalMillis, Double exponentialBackOff, MatchCondition... matchConditions) {
         return match(actual -> match(message, expected, actual, matchConditions), actualObjectSupplier, pollingDuration, pollingIntervalMillis, exponentialBackOff);
@@ -51,6 +49,11 @@ public class ObjectMatcher {
         }
     }
 
+    /**
+     * @deprecated This method will be removed from the next major version release.
+     * <p> Use <a href="https://github.com/awaitility/awaitility">Awaitility</a> instead.
+     */
+    @Deprecated
     public static Map<String, Object> matchJson(String message, Object expected, Supplier<Object> actualObjectSupplier, Duration pollingDuration,
                                                 Long pollingIntervalMillis, Double exponentialBackOff, MatchCondition... matchConditions) {
         return match(actual -> matchJson(message, expected, actual, matchConditions), actualObjectSupplier, pollingDuration, pollingIntervalMillis, exponentialBackOff);
@@ -64,6 +67,11 @@ public class ObjectMatcher {
         }
     }
 
+    /**
+     * @deprecated This method will be removed from the next major version release.
+     * <p> Use <a href="https://github.com/awaitility/awaitility">Awaitility</a> instead.
+     */
+    @Deprecated
     public static Map<String, Object> matchXml(String message, Object expected, Supplier<Object> actualObjectSupplier, Duration pollingDuration,
                                                Long pollingIntervalMillis, Double exponentialBackOff, MatchCondition... matchConditions) {
         return match(actual -> matchXml(message, expected, actual, matchConditions), actualObjectSupplier, pollingDuration, pollingIntervalMillis, exponentialBackOff);
@@ -86,11 +94,10 @@ public class ObjectMatcher {
     }
 
     /**
-     * Matches an expected object with a supplier value as strings until matching is successful or timeout is reached<br>
-     *
-     * @return properties captured after the match
-     * Expected object can contain placeholders for capturing values from the actual object: ~[placeholder_name]
+     * @deprecated This method will be removed from the next major version release.
+     * <p> Use <a href="https://github.com/awaitility/awaitility">Awaitility</a> instead.
      */
+    @Deprecated
     public static Map<String, Object> matchString(String message, Object expected, Supplier<Object> actualObjectSupplier, Duration pollingDuration,
                                                   Long pollingIntervalMillis, Double exponentialBackOff, MatchCondition... matchConditions) {
         return match(actual -> matchString(message, expected, actual, matchConditions), actualObjectSupplier, pollingDuration, pollingIntervalMillis, exponentialBackOff);
@@ -121,11 +128,10 @@ public class ObjectMatcher {
     }
 
     /**
-     * Matches two objects representing HTTP responses until matching is successful or timeout is reached<br>
-     *
-     * @return properties captured after the match
-     * Expected object can contain placeholders for capturing values from the actual object: ~[placeholder_name]
+     * @deprecated This method will be removed from the next major version release.
+     * <p> Use <a href="https://github.com/awaitility/awaitility">Awaitility</a> instead.
      */
+    @Deprecated
     public static Map<String, Object> matchHttpResponse(String message, PlainHttpResponse expected, Supplier<PlainHttpResponse> actualSupplier, Duration pollingDuration,
                                                         Long pollingIntervalMillis, Double exponentialBackOff, MatchCondition... matchConditions) {
         return match(actual -> matchHttpResponse(message, expected, actual, matchConditions), actualSupplier, pollingDuration, pollingIntervalMillis, exponentialBackOff);

@@ -6,6 +6,11 @@ import java.time.Duration;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
+/**
+ * @deprecated This class will be removed from the next major version release.
+ * <p> Use <a href="https://github.com/awaitility/awaitility">Awaitility</a> instead.
+ */
+@Deprecated
 public class Polling<T> {
     private Duration pollingDuration = Duration.ofSeconds(30);
     private Long pollingIntervalMillis = 3000L;

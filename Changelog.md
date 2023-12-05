@@ -2,6 +2,10 @@
 
 ## 5.14-SNAPSHOT
 
+## 5.14 (2023-12-05)
+- #### Changed
+  - Deprecate Polling support. Use [Awaitility](https://github.com/awaitility/awaitility) instead
+
 ## 5.13 (2023-11-26)
 - #### Changed
   - Upgrade dependencies (json-compare)  
