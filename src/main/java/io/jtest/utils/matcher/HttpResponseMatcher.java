@@ -27,14 +27,32 @@ class HttpResponseMatcher extends AbstractObjectMatcher<PlainHttpResponse> {
     }
 
     @Override
+    protected String negativeMatchMessage() {
+        return System.lineSeparator() + "HTTP responses match!" + System.lineSeparator();
+    }
+
+    @Override
     PlainHttpResponse convert(Object value) {
         return (PlainHttpResponse) value;
     }
 
+
     @Override
     public Map<String, Object> match() {
+        if (matchConditions.remove(MatchCondition.DO_NOT_MATCH)) {
+            try {
+                positiveMatch();
+            } catch (AssertionError e) {
+                return new HashMap<>();
+            }
+            AssertionFailureBuilder.assertionFailure().message(negativeMatchMessage).includeValuesInMessage(false)
+                    .expected(expected).actual(actual).buildAndThrow();
+        }
+        return positiveMatch();
+    }
+
+    public Map<String, Object> positiveMatch() {
         Map<String, Object> properties = new HashMap<>();
-        matchConditions.remove(MatchCondition.DO_NOT_MATCH);
         try {
             if (expectedStatus != null) {
                 if (matchConditions.contains(MatchCondition.DO_NOT_MATCH_HTTP_RESPONSE_BY_STATUS)) {

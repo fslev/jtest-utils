@@ -1,6 +1,10 @@
 # Changelog
 
-## 5.16-SNAPSHOT
+## 5.17-SNAPSHOT
+
+## 5.16 (2024-04-08)
+- #### Changed
+  - HttpResponseMatcher now supports `MatchCondition.DO_NOT_MATCH`
 
 ## 5.15 (2024-03-22)
 - #### Changed

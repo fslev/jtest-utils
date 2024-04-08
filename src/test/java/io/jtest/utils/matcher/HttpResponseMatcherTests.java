@@ -376,4 +376,29 @@ public class HttpResponseMatcherTests {
         assertThrows(AssertionError.class, () -> new HttpResponseMatcher(null, from(expected), from(actual),
                 new HashSet<>(Arrays.asList(MatchCondition.XML_CHILD_NODELIST_LENGTH, MatchCondition.DO_NOT_MATCH_HTTP_RESPONSE_BY_BODY))).match());
     }
+
+    @Test
+    void doNotMatchHttpResponses() throws InvalidTypeException {
+        String expected = "{\"status\": 200, \"headers\":[{\"auth\":1},{\"x-auth\":2}], \"reason\":\"test\",\"body\":{\"a\":\"~[val1] foobar\"}}";
+        String actual = "{\"status\": 200, \"reason\":\"test\", \"headers\":[{\"auth\":1},{\"x-auth\":2}], \"body\":{\"a\":\"lorem foobar\"}}";
+
+        assertTrue(assertThrows(AssertionError.class, () ->
+                new HttpResponseMatcher(null, from(expected), from(actual),
+                        new HashSet<>(Collections.singletonList(MatchCondition.DO_NOT_MATCH))).match())
+                .getMessage().contains("HTTP responses match!"));
+
+        assertTrue(assertThrows(AssertionError.class, () ->
+                new HttpResponseMatcher(null, from(expected), from(actual),
+                        new HashSet<>(Collections.singletonList(MatchCondition.DO_NOT_MATCH_HTTP_RESPONSE_BY_BODY))).match())
+                .getMessage().contains("HTTP Response bodies match!"));
+
+        new HttpResponseMatcher(null, from(expected), from(actual),
+                new HashSet<>(Arrays.asList(MatchCondition.DO_NOT_MATCH, MatchCondition.DO_NOT_MATCH_HTTP_RESPONSE_BY_BODY))).match();
+
+        String expected1 = "{\"status\": 200, \"headers\":[{\"auth\":1},{\"x-auth\":2}], \"reason\":\"test\",\"body\":{\"a\":\"~[val1] lorem\"}}";
+
+        Map<String, Object> props = new HttpResponseMatcher(null, from(expected1), from(actual),
+                new HashSet<>(Collections.singletonList(MatchCondition.DO_NOT_MATCH))).match();
+        assertEquals(0, props.size());
+    }
 }
