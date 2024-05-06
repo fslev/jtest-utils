@@ -22,7 +22,7 @@
         <jsoncompare.version>6.14</jsoncompare.version>
         <xmlunit.version>2.10.0</xmlunit.version>
         <surefire.version>3.2.5</surefire.version>
-        <jackson.version>2.17.0</jackson.version>
+        <jackson.version>2.17.1</jackson.version>
         <jackson.databind.version>2.17.1</jackson.databind.version>
         <log4j.version>2.23.1</log4j.version>
     </properties>
