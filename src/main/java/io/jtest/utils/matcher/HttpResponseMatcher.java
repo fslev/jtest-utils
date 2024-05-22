@@ -15,7 +15,7 @@ class HttpResponseMatcher extends AbstractObjectMatcher<PlainHttpResponse> {
 
     private final Object expectedStatus;
     private final String expectedReason;
-    private final List<Map.Entry<String, String>> expectedHeaders;
+    private final List<Map.Entry<String, Object>> expectedHeaders;
     private final Object expectedEntity;
 
     public HttpResponseMatcher(String message, PlainHttpResponse expected, PlainHttpResponse actual, Set<MatchCondition> matchConditions) throws InvalidTypeException {

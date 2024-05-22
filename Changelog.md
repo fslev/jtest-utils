@@ -1,7 +1,12 @@
 # Changelog
 
-## 5.17-SNAPSHOT
+## 5.18-SNAPSHOT
 
+## 5.17 (2024-05-22)
+- #### Changed
+  - Change type of `PlainHttpResponse.headers` to `List<Map.Entry<String, Object>>`
+  - Updated dependencies 
+  
 ## 5.16 (2024-04-08)
 - #### Changed
   - HttpResponseMatcher now supports `MatchCondition.DO_NOT_MATCH`

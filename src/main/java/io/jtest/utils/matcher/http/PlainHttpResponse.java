@@ -14,12 +14,12 @@ public class PlainHttpResponse {
     @JsonProperty(value = "body")
     private Object entity;
     @JsonProperty(value = "headers")
-    private List<Map.Entry<String, String>> headers;
+    private List<Map.Entry<String, Object>> headers;
 
     public PlainHttpResponse() {
     }
 
-    private PlainHttpResponse(Object status, String reasonPhrase, Object entity, List<Map.Entry<String, String>> headers) {
+    private PlainHttpResponse(Object status, String reasonPhrase, Object entity, List<Map.Entry<String, Object>> headers) {
         this.status = status;
         this.reasonPhrase = reasonPhrase;
         this.entity = entity;
@@ -38,7 +38,7 @@ public class PlainHttpResponse {
         return reasonPhrase;
     }
 
-    public List<Map.Entry<String, String>> getHeaders() {
+    public List<Map.Entry<String, Object>> getHeaders() {
         return headers;
     }
 
@@ -56,7 +56,7 @@ public class PlainHttpResponse {
         private Object status;
         private String reasonPhrase;
         private Object entity;
-        private List<Map.Entry<String, String>> headers;
+        private List<Map.Entry<String, Object>> headers;
 
         private Builder() {
         }
@@ -80,7 +80,7 @@ public class PlainHttpResponse {
             return this;
         }
 
-        public Builder headers(List<Map.Entry<String, String>> headers) {
+        public Builder headers(List<Map.Entry<String, Object>> headers) {
             this.headers = Collections.unmodifiableList(headers);
             return this;
         }

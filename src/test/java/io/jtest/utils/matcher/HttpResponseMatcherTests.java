@@ -29,7 +29,7 @@ public class HttpResponseMatcherTests {
     public void matchInvalidHttpResponses() {
         String expected = "{\"status\": 200, \"headers\":{\"auth\":1}, \"reason\":\"test\",\"body\":{\"a\":\"~[val1] ipsum\"}}";
 
-        List<Map.Entry<String, String>> headers = new ArrayList<>();
+        List<Map.Entry<String, Object>> headers = new ArrayList<>();
         headers.add(new AbstractMap.SimpleEntry<>("auth", "1"));
         headers.add(new AbstractMap.SimpleEntry<>("x-auth", "2"));
         PlainHttpResponse actual = PlainHttpResponse.Builder.create().status(200)
@@ -46,9 +46,9 @@ public class HttpResponseMatcherTests {
     public void matchSimpleHttpResponses() throws InvalidTypeException {
         String expected = "{\"status\": 200, \"headers\":[{\"auth\":1},{\"x-auth\":2}], \"reason\":\"test\",\"body\":{\"a\":\"~[val1] ipsum\"}}";
 
-        List<Map.Entry<String, String>> headers = new ArrayList<>();
-        headers.add(new AbstractMap.SimpleEntry<>("auth", "1"));
-        headers.add(new AbstractMap.SimpleEntry<>("x-auth", "2"));
+        List<Map.Entry<String, Object>> headers = new ArrayList<>();
+        headers.add(new AbstractMap.SimpleEntry<>("auth", 1));
+        headers.add(new AbstractMap.SimpleEntry<>("x-auth", 2));
 
         PlainHttpResponse actual = PlainHttpResponse.Builder.create().status(200)
                 .headers(headers)
@@ -64,7 +64,7 @@ public class HttpResponseMatcherTests {
     public void matchSimpleHttpResponses_negative() {
         String expected = "{\"status\": 200, \"headers\":[{\"auth\":1},{\"x-auth\":2}], \"reason\":\"test\",\"body\":{\"a\":\"~[val1] ipsum\"}}";
 
-        List<Map.Entry<String, String>> headers = new ArrayList<>();
+        List<Map.Entry<String, Object>> headers = new ArrayList<>();
         headers.add(new AbstractMap.SimpleEntry<>("auth", "2"));
         PlainHttpResponse actual = PlainHttpResponse.Builder.create().status(200)
                 .reasonPhrase("test")
