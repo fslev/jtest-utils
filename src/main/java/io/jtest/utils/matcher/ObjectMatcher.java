@@ -33,7 +33,7 @@ public class ObjectMatcher {
 
     /**
      * @deprecated This method will be removed from the next major version release.
-     * <p> Use <a href="https://github.com/awaitility/awaitility">Awaitility</a> instead.
+     * <p>For polling based matching, use <a href="https://github.com/awaitility/awaitility">Awaitility</a> instead.
      */
     @Deprecated
     public static Map<String, Object> match(String message, Object expected, Supplier<Object> actualObjectSupplier, Duration pollingDuration,
@@ -51,7 +51,7 @@ public class ObjectMatcher {
 
     /**
      * @deprecated This method will be removed from the next major version release.
-     * <p> Use <a href="https://github.com/awaitility/awaitility">Awaitility</a> instead.
+     * <p>For polling based matching, use <a href="https://github.com/awaitility/awaitility">Awaitility</a> instead.
      */
     @Deprecated
     public static Map<String, Object> matchJson(String message, Object expected, Supplier<Object> actualObjectSupplier, Duration pollingDuration,
@@ -69,7 +69,7 @@ public class ObjectMatcher {
 
     /**
      * @deprecated This method will be removed from the next major version release.
-     * <p> Use <a href="https://github.com/awaitility/awaitility">Awaitility</a> instead.
+     * <p>For polling based matching, use <a href="https://github.com/awaitility/awaitility">Awaitility</a> instead.
      */
     @Deprecated
     public static Map<String, Object> matchXml(String message, Object expected, Supplier<Object> actualObjectSupplier, Duration pollingDuration,
@@ -95,7 +95,7 @@ public class ObjectMatcher {
 
     /**
      * @deprecated This method will be removed from the next major version release.
-     * <p> Use <a href="https://github.com/awaitility/awaitility">Awaitility</a> instead.
+     * <p>For polling based matching, use <a href="https://github.com/awaitility/awaitility">Awaitility</a> instead.
      */
     @Deprecated
     public static Map<String, Object> matchString(String message, Object expected, Supplier<Object> actualObjectSupplier, Duration pollingDuration,
@@ -129,7 +129,7 @@ public class ObjectMatcher {
 
     /**
      * @deprecated This method will be removed from the next major version release.
-     * <p> Use <a href="https://github.com/awaitility/awaitility">Awaitility</a> instead.
+     * <p>For polling based matching, use <a href="https://github.com/awaitility/awaitility">Awaitility</a> instead.
      */
     @Deprecated
     public static Map<String, Object> matchHttpResponse(String message, PlainHttpResponse expected, Supplier<PlainHttpResponse> actualSupplier, Duration pollingDuration,
