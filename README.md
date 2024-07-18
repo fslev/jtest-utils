@@ -257,7 +257,7 @@ Map<String, Object> capturedData = ObjectMatcher.matchJson(null, expected, actua
 assertEquals("heard", capturedData.get("someValueForBeneath"));
 assertEquals("-263355062.750", capturedData.get("speakValue"));
 ```  
-This feature is available for any flavour of object matching (Strings, Jsons or XMLs).    
+This feature is available for any flavour of object matching (String, Json or XML).    
   
 # <a name="polling"></a> 2. Polling (Deprecated)
 Retry an operation until desired result or timeout is reached:  
