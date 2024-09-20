@@ -1,6 +1,10 @@
 # Changelog
 
-## 5.18-SNAPSHOT
+## 5.19-SNAPSHOT
+
+## 5.18 (2024-05-22)
+- #### Changed
+  - Updated dependencies
 
 ## 5.17 (2024-05-22)
 - #### Changed
