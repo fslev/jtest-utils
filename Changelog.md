@@ -1,8 +1,10 @@
 # Changelog
 
-## 5.19-SNAPSHOT
-
-## 5.18 (2024-05-22)
+## 5.19 (2024-09-20)
+- #### Changed
+  - Updated json-compare dependency
+  
+## 5.18 (2024-09-20)
 - #### Changed
   - Updated dependencies
 
