@@ -1,6 +1,11 @@
 # Changelog
 
-## 5.21-SNAPSHOT
+## 5.22-SNAPSHOT
+
+## 5.21 (2024-09-26)
+- #### Changed
+  - Update dependencies   
+  - Aligned Jackson dependencies via Jackson BOM  
 
 ## 5.20 (2024-09-26)
 - #### Changed
