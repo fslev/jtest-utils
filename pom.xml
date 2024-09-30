@@ -24,7 +24,7 @@
         <surefire.version>3.5.0</surefire.version>
         <jackson.version>2.18.0</jackson.version>
         <jackson.databind.version>2.17.2</jackson.databind.version>
-        <log4j.version>2.24.0</log4j.version>
+        <log4j.version>2.24.1</log4j.version>
     </properties>
 
     <dependencyManagement>
