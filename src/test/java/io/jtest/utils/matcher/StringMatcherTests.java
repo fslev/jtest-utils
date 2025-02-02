@@ -175,6 +175,15 @@ public class StringMatcherTests {
     }
 
     @Test
+    public void compareSimpleStringWithSpecialCharsAssignSymbols() throws InvalidTypeException {
+        String expected = "This is ~[color.var-with!special[name<>{}\":;'/.,?'] color";
+        String actual = "This is blue black color";
+        StringMatcher matcher = new StringMatcher(null, expected, actual, null);
+        Map<String, Object> symbols = matcher.match();
+        assertEquals("blue black", symbols.get("color.var-with!special[name<>{}\":;'/.,?'"));
+    }
+
+    @Test
     public void compareRegexWithAssignSymbols() throws InvalidTypeException {
         String expected = ".* Rabbit ~[sym1] in the .*";
         String actual = "The Rabbit is running in the forest";
