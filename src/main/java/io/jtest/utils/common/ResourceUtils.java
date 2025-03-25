@@ -130,7 +130,7 @@ public class ResourceUtils {
         InputStream is = !isAbsolute(filePath) ? Thread.currentThread().getContextClassLoader().getResourceAsStream(filePath)
                 : Files.newInputStream(Paths.get(filePath));
         if (is == null) {
-            throw new IOException("File " + filePath + " not found");
+            throw new IOException("File " + filePath + " not found or directory might be empty");
         }
         return is;
     }

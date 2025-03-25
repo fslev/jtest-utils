@@ -1,6 +1,10 @@
 # Changelog
 
-## 5.22-SNAPSHOT
+## 5.23-SNAPSHOT
+
+## 5.22 (2025-03-25)
+- #### Changed
+  - Enhance error message when file not found while using [ResourceUtils.java](src/main/java/io/jtest/utils/common/ResourceUtils.java)
 
 ## 5.21 (2024-09-26)
 - #### Changed
