@@ -114,7 +114,7 @@ public class ResourceUtils {
         if (!isAbsolute(filePath)) {
             URL url = Thread.currentThread().getContextClassLoader().getResource(filePath);
             if (url == null) {
-                throw new IOException("File " + filePath + " not found");
+                throw new IOException("File " + filePath + " not found or directory might be empty");
             }
             path = Paths.get(url.toURI());
         } else {
