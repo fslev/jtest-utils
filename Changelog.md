@@ -1,6 +1,9 @@
 # Changelog
 
-## 5.24-SNAPSHOT
+## 6.0 (2025-03-28)
+- #### Changed
+  - Updated `json-compare` dependency to the next major version  
+    - This changes the way JSON diffs are displayed  
 
 ## 5.23 (2025-03-26)
 - #### Changed

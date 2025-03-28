@@ -4,7 +4,7 @@
 
     <groupId>io.github.fslev</groupId>
     <artifactId>jtest-utils</artifactId>
-    <version>5.24-SNAPSHOT</version>
+    <version>6.0-SNAPSHOT</version>
 
     <name>JTest Utils</name>
     <description>Java Utilities for testing</description>
@@ -19,7 +19,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <jsoncompare.version>6.18</jsoncompare.version>
+        <jsoncompare.version>7.0</jsoncompare.version>
         <xmlunit.version>2.10.0</xmlunit.version>
         <surefire.version>3.5.2</surefire.version>
         <jackson.version>2.18.3</jackson.version>
