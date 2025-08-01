@@ -1,5 +1,9 @@
 # Changelog
 
+## 6.1 (2025-08-01)
+- #### Changed
+  - Updated dependencies  
+
 ## 6.0 (2025-03-28)
 - #### Changed
   - Updated `json-compare` dependency to the next major version  
