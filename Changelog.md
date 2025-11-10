@@ -2,7 +2,7 @@
 
 ## 6.2 (2025-11-10)
 - #### Changed
-    - Updated dependencies
+  - Updated dependencies
 
 ## 6.1 (2025-08-01)
 - #### Changed
