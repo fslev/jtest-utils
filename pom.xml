@@ -19,7 +19,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <jsoncompare.version>7.1</jsoncompare.version>
+        <jsoncompare.version>7.2</jsoncompare.version>
         <xmlunit.version>2.11.0</xmlunit.version>
         <surefire.version>3.5.4</surefire.version>
         <jackson.version>2.20.1</jackson.version>
