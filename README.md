@@ -12,7 +12,6 @@ A set of testing utilities for Java
 by adding some powerful features:
 
 - **[Matching](#match)**
-- **[Polling](#polling)** (Deprecated)
 - **[Resource reader](#resource-reader)**
 
 **[Real world examples](#real-world)**
@@ -37,7 +36,7 @@ Gradle: compile("io.github.fslev:jtest-utils:${latest.version}")
 - Match Objects
 - Match HTTP responses
 
-_... with specific matching conditions, regular expression data capture and polling support_
+_... with specific matching conditions and regular expression data capture_
 
 ## <a name="match-jsons"></a> 1.1 Match JSONs
 
@@ -214,20 +213,7 @@ The beautiful part while comparing HTTP responses is the fact that depending on 
 In other words, the HTTP response bodies / entities might be matched as [JSONs](#match-jsons), [XMLs](#match-xmls) or [texts](#match-texts).  
 HTTP statuses and reasons are compared as [texts](#match-texts) while HTTP headers as [JSONs](#match-jsons).  
 
-## 1.6 Match with Polling support (Deprecated)
-All the matching mechanisms from above support polling.  
-The most used case is when we need to compare HTTP responses from a service which delivers the desired data asynchronously.  
-In this case we need to retry the execution of client request until the actual response is matched.  
-```javascript
-String expected = "{\"status\": 200, \"body\":{\"employee\":\"John Johnson\"}}";
-ObjectMatcher.matchHttpResponse("Result not found", from(expected),
-        () -> from(client.execute()),
-        Duration.ofSeconds(30), 1000L);
-```
-  
-  
-
-## 1.7 Match and Capture
+## 1.6 Match and Capture
 Only comparing objects is not enough in the real world of testing. Often, we need to parse the results that we've just matched, extract specific data and use it inside the next test step. Writing code for this, repeatedly, can be cumbersome.  
 So, in case of successful matching, we can extract the data we need by using custom placeholders delimited by  
 `~[` and `]` inside the __expected__ object: 
@@ -259,19 +245,7 @@ assertEquals("-263355062.750", capturedData.get("speakValue"));
 ```  
 This feature is available for any flavour of object matching (String, Json or XML).    
   
-# <a name="polling"></a> 2. Polling (Deprecated)
-Retry an operation until desired result or timeout is reached:  
-```javascript
-Integer result = new Polling<Integer>()
-        .duration(Duration.ofSeconds(30), 5L)
-        .exponentialBackOff(1.0)
-        .supplier(() -> generateRandomFromInterval(4, 7))
-        .until(number -> number == 6).get();
-        
-assertEquals(6, result);
-```
-
-# <a name="resource-reader"></a> 3. Resource reader
+# <a name="resource-reader"></a> 2. Resource reader
 
 Read resource as String from either classpath or absolute path:
 ```javascript
@@ -287,7 +261,7 @@ assertEquals("<html>text</html>", data.get("features/data/bar.html"));
 assertEquals("{\"elephants\" : 1}", data.get("features/data/zoo/animals.json"));
 ```
 
-# <a name="real-world"></a> 4. Real world examples
+# <a name="real-world"></a> 3. Real world examples
 Explore [cucumber-jutils-tutorial](https://github.com/fslev/cucumber-jutils-tutorial) to discover how most of these features are used in real life test scenarios.
 
 # Website
