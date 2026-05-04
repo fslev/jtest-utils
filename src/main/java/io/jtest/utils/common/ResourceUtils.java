@@ -76,22 +76,28 @@ public class ResourceUtils {
         if (!Files.isDirectory(rootPath)) {
             throw new IOException("Not a directory " + rootPath);
         }
-        try (Stream<Path> stream = Files.walk(rootPath).filter(path -> {
-            if (!path.toFile().isFile()) {
-                return false;
-            }
-            if (fileExtensionPatterns.length == 0 || (path.getFileName().toString().contains(".")
-                    && new HashSet<>(Arrays.asList(fileExtensionPatterns))
-                    .contains(path.getFileName().toString().substring(path.getFileName().toString().lastIndexOf("."))))) {
-                return true;
-            }
-            LOG.warn("Ignore file '{}'." + System.lineSeparator() + "It has none of the following extensions: {}",
-                    path.getFileName().toString(), fileExtensionPatterns);
-            return false;
-        })) {
+        Set<String> extensions = new HashSet<>(Arrays.asList(fileExtensionPatterns));
+        try (Stream<Path> stream = Files.walk(rootPath).filter(path -> isMatchingFile(path, extensions))) {
             return stream.map(path -> dirPath + (!dirPath.isEmpty() ? File.separator : "") + rootPath.relativize(path))
                     .collect(Collectors.toSet());
         }
+    }
+
+    private static boolean isMatchingFile(Path path, Set<String> extensions) {
+        if (!Files.isRegularFile(path)) {
+            return false;
+        }
+        if (extensions.isEmpty()) {
+            return true;
+        }
+        String fileName = path.getFileName().toString();
+        int dotIndex = fileName.lastIndexOf('.');
+        if (dotIndex >= 0 && extensions.contains(fileName.substring(dotIndex))) {
+            return true;
+        }
+        LOG.warn("Ignore file '{}'." + System.lineSeparator() + "It has none of the following extensions: {}",
+                fileName, extensions);
+        return false;
     }
 
     private static String readFromPath(String filePath) throws IOException {
