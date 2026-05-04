@@ -30,47 +30,40 @@ public class CustomXmlDiffEvaluator implements DifferenceEvaluator {
     public ComparisonResult evaluate(Comparison comparison, ComparisonResult comparisonResult) {
         ComparisonType comparisonType = comparison.getType();
 
-        if (comparison.getType() == ComparisonType.CHILD_NODELIST_LENGTH) {
-            return matchConditions.contains(MatchCondition.XML_CHILD_NODELIST_LENGTH) ? comparisonResult : ComparisonResult.SIMILAR;
-        }
-
-        if (comparison.getType() == ComparisonType.CHILD_NODELIST_SEQUENCE) {
-            return matchConditions.contains(MatchCondition.XML_CHILD_NODELIST_SEQUENCE) ?
-                    comparisonResult.equals(ComparisonResult.SIMILAR) ? ComparisonResult.DIFFERENT : comparisonResult
-                    : ComparisonResult.SIMILAR;
-        }
-
-        if (comparison.getType() == ComparisonType.ELEMENT_NUM_ATTRIBUTES) {
-            return matchConditions.contains(MatchCondition.XML_ELEMENT_NUM_ATTRIBUTES) ? comparisonResult : ComparisonResult.SIMILAR;
-        }
-
-        if (comparisonType == ComparisonType.XML_ENCODING
-                || comparisonType == ComparisonType.XML_VERSION
-                || comparisonType == ComparisonType.XML_STANDALONE
-                || comparisonType == ComparisonType.NO_NAMESPACE_SCHEMA_LOCATION
-                || comparisonType == ComparisonType.NAMESPACE_URI
-                || comparisonType == ComparisonType.NAMESPACE_PREFIX
-                || comparisonType == ComparisonType.SCHEMA_LOCATION
-                || comparison.getControlDetails().getTarget() == null) {
-            return ComparisonResult.SIMILAR;
+        switch (comparisonType) {
+            case CHILD_NODELIST_LENGTH:
+                return matchConditions.contains(MatchCondition.XML_CHILD_NODELIST_LENGTH) ? comparisonResult : ComparisonResult.SIMILAR;
+            case CHILD_NODELIST_SEQUENCE:
+                return matchConditions.contains(MatchCondition.XML_CHILD_NODELIST_SEQUENCE)
+                        ? (comparisonResult == ComparisonResult.SIMILAR ? ComparisonResult.DIFFERENT : comparisonResult)
+                        : ComparisonResult.SIMILAR;
+            case ELEMENT_NUM_ATTRIBUTES:
+                return matchConditions.contains(MatchCondition.XML_ELEMENT_NUM_ATTRIBUTES) ? comparisonResult : ComparisonResult.SIMILAR;
+            case XML_ENCODING:
+            case XML_VERSION:
+            case XML_STANDALONE:
+            case NO_NAMESPACE_SCHEMA_LOCATION:
+            case NAMESPACE_URI:
+            case NAMESPACE_PREFIX:
+            case SCHEMA_LOCATION:
+                return ComparisonResult.SIMILAR;
+            default:
+                break;
         }
 
         Node expectedNode = comparison.getControlDetails().getTarget();
+        if (expectedNode == null) {
+            return ComparisonResult.SIMILAR;
+        }
         Node actualNode = comparison.getTestDetails().getTarget();
 
-        if (expectedNode instanceof Attr && actualNode instanceof Attr) {
-            String expected = ((Attr) expectedNode).getValue();
-            String actual = ((Attr) actualNode).getValue();
-            return compare(expected, actual);
+        if (expectedNode instanceof Attr expectedAttr && actualNode instanceof Attr actualAttr) {
+            return compare(expectedAttr.getValue(), actualAttr.getValue());
         }
-
-        if (expectedNode instanceof Text && actualNode instanceof Text) {
-            String expected = ((Text) expectedNode).getData();
-            String actual = ((Text) actualNode).getData();
-            return compare(expected, actual);
+        if (expectedNode instanceof Text expectedText && actualNode instanceof Text actualText) {
+            return compare(expectedText.getData(), actualText.getData());
         }
-
-        if (comparisonType.equals(ComparisonType.ATTR_NAME_LOOKUP)) {
+        if (comparisonType == ComparisonType.ATTR_NAME_LOOKUP) {
             return compare(Nodes.getAttributes(expectedNode), Nodes.getAttributes(actualNode));
         }
         return comparisonResult;
