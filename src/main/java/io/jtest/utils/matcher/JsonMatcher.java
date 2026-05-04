@@ -9,8 +9,8 @@ import io.jtest.utils.matcher.comparators.json.CustomJsonComparator;
 import io.jtest.utils.matcher.condition.MatchCondition;
 import org.junit.jupiter.api.AssertionFailureBuilder;
 
+import java.util.EnumSet;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -82,16 +82,15 @@ public class JsonMatcher extends AbstractObjectMatcher<JsonNode> {
     }
 
     private Set<CompareMode> jsonCompareModes() {
-        Set<CompareMode> jsonCompareModes = new HashSet<>();
+        Set<CompareMode> modes = EnumSet.noneOf(CompareMode.class);
         for (MatchCondition condition : matchConditions) {
-            if (MatchCondition.JSON_NON_EXTENSIBLE_OBJECT.equals(condition)) {
-                jsonCompareModes.add(CompareMode.JSON_OBJECT_NON_EXTENSIBLE);
-            } else if (MatchCondition.JSON_NON_EXTENSIBLE_ARRAY.equals(condition)) {
-                jsonCompareModes.add(CompareMode.JSON_ARRAY_NON_EXTENSIBLE);
-            } else if (MatchCondition.JSON_STRICT_ORDER_ARRAY.equals(condition)) {
-                jsonCompareModes.add(CompareMode.JSON_ARRAY_STRICT_ORDER);
+            switch (condition) {
+                case JSON_NON_EXTENSIBLE_OBJECT -> modes.add(CompareMode.JSON_OBJECT_NON_EXTENSIBLE);
+                case JSON_NON_EXTENSIBLE_ARRAY -> modes.add(CompareMode.JSON_ARRAY_NON_EXTENSIBLE);
+                case JSON_STRICT_ORDER_ARRAY -> modes.add(CompareMode.JSON_ARRAY_STRICT_ORDER);
+                default -> { /* unrelated condition, ignore */ }
             }
         }
-        return jsonCompareModes;
+        return modes;
     }
 }
