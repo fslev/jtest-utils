@@ -1,5 +1,33 @@
 # Changelog
 
+## 7.0 (TBD)
+- #### Removed
+  - Removed deprecated `Polling` API (`io.jtest.utils.polling.Polling`,
+    `io.jtest.utils.exceptions.PollingTimeoutException`) and the
+    polling-based overloads of `ObjectMatcher.match*`. Use
+    [Awaitility](https://github.com/awaitility/awaitility) instead.
+- #### Changed
+  - **Breaking:** Java baseline raised from 8 to 17. Consumers must
+    compile with JDK 17 or newer.
+  - **Breaking:** `PlainHttpResponse` is now a `record`. Accessor
+    methods change from `getStatus()`/`getReasonPhrase()`/`getEntity()`/
+    `getHeaders()` to `status()`/`reasonPhrase()`/`entity()`/`headers()`.
+    The `Builder` API (`PlainHttpResponse.Builder.create()...build()`)
+    and the `ParseException` are unchanged. The builder now defensively
+    copies the headers list via `List.copyOf` in the record's compact
+    constructor.
+  - Internal refactors across the matcher package: extracted the
+    duplicated `HttpResponseMatcher.positiveMatch` per-component logic
+    into a single helper, replaced `if`/`else if` enum dispatch with
+    `switch` and pattern matching for `instanceof` in
+    `CustomXmlDiffEvaluator`, switched `JsonMatcher.jsonCompareModes`
+    to a switch + `EnumSet`, made `AbstractObjectMatcher.message`
+    final via a `matchTypeSuffix()` override, decomposed
+    `StringMatcher.positiveMatch` into named branch helpers, replaced
+    `JsonMatcher.positiveMatch`'s `while(true)` retry with a named
+    helper, and simplified `StringMatcher.convertToString`'s dead
+    if-branch.
+
 ## 6.2 (2025-11-10)
 - #### Changed
   - Updated dependencies
