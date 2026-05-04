@@ -2,44 +2,17 @@ package io.jtest.utils.matcher.http;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-public class PlainHttpResponse {
-    @JsonProperty(value = "status")
-    private Object status;
-    @JsonProperty(value = "reason")
-    private String reasonPhrase;
-    @JsonProperty(value = "body")
-    private Object entity;
-    @JsonProperty(value = "headers")
-    private List<Map.Entry<String, Object>> headers;
+public record PlainHttpResponse(
+        @JsonProperty("status") Object status,
+        @JsonProperty("reason") String reasonPhrase,
+        @JsonProperty("body") Object entity,
+        @JsonProperty("headers") List<Map.Entry<String, Object>> headers) {
 
-    public PlainHttpResponse() {
-    }
-
-    private PlainHttpResponse(Object status, String reasonPhrase, Object entity, List<Map.Entry<String, Object>> headers) {
-        this.status = status;
-        this.reasonPhrase = reasonPhrase;
-        this.entity = entity;
-        this.headers = headers;
-    }
-
-    public Object getStatus() {
-        return status;
-    }
-
-    public Object getEntity() {
-        return entity;
-    }
-
-    public String getReasonPhrase() {
-        return reasonPhrase;
-    }
-
-    public List<Map.Entry<String, Object>> getHeaders() {
-        return headers;
+    public PlainHttpResponse {
+        headers = headers == null ? null : List.copyOf(headers);
     }
 
     @Override
@@ -52,7 +25,7 @@ public class PlainHttpResponse {
                 '}';
     }
 
-    public static class Builder {
+    public static final class Builder {
         private Object status;
         private String reasonPhrase;
         private Object entity;
@@ -81,7 +54,7 @@ public class PlainHttpResponse {
         }
 
         public Builder headers(List<Map.Entry<String, Object>> headers) {
-            this.headers = Collections.unmodifiableList(headers);
+            this.headers = headers;
             return this;
         }
 
