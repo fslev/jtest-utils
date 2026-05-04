@@ -6,7 +6,6 @@ import io.jtest.utils.common.RegexUtils;
 import io.jtest.utils.common.StringParser;
 import io.jtest.utils.exceptions.InvalidTypeException;
 import io.jtest.utils.matcher.condition.MatchCondition;
-import org.apache.commons.lang3.ClassUtils;
 import org.junit.jupiter.api.AssertionFailureBuilder;
 
 import java.util.HashMap;
@@ -145,13 +144,11 @@ public class StringMatcher extends AbstractObjectMatcher<Object> {
     }
 
     private static String convertToString(Object value) {
-        if (!(value instanceof String) || !ClassUtils.isPrimitiveOrWrapper(value.getClass())) {
-            try {
-                return MAPPER.convertValue(value, String.class);
-            } catch (IllegalArgumentException ignored) {
-            }
+        try {
+            return MAPPER.convertValue(value, String.class);
+        } catch (IllegalArgumentException ignored) {
+            return value.toString();
         }
-        return value.toString();
     }
 
     private static Pattern patternWithPlaceholdersAsCaptureGroups(String source, List<String> placeholderNames, boolean regexDisabled) {
