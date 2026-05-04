@@ -4,6 +4,7 @@ import io.jtest.utils.exceptions.InvalidTypeException;
 import io.jtest.utils.matcher.condition.MatchCondition;
 import org.junit.jupiter.api.Test;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -601,5 +602,36 @@ public class StringMatcherTests {
     public void matchWithDisabledRegex_negative() throws InvalidTypeException {
         assertThrows(AssertionError.class, () -> new StringMatcher(null, "test (zara shop", "test (zara) shop",
                 new HashSet<>(Collections.singletonList(MatchCondition.REGEX_DISABLED))).match());
+    }
+
+    @Test
+    public void compareLongs() throws InvalidTypeException {
+        Map<String, Object> props = new StringMatcher(null, 1234567890123L, 1234567890123L, null).match();
+        assertTrue(props.isEmpty());
+    }
+
+    @Test
+    public void compareDoubles() throws InvalidTypeException {
+        Map<String, Object> props = new StringMatcher(null, 3.14, 3.14, null).match();
+        assertTrue(props.isEmpty());
+    }
+
+    @Test
+    public void compareCharacters() throws InvalidTypeException {
+        Map<String, Object> props = new StringMatcher(null, 'a', 'a', null).match();
+        assertTrue(props.isEmpty());
+    }
+
+    @Test
+    public void compareBigDecimals() throws InvalidTypeException {
+        Map<String, Object> props = new StringMatcher(null,
+                new BigDecimal("100.50"), new BigDecimal("100.50"), null).match();
+        assertTrue(props.isEmpty());
+    }
+
+    @Test
+    public void compareIntegerWithLongOfSameValue() throws InvalidTypeException {
+        Map<String, Object> props = new StringMatcher(null, 42, 42L, null).match();
+        assertTrue(props.isEmpty());
     }
 }
