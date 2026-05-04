@@ -33,13 +33,17 @@ public class StringMatcher extends AbstractObjectMatcher<Object> {
 
     public StringMatcher(String message, Object expected, Object actual, Set<MatchCondition> matchConditions) throws InvalidTypeException {
         super(message, expected, actual, matchConditions);
-        this.message += "Strings do not match" + System.lineSeparator() + System.lineSeparator() + ASSERTION_ERROR_HINT_MESSAGE +
-                System.lineSeparator() + System.lineSeparator();
     }
 
     @Override
     Object convert(Object value) {
         return value;
+    }
+
+    @Override
+    protected String matchTypeSuffix() {
+        return "Strings do not match" + System.lineSeparator() + System.lineSeparator() + ASSERTION_ERROR_HINT_MESSAGE +
+                System.lineSeparator() + System.lineSeparator();
     }
 
     @Override

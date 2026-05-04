@@ -22,8 +22,6 @@ public class JsonMatcher extends AbstractObjectMatcher<JsonNode> {
 
     public JsonMatcher(String message, Object expected, Object actual, Set<MatchCondition> matchConditions) throws InvalidTypeException {
         super(message, expected, actual, matchConditions);
-        this.message += "JSONs do not match" + System.lineSeparator() + System.lineSeparator() + ASSERTION_ERROR_HINT_MESSAGE +
-                System.lineSeparator() + System.lineSeparator();
         this.comparator = new CustomJsonComparator(matchConditions);
     }
 
@@ -34,6 +32,12 @@ public class JsonMatcher extends AbstractObjectMatcher<JsonNode> {
         } catch (Exception e) {
             throw new InvalidTypeException("Invalid JSON NODE", e);
         }
+    }
+
+    @Override
+    protected String matchTypeSuffix() {
+        return "JSONs do not match" + System.lineSeparator() + System.lineSeparator() + ASSERTION_ERROR_HINT_MESSAGE +
+                System.lineSeparator() + System.lineSeparator();
     }
 
     @Override
