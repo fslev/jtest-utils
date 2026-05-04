@@ -67,55 +67,70 @@ public class StringMatcher extends AbstractObjectMatcher<Object> {
     }
 
     private Map<String, Object> positiveMatch() {
-        Map<String, Object> properties = new HashMap<>();
-
         if (matchesWithNull()) {
-            return properties;
+            return new HashMap<>();
         }
 
         String expectedString = convertToString(expected);
         String actualString = convertToString(actual);
-
         List<String> placeholderNames = StringParser.captureValues(expectedString, captureGroupPattern);
 
-        if (placeholderNames.size() == 1 && expectedString.equals(CAPTURE_PLACEHOLDER_PREFIX + placeholderNames.get(0) + CAPTURE_PLACEHOLDER_SUFFIX)) {
-            String standalonePlaceholder = placeholderNames.get(0);
-            properties.put(standalonePlaceholder, actual);
-            return properties;
-        } else if (actual == null) {
+        if (isStandalonePlaceholder(expectedString, placeholderNames)) {
+            return captureActualAsStandalonePlaceholder(placeholderNames.get(0));
+        }
+        if (actual == null) {
             AssertionFailureBuilder.assertionFailure().message(message).expected(expected).actual(null).buildAndThrow();
-        } else if (!placeholderNames.isEmpty()) {
-            List<String> capturedValues = StringParser.captureValues(actualString,
-                    patternWithPlaceholdersAsCaptureGroups(expectedString, placeholderNames, matchConditions.contains(MatchCondition.REGEX_DISABLED)), true);
-            if (capturedValues.isEmpty()) {
-                AssertionFailureBuilder.assertionFailure().message(message).expected(expected).actual(actual).buildAndThrow();
-            }
-            for (int i = 0; i < capturedValues.size(); i++) {
-                if (i < placeholderNames.size()) {
-                    properties.put(placeholderNames.get(i), capturedValues.get(i));
-                }
-            }
-            return properties;
+        }
+        if (!placeholderNames.isEmpty()) {
+            return matchWithCaptureGroups(expectedString, actualString, placeholderNames);
+        }
+        return matchAsRegexOrLiteral(expectedString, actualString);
+    }
 
-        } else {
-            if (!matchConditions.contains(MatchCondition.REGEX_DISABLED)) {
-                try {
-                    Pattern pattern = Pattern.compile(expectedString, Pattern.DOTALL | Pattern.MULTILINE);
-                    if (!pattern.matcher(actualString).matches()) {
-                        AssertionFailureBuilder.assertionFailure().message(message).expected(expected).actual(actual).buildAndThrow();
-                    }
-                } catch (PatternSyntaxException e) {
-                    if (!expectedString.equals(actual)) {
-                        AssertionFailureBuilder.assertionFailure().message(message).expected(expected).actual(actual).buildAndThrow();
-                    }
-                }
-            } else {
-                if (!expectedString.equals(actualString)) {
-                    AssertionFailureBuilder.assertionFailure().message(message).expected(expected).actual(actual).buildAndThrow();
-                }
-            }
+    private static boolean isStandalonePlaceholder(String expectedString, List<String> placeholderNames) {
+        return placeholderNames.size() == 1
+                && expectedString.equals(CAPTURE_PLACEHOLDER_PREFIX + placeholderNames.get(0) + CAPTURE_PLACEHOLDER_SUFFIX);
+    }
+
+    private Map<String, Object> captureActualAsStandalonePlaceholder(String placeholder) {
+        Map<String, Object> properties = new HashMap<>();
+        properties.put(placeholder, actual);
+        return properties;
+    }
+
+    private Map<String, Object> matchWithCaptureGroups(String expectedString, String actualString, List<String> placeholderNames) {
+        Pattern pattern = patternWithPlaceholdersAsCaptureGroups(expectedString, placeholderNames,
+                matchConditions.contains(MatchCondition.REGEX_DISABLED));
+        List<String> capturedValues = StringParser.captureValues(actualString, pattern, true);
+        if (capturedValues.isEmpty()) {
+            AssertionFailureBuilder.assertionFailure().message(message).expected(expected).actual(actual).buildAndThrow();
+        }
+        Map<String, Object> properties = new HashMap<>();
+        int limit = Math.min(capturedValues.size(), placeholderNames.size());
+        for (int i = 0; i < limit; i++) {
+            properties.put(placeholderNames.get(i), capturedValues.get(i));
         }
         return properties;
+    }
+
+    private Map<String, Object> matchAsRegexOrLiteral(String expectedString, String actualString) {
+        if (matchConditions.contains(MatchCondition.REGEX_DISABLED)) {
+            if (!expectedString.equals(actualString)) {
+                AssertionFailureBuilder.assertionFailure().message(message).expected(expected).actual(actual).buildAndThrow();
+            }
+            return new HashMap<>();
+        }
+        try {
+            Pattern pattern = Pattern.compile(expectedString, Pattern.DOTALL | Pattern.MULTILINE);
+            if (!pattern.matcher(actualString).matches()) {
+                AssertionFailureBuilder.assertionFailure().message(message).expected(expected).actual(actual).buildAndThrow();
+            }
+        } catch (PatternSyntaxException e) {
+            if (!expectedString.equals(actual)) {
+                AssertionFailureBuilder.assertionFailure().message(message).expected(expected).actual(actual).buildAndThrow();
+            }
+        }
+        return new HashMap<>();
     }
 
     private boolean matchesWithNull() {
