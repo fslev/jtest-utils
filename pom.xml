@@ -4,7 +4,7 @@
 
     <groupId>io.github.fslev</groupId>
     <artifactId>jtest-utils</artifactId>
-    <version>6.3-SNAPSHOT</version>
+    <version>7.0-SNAPSHOT</version>
 
     <name>JTest Utils</name>
     <description>Java Utilities for testing</description>
@@ -128,7 +128,7 @@
                             </execution>
                         </executions>
                         <configuration>
-                            <source>11</source>
+                            <source>17</source>
                             <doclint>none</doclint>
                         </configuration>
                     </plugin>
@@ -229,8 +229,7 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.14.1</version>
                 <configuration>
-                    <release>8</release>
-                    <testRelease>11</testRelease>
+                    <release>17</release>
                 </configuration>
             </plugin>
         </plugins>
