@@ -129,6 +129,28 @@ ObjectMatcher.matchJson(
         MatchCondition.JSON_STRICT_ORDER_ARRAY); // throws AssertionError
 ```
 
+The match fails and every difference is reported together, not just the first:
+
+```
+FOUND 4 DIFFERENCE(S):
+
+_________________________DIFF__________________________
+$.copper[0].jack was not found
+
+_________________________DIFF__________________________
+$.speak
+Expected value: -263355062.75097084 But got: -263355062.750
+
+_________________________DIFF__________________________
+$.basis was not found
+
+_________________________DIFF__________________________
+$ -> Actual JSON OBJECT has extra fields
+
+Seems that JSONs do not match
+JSONs do not match
+```
+
 Either side may be a JSON string, a Jackson `JsonNode`, a `Map`, a `List`, or any POJO.
 
 ### `matchXml`
