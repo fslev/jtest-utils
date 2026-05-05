@@ -83,6 +83,12 @@ The match is lenient by default — `actual` may have extra fields and arrays ma
 All entrypoints live on `io.jtest.utils.matcher.ObjectMatcher`. Each returns a `Map<String, Object>` of
 captured placeholder values (empty if none were defined) and throws `AssertionError` on mismatch.
 
+Under the hood: JSON matching is delegated to [json-compare](https://github.com/fslev/json-compare),
+XML matching to [XMLUnit](https://github.com/xmlunit/xmlunit), and string matching uses Java's built-in
+`java.util.regex`. `matchHttpResponse` routes each response component to one of the above (statuses and
+reasons → string, headers → JSON, body → auto-detect), and `match` itself simply tries JSON, then XML,
+then string.
+
 | Method | Purpose |
 |---|---|
 | [`matchJson`](#matchjson) | Match as JSON. Either side may be a JSON string, `JsonNode`, `Map`, `List`, or POJO. |
@@ -168,38 +174,45 @@ clearer failure messages.
 ### `matchHttpResponse`
 
 ```java
-import io.jtest.utils.matcher.http.PlainHttpResponse;
+String expected = "{\"status\": 200, \"headers\":[{\"Content-Length\":\"157\"}], \"body\":{\"employee\":\"John Johnson\"}}";
+String actual   = "{\"status\": 200, \"headers\":[{\"Content-Length\":\"157\"}], \"body\":{\"employee\":\"John Johnny\"}}";
 
-import java.util.AbstractMap;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-List<Map.Entry<String, Object>> expectedHeaders = new ArrayList<>();
-expectedHeaders.add(new AbstractMap.SimpleEntry<>("Content-Length", "157"));
-
-PlainHttpResponse expected = PlainHttpResponse.Builder.create()
-        .status(200)
-        .headers(expectedHeaders)
-        .entity("{\"employee\":\"~[name]\"}")
-        .build();
-
-PlainHttpResponse actual = adaptFromYourHttpClient();   // build the same way
-
-Map<String, Object> captured =
-        ObjectMatcher.matchHttpResponse("Matching failure", expected, actual);
-captured.get("name"); // captured from the response body
+ObjectMatcher.matchHttpResponse("Matching failure", from(expected), from(actual));
 ```
 
-Only the components set on `expected` are asserted on — leave a component unset to skip it. The `entity`
-(body) is matched via the same auto-detect logic as `match` above, so JSON, XML, and plain-text bodies all
-work transparently.
+The match fails and the assertion error spells out which component differed and why:
+
+```
+FOUND 1 DIFFERENCE(S):
+
+_________________________DIFF__________________________
+$.employee
+Expected value: "John Johnson" But got: "John Johnny"
+
+HTTP Response bodies do not match!
+Matching failure
+
+JSONs do not match
+```
+
+Only the components set on `expected` are asserted on — leave a component unset to skip it. The body is
+matched via the same auto-detect logic as `match` above, so JSON, XML, and plain-text bodies all work
+transparently.
 
 `PlainHttpResponse` is a record (Java 17). Accessors are `status()`, `reasonPhrase()`, `entity()`, and
-`headers()`. The class is also Jackson-deserializable from the JSON shape:
+`headers()`. Build one with `PlainHttpResponse.Builder.create()…build()` for hand-crafted expected values,
+or deserialize one from a JSON document with the shape
+`{ "status": …, "reason": …, "headers": [{…: …}, …], "body": … }`. The `from(...)` helper above is a
+project-local Jackson convenience:
 
-```
-{ "status": <number-or-string>, "reason": "<text>", "headers": [{"<name>": <value>}, …], "body": <object-or-text> }
+```java
+public static PlainHttpResponse from(String content) {
+    try {
+        return new ObjectMapper().readValue(content, PlainHttpResponse.class);
+    } catch (JsonProcessingException e) {
+        throw new PlainHttpResponse.ParseException("Cannot parse content", e);
+    }
+}
 ```
 
 ## Capture placeholders
