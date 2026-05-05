@@ -1,6 +1,6 @@
 # Changelog
 
-## 7.0 (TBD)
+## 7.0 (2026-05-05)
 - #### Removed
   - Removed deprecated `Polling` API. Use [Awaitility](https://github.com/awaitility/awaitility) instead.
 - #### Changed
