@@ -11,7 +11,7 @@ facade (`ObjectMatcher`), supports regex on every scalar by default, lets you ti
 comparison with `MatchCondition` flags, and returns a map of values captured from the actual side via
 `~[name]` placeholders embedded in the expected side.  
 
-## Features
+## 1. Features
 
 - One facade for JSON, XML, plain-text, and HTTP-response matching: `ObjectMatcher`.
 - `~[name]` capture placeholders inside the expected value — values are returned in a `Map<String, Object>`.
@@ -20,11 +20,11 @@ comparison with `MatchCondition` flags, and returns a map of values captured fro
 - Soft-assertion failures (every difference is reported, not just the first) via `org.opentest4j.AssertionFailedError`.
 - Read fixture files from the classpath or an absolute filesystem path: `ResourceUtils.read`, `readYaml`, `readDirectory`.
 
-## Requirements
+## 2. Requirements
 
 - Java 17 or later
 
-## Installation
+## 3. Installation
 
 Maven:
 
@@ -42,7 +42,7 @@ Gradle:
 testImplementation 'io.github.fslev:jtest-utils:${latest.version}'
 ```
 
-## Quickstart
+## 4. Quickstart
 
 ```java
 import io.jtest.utils.matcher.ObjectMatcher;
@@ -76,9 +76,9 @@ captured.get("speakValue");          // "-263355062.750"
 ```
 
 The match is lenient by default — `actual` may have extra fields and arrays may be out of order. Tighten with
-[`MatchCondition`](#match-conditions) flags.
+[`MatchCondition`](#7-match-conditions) flags.
 
-## Matching
+## 5. Matching
 
 All entrypoints live on `io.jtest.utils.matcher.ObjectMatcher`. Each returns a `Map<String, Object>` of
 captured placeholder values (empty if none were defined) and throws `AssertionError` on mismatch.
@@ -237,7 +237,7 @@ public static PlainHttpResponse from(String content) {
 }
 ```
 
-## Capture placeholders
+## 6. Capture placeholders
 
 A placeholder of the form `~[name]` inside the expected value matches any text in the actual value at that
 position; the matched substring is returned in the result map under `name`.
@@ -251,7 +251,7 @@ captured.get("who"); // "world"
 A placeholder that occupies an entire scalar (e.g. an entire JSON value, an entire attribute, an entire
 string) captures the raw value, not its string form. Otherwise the captured value is the matched substring.
 
-## Match conditions
+## 7. Match conditions
 
 Pass any combination as the trailing varargs of an `ObjectMatcher.matchXxx` call.
 
@@ -267,7 +267,7 @@ Pass any combination as the trailing varargs of an `ObjectMatcher.matchXxx` call
 | `DO_NOT_MATCH_HTTP_RESPONSE_BY_STATUS` / `_BY_REASON` / `_BY_HEADERS` / `_BY_BODY` | Per-component negation for HTTP responses (the plain `DO_NOT_MATCH` is ambiguous there). |
 | `REGEX_DISABLED` | Compare scalars by literal equality instead of as regex. |
 
-## Resource reader
+## 8. Resource reader
 
 `io.jtest.utils.common.ResourceUtils` reads files from either the classpath (relative path) or the filesystem
 (absolute path); the same call works for both.
@@ -289,7 +289,7 @@ files.get("foobar/dir1/test2.properties"); // "pass"
 `readProps(String)` returns `java.util.Properties`; `getFilesFromDir(String, String...)` returns the relative
 paths only; `getFileName(String)` returns the last path segment. Missing files surface as `IOException`.
 
-## Other utilities
+## 9. Other utilities
 
 The library also exposes a few small helpers (see Javadoc for full method lists):
 
@@ -298,10 +298,10 @@ The library also exposes a few small helpers (see Javadoc for full method lists)
 - `io.jtest.utils.common.RegexUtils` — check whether a string is a syntactically valid regex; list the metacharacters it contains.
 - `io.jtest.utils.common.XmlUtils` — parse a string to a DOM `Node`, serialize a `Node`, walk an XML tree applying a function to each element / attribute / text node.
 
-## Real-world examples
+## 10. Real-world examples
 
 For end-to-end usage in a test framework, see [cucumber-jutils-tutorial](https://github.com/fslev/cucumber-jutils-tutorial).
 
-## License
+## 11. License
 
 [Apache License 2.0](LICENSE)
