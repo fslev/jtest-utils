@@ -64,12 +64,13 @@ public record PlainHttpResponse(
     }
 
     public static class ParseException extends RuntimeException {
-        public static final String EXPECTED_FORMAT = "{" + System.lineSeparator() +
-                "  \"status\": <number> | \"<text>\"," + System.lineSeparator() +
-                "  \"body\": <object>," + System.lineSeparator() +
-                "  \"headers\": [{\"<name>\":<value>}, ...]," + System.lineSeparator() +
-                "  \"reason\": \"<text>\"" + System.lineSeparator() +
-                "}";
+        public static final String EXPECTED_FORMAT = """
+                {
+                  "status": <number> | "<text>",
+                  "body": <object>,
+                  "headers": [{"<name>":<value>}, ...],
+                  "reason": "<text>"
+                }""";
 
         public ParseException(String msg) {
             this(msg, null);

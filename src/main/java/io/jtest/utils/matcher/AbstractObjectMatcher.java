@@ -10,9 +10,10 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 abstract class AbstractObjectMatcher<T> {
-    protected static final String ASSERTION_ERROR_HINT_MESSAGE = "Matching is by default case-sensitive and uses regular expressions." + System.lineSeparator() +
-            "If expected object contains any unintentional regexes, then quote them between \\Q and \\E delimiters.\n" +
-            "For disabling case-sensitivity, use (?i) and (?-i) modifiers.";
+    protected static final String ASSERTION_ERROR_HINT_MESSAGE = """
+            Matching is by default case-sensitive and uses regular expressions.
+            If expected object contains any unintentional regexes, then quote them between \\Q and \\E delimiters.
+            For disabling case-sensitivity, use (?i) and (?-i) modifiers.""";
 
     protected final String message;
     protected final String negativeMatchMessage;
