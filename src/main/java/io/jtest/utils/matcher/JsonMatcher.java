@@ -62,7 +62,7 @@ public class JsonMatcher extends AbstractObjectMatcher<JsonNode> {
 
     private Map<String, Object> positiveMatch() {
         try {
-            JSONCompare.assertMatches(expected, actual, comparator, jsonCompareModes(), message);
+            assertJsonsMatch();
         } catch (AssertionError firstFailure) {
             if (comparator.getFieldProperties().isEmpty()) {
                 throw firstFailure;
@@ -77,7 +77,7 @@ public class JsonMatcher extends AbstractObjectMatcher<JsonNode> {
             comparator.getDepletedFieldPropertyList().add(new HashMap<>(comparator.getFieldProperties()));
             comparator.getFieldProperties().clear();
             try {
-                JSONCompare.assertMatches(expected, actual, comparator, jsonCompareModes(), message);
+                assertJsonsMatch();
                 return;
             } catch (AssertionError retryFailure) {
                 if (comparator.getFieldProperties().isEmpty()) {
@@ -85,6 +85,14 @@ public class JsonMatcher extends AbstractObjectMatcher<JsonNode> {
                 }
             }
         }
+    }
+
+    private void assertJsonsMatch() {
+        JSONCompare.compare(expected, actual)
+                .comparator(comparator)
+                .modes(jsonCompareModes())
+                .message(message)
+                .assertMatches();
     }
 
     private Set<CompareMode> jsonCompareModes() {
