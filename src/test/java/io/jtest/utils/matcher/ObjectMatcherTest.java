@@ -98,58 +98,59 @@ public class ObjectMatcherTest {
 
     @Test
     public void matchJsonObjectsUsingJsonPath() {
-        String expected = "{\"#($..book[?(@.price <= $['expensive'])])\":[" +
-                "{\n" +
-                "                \"category\": \"fiction\",\n" +
-                "                \"author\": \"Herman Melville\",\n" +
-                "                \"title\": \"~[title1]\",\n" +
-                "                \"isbn\": \"0-553-21311-3\",\n" +
-                "                \"price\": 8.99\n" +
-                "            },\n" +
-                "{\n" +
-                "                \"category\": \"reference\",\n" +
-                "                \"author\": \"~[author2]\",\n" +
-                "                \"title\": \"S.*e Century\",\n" +
-                "                \"price\": 8.95\n" +
-                "            }\n" +
-                "]}";
-        String actual = "{\n" +
-                "    \"store\": {\n" +
-                "        \"book\": [\n" +
-                "            {\n" +
-                "                \"category\": \"reference\",\n" +
-                "                \"author\": \"Nigel Rees\",\n" +
-                "                \"title\": \"Sayings of the Century\",\n" +
-                "                \"price\": 8.95\n" +
-                "            },\n" +
-                "            {\n" +
-                "                \"category\": \"fiction\",\n" +
-                "                \"author\": \"Evelyn Waugh\",\n" +
-                "                \"title\": \"Sword of Honour\",\n" +
-                "                \"price\": 12.99\n" +
-                "            },\n" +
-                "            {\n" +
-                "                \"category\": \"fiction\",\n" +
-                "                \"author\": \"Herman Melville\",\n" +
-                "                \"title\": \"Moby Dick\",\n" +
-                "                \"isbn\": \"0-553-21311-3\",\n" +
-                "                \"price\": 8.99\n" +
-                "            },\n" +
-                "            {\n" +
-                "                \"category\": \"fiction\",\n" +
-                "                \"author\": \"J. R. R. Tolkien\",\n" +
-                "                \"title\": \"The Lord of the Rings\",\n" +
-                "                \"isbn\": \"0-395-19395-8\",\n" +
-                "                \"price\": 22.99\n" +
-                "            }\n" +
-                "        ],\n" +
-                "        \"bicycle\": {\n" +
-                "            \"color\": \"red\",\n" +
-                "            \"price\": 19.95\n" +
-                "        }\n" +
-                "    },\n" +
-                "    \"expensive\": 10\n" +
-                "}";
+        String expected = """
+                {"#($..book[?(@.price <= $['expensive'])])":[{
+                                "category": "fiction",
+                                "author": "Herman Melville",
+                                "title": "~[title1]",
+                                "isbn": "0-553-21311-3",
+                                "price": 8.99
+                            },
+                {
+                                "category": "reference",
+                                "author": "~[author2]",
+                                "title": "S.*e Century",
+                                "price": 8.95
+                            }
+                ]}""";
+        String actual = """
+                {
+                    "store": {
+                        "book": [
+                            {
+                                "category": "reference",
+                                "author": "Nigel Rees",
+                                "title": "Sayings of the Century",
+                                "price": 8.95
+                            },
+                            {
+                                "category": "fiction",
+                                "author": "Evelyn Waugh",
+                                "title": "Sword of Honour",
+                                "price": 12.99
+                            },
+                            {
+                                "category": "fiction",
+                                "author": "Herman Melville",
+                                "title": "Moby Dick",
+                                "isbn": "0-553-21311-3",
+                                "price": 8.99
+                            },
+                            {
+                                "category": "fiction",
+                                "author": "J. R. R. Tolkien",
+                                "title": "The Lord of the Rings",
+                                "isbn": "0-395-19395-8",
+                                "price": 22.99
+                            }
+                        ],
+                        "bicycle": {
+                            "color": "red",
+                            "price": 19.95
+                        }
+                    },
+                    "expensive": 10
+                }""";
         Map<String, Object> resultedVars = ObjectMatcher.match(null, expected, actual);
         assertEquals("Moby Dick", resultedVars.get("title1"));
         assertEquals("Nigel Rees", resultedVars.get("author2"));
