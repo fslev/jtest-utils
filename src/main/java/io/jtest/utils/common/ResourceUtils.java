@@ -23,6 +23,20 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+/**
+ * Reads files from either the classpath or an absolute filesystem path, with helpers for
+ * common test-fixture formats (plain text, properties, YAML) and bulk directory reads.
+ *
+ * <p>Every {@code filePath} parameter accepts both forms:
+ * <ul>
+ *   <li>A <b>relative path</b> resolved against the current thread's context classloader,
+ *       e.g. {@code "fixtures/config.yaml"}.</li>
+ *   <li>An <b>absolute filesystem path</b>, e.g. {@code "/var/tmp/data.json"}.</li>
+ * </ul>
+ *
+ * <p>If the path does not resolve to a readable file, an {@link IOException} is thrown
+ * with the offending path included in the message.
+ */
 public class ResourceUtils {
 
     private ResourceUtils() {
@@ -31,16 +45,40 @@ public class ResourceUtils {
 
     private static final Logger LOG = LogManager.getLogger();
 
+    /**
+     * Reads the file at {@code filePath} as a UTF-8 string.
+     *
+     * @param filePath classpath-relative or absolute path
+     * @return file contents as a UTF-8 string
+     * @throws IOException if the file is not found or cannot be read
+     */
     public static String read(String filePath) throws IOException {
         return readFromPath(filePath);
     }
 
+    /**
+     * Reads the file at {@code filePath} as a Java {@link Properties} document.
+     * The file is decoded as UTF-8 before being parsed.
+     *
+     * @param filePath classpath-relative or absolute path to a {@code .properties} file
+     * @return parsed properties
+     * @throws IOException if the file is not found, cannot be read, or is not valid
+     *                     properties syntax
+     */
     public static Properties readProps(String filePath) throws IOException {
         Properties props = new Properties();
         props.load(new StringReader(read(filePath)));
         return props;
     }
 
+    /**
+     * Reads the file at {@code filePath} as a YAML document and returns it as a tree
+     * of nested {@link Map}s and {@link java.util.List}s, mirroring the YAML structure.
+     *
+     * @param filePath classpath-relative or absolute path to a {@code .yaml} / {@code .yml} file
+     * @return the parsed YAML root, or {@code null} if the file is empty
+     * @throws IOException if the file is not found or cannot be read
+     */
     public static Map<String, Object> readYaml(String filePath) throws IOException {
         try (InputStream is = getInputStream(filePath)) {
             return new Yaml().load(is);
@@ -48,7 +86,20 @@ public class ResourceUtils {
     }
 
     /**
-     * @return a Map&lt;String,String&gt; between corresponding relative file paths and file contents
+     * Recursively reads every file under {@code dirPath} whose extension matches one of
+     * {@code fileExtensionPatterns}, returning a map from the file's relative path to its
+     * UTF-8 content.
+     *
+     * <p>If no extensions are given, every regular file under the directory is read.
+     * Files with non-matching extensions are skipped and logged at WARN level.
+     *
+     * @param dirPath               classpath-relative or absolute path to a directory
+     * @param fileExtensionPatterns extensions to include, each starting with a dot
+     *                              (e.g. {@code ".json", ".txt"}); empty for "all files"
+     * @return relative file path → file contents
+     * @throws IOException        if {@code dirPath} is not a directory, or a file cannot
+     *                            be read
+     * @throws URISyntaxException if a classpath URL cannot be converted to a file path
      */
     public static Map<String, String> readDirectory(String dirPath, String... fileExtensionPatterns) throws IOException, URISyntaxException {
         Set<String> files = getFilesFromDir(dirPath, fileExtensionPatterns);
@@ -63,13 +114,19 @@ public class ResourceUtils {
     }
 
     /**
-     * Returns relative file paths from a directory matching given extensions
+     * Recursively lists every file under {@code dirPath} whose extension matches one of
+     * {@code fileExtensionPatterns}.
      *
-     * @param dirPath
-     * @param fileExtensionPatterns
-     * @return
-     * @throws IOException
-     * @throws URISyntaxException
+     * <p>Returned paths are <em>relative to {@code dirPath}</em>, prefixed with
+     * {@code dirPath} itself — they can be passed straight back to {@link #read(String)}.
+     * If no extensions are given, every regular file under the directory is returned.
+     *
+     * @param dirPath               classpath-relative or absolute path to a directory
+     * @param fileExtensionPatterns extensions to include, each starting with a dot
+     *                              (e.g. {@code ".json", ".txt"}); empty for "all files"
+     * @return set of file paths matching the extension filter
+     * @throws IOException        if {@code dirPath} is not a directory
+     * @throws URISyntaxException if a classpath URL cannot be converted to a file path
      */
     public static Set<String> getFilesFromDir(String dirPath, String... fileExtensionPatterns) throws IOException, URISyntaxException {
         Path rootPath = getPath(dirPath);
@@ -111,6 +168,15 @@ public class ResourceUtils {
         }
     }
 
+    /**
+     * Returns the file name component (the last path segment) of {@code filePath},
+     * resolving classpath references the same way as {@link #read(String)}.
+     *
+     * @param filePath classpath-relative or absolute path
+     * @return the file's name (no directories, with extension if any)
+     * @throws IOException        if the file is not found
+     * @throws URISyntaxException if a classpath URL cannot be converted to a file path
+     */
     public static String getFileName(String filePath) throws IOException, URISyntaxException {
         return getPath(filePath).getFileName().toString();
     }
