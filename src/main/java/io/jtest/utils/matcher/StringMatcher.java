@@ -144,6 +144,12 @@ public class StringMatcher extends AbstractObjectMatcher<Object> {
     }
 
     private static String convertToString(Object value) {
+        if (value instanceof String s) {
+            return s;
+        }
+        if (value instanceof Number || value instanceof Boolean || value instanceof Character) {
+            return value.toString();
+        }
         try {
             return MAPPER.convertValue(value, String.class);
         } catch (IllegalArgumentException ignored) {
