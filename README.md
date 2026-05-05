@@ -9,8 +9,7 @@
 `jtest-utils` is a small library for Java tests. It compares expected against actual values via a single
 facade (`ObjectMatcher`), supports regex on every scalar by default, lets you tighten or invert the
 comparison with `MatchCondition` flags, and returns a map of values captured from the actual side via
-`~[name]` placeholders embedded in the expected side. A `ResourceUtils` helper covers the common
-read-a-fixture-from-classpath cases.
+`~[name]` placeholders embedded in the expected side.  
 
 ## Features
 
@@ -84,6 +83,14 @@ The match is lenient by default — `actual` may have extra fields and arrays ma
 All entrypoints live on `io.jtest.utils.matcher.ObjectMatcher`. Each returns a `Map<String, Object>` of
 captured placeholder values (empty if none were defined) and throws `AssertionError` on mismatch.
 
+| Method | Purpose |
+|---|---|
+| [`matchJson`](#matchjson) | Match as JSON. Either side may be a JSON string, `JsonNode`, `Map`, `List`, or POJO. |
+| [`matchXml`](#matchxml) | Match as XML. Either side may be an XML string or `org.w3c.dom.Node`. |
+| [`matchString`](#matchstring) | Match as text — regex by default; pass `REGEX_DISABLED` for literal equality. |
+| [`match`](#match) | Auto-detect: try JSON, then XML, then text. |
+| [`matchHttpResponse`](#matchhttpresponse) | Match HTTP responses by status / reason / headers / body. |
+
 ### `matchJson`
 
 ```java
@@ -144,7 +151,9 @@ ObjectMatcher.matchString("Texts do not match", expected, actual);
 
 Pass `MatchCondition.REGEX_DISABLED` to compare literally instead.
 
-### `match` — auto-detect
+### `match`
+
+Auto-detects the content type — tries JSON, then XML, then plain text.
 
 ```java
 ObjectMatcher.match(null, "{\"a\":1}", "{\"a\":1}");           // matched as JSON
