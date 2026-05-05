@@ -1,5 +1,17 @@
 # Changelog
 
+## 7.0 (2026-05-05)
+- #### Removed
+  - Removed deprecated `Polling` API. Use [Awaitility](https://github.com/awaitility/awaitility) instead.
+- #### Changed
+  - **Breaking:** requires Java 17 (was Java 8).
+  - **Breaking:** `PlainHttpResponse` is now a `record`. Accessors are
+    `status()` / `reasonPhrase()` / `entity()` / `headers()`
+    (was `getStatus()` etc.). `Builder` and `ParseException` unchanged.
+  - Updated `json-compare` to 8.0 and migrated to its new fluent builder API.
+  - Internal refactors and Java 17 modernization across the matcher package.
+  - Refreshed README and improved Javadoc on the public API.
+
 ## 6.2 (2025-11-10)
 - #### Changed
   - Updated dependencies

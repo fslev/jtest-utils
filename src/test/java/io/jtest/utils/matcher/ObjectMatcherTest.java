@@ -3,9 +3,7 @@ package io.jtest.utils.matcher;
 import io.jtest.utils.matcher.condition.MatchCondition;
 import org.junit.jupiter.api.Test;
 
-import java.time.Duration;
 import java.util.Map;
-import java.util.function.Supplier;
 
 import static io.jtest.utils.PlainHttpResponseUtils.from;
 import static org.junit.jupiter.api.Assertions.*;
@@ -19,72 +17,14 @@ public class ObjectMatcherTest {
     }
 
     @Test
-    public void matchWithPolling() {
-        ObjectMatcher.match("Matching failed", "lorem", () -> "lorem", Duration.ofSeconds(1), 1000L, 1.5);
-        ObjectMatcher.matchString("Matching failed", "lorem", () -> "lorem", Duration.ofSeconds(1), 1000L, 1.5);
-    }
-
-    @Test
     public void doNotMatchWithNull() {
         ObjectMatcher.match(null, null, "val", MatchCondition.DO_NOT_MATCH);
-    }
-
-    @Test
-    public void matchJsonWithPolling() {
-        // match as JSONs
-        ObjectMatcher.matchJson("Matching failed", "{\"status\":\"UPDATE\"}", new Supplier<Object>() {
-            private int retry = 0;
-
-            @Override
-            public Object get() {
-                retry++;
-                return retry < 2 ? "{\"status\":\"UPDATING\"}" : "{\"status\":\"UPDATE\"}";
-            }
-        }, Duration.ofSeconds(1), 100L, 1.0);
-        // match as objects
-        ObjectMatcher.match("Matching failed", "{\"status\":\"UPDATE\"}", new Supplier<Object>() {
-            private int retry = 0;
-
-            @Override
-            public Object get() {
-                retry++;
-                return retry < 2 ? "{\"status\":\"UPDATING\"}" : "{\"status\":\"UPDATE\"}";
-            }
-        }, Duration.ofSeconds(1), 100L, 1.0);
-    }
-
-    @Test
-    public void matchJsonWithPolling_timeout() {
-        // match as JSONs
-        assertThrows(AssertionError.class, () -> ObjectMatcher.matchJson("Matching failed", "{\"status\":\"UPDATE\"}", new Supplier<Object>() {
-            private int retry = 0;
-
-            @Override
-            public Object get() {
-                retry++;
-                return retry < 200 ? "{\"status\":\"UPDATING\"}" : "{\"status\":\"UPDATE\"}";
-            }
-        }, Duration.ofSeconds(1), 100L, 1.0));
-
-        // match as objects
-        assertThrows(AssertionError.class, () -> ObjectMatcher.match("Matching failed", "{\"status\":\"UPDATE\"}", new Supplier<Object>() {
-            private int retry = 0;
-
-            @Override
-            public Object get() {
-                retry++;
-                return retry < 200 ? "{\"status\":\"UPDATING\"}" : "{\"status\":\"UPDATE\"}";
-            }
-        }, Duration.ofSeconds(1), 100L, 1.0));
     }
 
     @Test
     public void matchWithInvalidJson() {
         assertTrue(assertThrows(RuntimeException.class,
                 () -> ObjectMatcher.matchJson("match failed", "{\"a\":1}", "{a:1}"))
-                .getMessage().contains("Invalid JSON"));
-        assertTrue(assertThrows(RuntimeException.class,
-                () -> ObjectMatcher.matchJson("match failed", "{\"a\":1}", () -> "{a:1}", Duration.ofSeconds(1), 1000L, 1.5))
                 .getMessage().contains("Invalid JSON"));
         assertTrue(assertThrows(RuntimeException.class,
                 () -> ObjectMatcher.matchJson("match failed", "{a:1}", "{\"a\":1}"))
@@ -132,28 +72,6 @@ public class ObjectMatcherTest {
     }
 
     @Test
-    public void matchXmlWithPolling() {
-        String expected =
-                "<struct><int a=\"~[sym1]\">some ~[sym3] here</int><boolean a=\"bo~[sym2]ue\">false</boolean></struct>";
-        String actual = "<struct>"
-                + "<int a=\"(attrValue1\">some text here</int><boolean a=\"boolAttrValue\">false</boolean><str a=\"some result\"><a>sub text</a></str></struct>";
-        Map<String, Object> symbols = ObjectMatcher.match(null, expected, () -> actual,
-                Duration.ofSeconds(1), 100L, 1.0, MatchCondition.XML_CHILD_NODELIST_SEQUENCE);
-        assertEquals("(attrValue1", symbols.get("sym1"));
-        assertEquals("olAttrVal", symbols.get("sym2"));
-        assertEquals("text", symbols.get("sym3"));
-        assertEquals(3, symbols.size());
-        symbols = ObjectMatcher.matchXml(null, expected, actual, MatchCondition.XML_CHILD_NODELIST_SEQUENCE);
-        assertEquals("(attrValue1", symbols.get("sym1"));
-        assertEquals("olAttrVal", symbols.get("sym2"));
-        assertEquals("text", symbols.get("sym3"));
-        assertEquals(3, symbols.size());
-        // match again directly as XMLs
-        ObjectMatcher.matchXml(null, expected, () -> actual,
-                Duration.ofSeconds(1), 100L, 1.0, MatchCondition.XML_CHILD_NODELIST_SEQUENCE);
-    }
-
-    @Test
     public void matchXMLs_withDisabledRegex() {
         ObjectMatcher.matchXml(null, "<struct>tr[ue</struct>", "<struct>tr[ue</struct>");
         ObjectMatcher.matchXml(null, "<struct>tr[ue</struct>", "<struct>tr[ue</struct>", MatchCondition.REGEX_DISABLED);
@@ -180,58 +98,59 @@ public class ObjectMatcherTest {
 
     @Test
     public void matchJsonObjectsUsingJsonPath() {
-        String expected = "{\"#($..book[?(@.price <= $['expensive'])])\":[" +
-                "{\n" +
-                "                \"category\": \"fiction\",\n" +
-                "                \"author\": \"Herman Melville\",\n" +
-                "                \"title\": \"~[title1]\",\n" +
-                "                \"isbn\": \"0-553-21311-3\",\n" +
-                "                \"price\": 8.99\n" +
-                "            },\n" +
-                "{\n" +
-                "                \"category\": \"reference\",\n" +
-                "                \"author\": \"~[author2]\",\n" +
-                "                \"title\": \"S.*e Century\",\n" +
-                "                \"price\": 8.95\n" +
-                "            }\n" +
-                "]}";
-        String actual = "{\n" +
-                "    \"store\": {\n" +
-                "        \"book\": [\n" +
-                "            {\n" +
-                "                \"category\": \"reference\",\n" +
-                "                \"author\": \"Nigel Rees\",\n" +
-                "                \"title\": \"Sayings of the Century\",\n" +
-                "                \"price\": 8.95\n" +
-                "            },\n" +
-                "            {\n" +
-                "                \"category\": \"fiction\",\n" +
-                "                \"author\": \"Evelyn Waugh\",\n" +
-                "                \"title\": \"Sword of Honour\",\n" +
-                "                \"price\": 12.99\n" +
-                "            },\n" +
-                "            {\n" +
-                "                \"category\": \"fiction\",\n" +
-                "                \"author\": \"Herman Melville\",\n" +
-                "                \"title\": \"Moby Dick\",\n" +
-                "                \"isbn\": \"0-553-21311-3\",\n" +
-                "                \"price\": 8.99\n" +
-                "            },\n" +
-                "            {\n" +
-                "                \"category\": \"fiction\",\n" +
-                "                \"author\": \"J. R. R. Tolkien\",\n" +
-                "                \"title\": \"The Lord of the Rings\",\n" +
-                "                \"isbn\": \"0-395-19395-8\",\n" +
-                "                \"price\": 22.99\n" +
-                "            }\n" +
-                "        ],\n" +
-                "        \"bicycle\": {\n" +
-                "            \"color\": \"red\",\n" +
-                "            \"price\": 19.95\n" +
-                "        }\n" +
-                "    },\n" +
-                "    \"expensive\": 10\n" +
-                "}";
+        String expected = """
+                {"#($..book[?(@.price <= $['expensive'])])":[{
+                                "category": "fiction",
+                                "author": "Herman Melville",
+                                "title": "~[title1]",
+                                "isbn": "0-553-21311-3",
+                                "price": 8.99
+                            },
+                {
+                                "category": "reference",
+                                "author": "~[author2]",
+                                "title": "S.*e Century",
+                                "price": 8.95
+                            }
+                ]}""";
+        String actual = """
+                {
+                    "store": {
+                        "book": [
+                            {
+                                "category": "reference",
+                                "author": "Nigel Rees",
+                                "title": "Sayings of the Century",
+                                "price": 8.95
+                            },
+                            {
+                                "category": "fiction",
+                                "author": "Evelyn Waugh",
+                                "title": "Sword of Honour",
+                                "price": 12.99
+                            },
+                            {
+                                "category": "fiction",
+                                "author": "Herman Melville",
+                                "title": "Moby Dick",
+                                "isbn": "0-553-21311-3",
+                                "price": 8.99
+                            },
+                            {
+                                "category": "fiction",
+                                "author": "J. R. R. Tolkien",
+                                "title": "The Lord of the Rings",
+                                "isbn": "0-395-19395-8",
+                                "price": 22.99
+                            }
+                        ],
+                        "bicycle": {
+                            "color": "red",
+                            "price": 19.95
+                        }
+                    },
+                    "expensive": 10
+                }""";
         Map<String, Object> resultedVars = ObjectMatcher.match(null, expected, actual);
         assertEquals("Moby Dick", resultedVars.get("title1"));
         assertEquals("Nigel Rees", resultedVars.get("author2"));
@@ -269,22 +188,6 @@ public class ObjectMatcherTest {
         String expected = "{\"status\":\"\\\\d+\"}";
         String actual = "{\"status\":409}";
         ObjectMatcher.matchHttpResponse(null, from(expected), from(actual));
-    }
-
-    @Test
-    public void matchHttpResponses_withPolling() {
-        String expected = "{\"status\":\"\\\\d+\"}";
-        String actual = "{\"status\":409}";
-        ObjectMatcher.matchHttpResponse(null, from(expected),
-                () -> from(actual), Duration.ofSeconds(1), 100L, 1.0);
-    }
-
-    @Test
-    public void matchHttpResponses_withPolling_negative() {
-        String expected = "{\"status\":\"\\\\d+\"}";
-        String actual = "{\"status\":\"invalid\"}";
-        assertThrows(AssertionError.class, () ->
-                ObjectMatcher.matchHttpResponse(null, from(expected), () -> from(actual), Duration.ofSeconds(1), 100L, 1.0));
     }
 
     @Test

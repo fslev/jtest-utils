@@ -27,10 +27,6 @@ public class XmlUtils {
 
     }
 
-    /**
-     * @param xml
-     * @return check is valid XML
-     */
     public static boolean isValid(String xml) {
         try {
             toNode(xml);
@@ -40,10 +36,6 @@ public class XmlUtils {
         return true;
     }
 
-    /**
-     * @param xml
-     * @return Document representation of String XML
-     */
     public static Node toNode(String xml) throws ParserConfigurationException, IOException, SAXException {
         DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
         builder.setErrorHandler(new ErrorHandler() {
@@ -71,15 +63,6 @@ public class XmlUtils {
         return writer.toString().replaceAll("(?m)^[ \t]*\r?\n", "");
     }
 
-    /**
-     * Walks the XML, applies a function on each XML node element and attribute
-     * and returns resulted values mapped to their corresponding XML paths
-     *
-     * @param xml
-     * @param processFunction Applied for each XML node element and attribute
-     * @param <R>             Process function return type
-     * @return A map between resulted node values and their corresponding XML paths
-     */
     public static <R> Map<String, R> walkXmlAndProcessNodes(Node xml, Function<String, R> processFunction) {
         Map<String, R> resultsMap = new HashMap<>();
         Xml.walkAndProcessNode(xml, processFunction, "", resultsMap);

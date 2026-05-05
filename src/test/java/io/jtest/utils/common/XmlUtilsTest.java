@@ -30,10 +30,11 @@ public class XmlUtilsTest {
     public void testXmlsAreValid() {
         assertTrue(XmlUtils.isValid("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><a>test<b>test</b></a>"));
         assertTrue(XmlUtils.isValid("<a>test<b>test</b></a>"));
-        assertTrue(XmlUtils.isValid("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n" +
-                "<bookingResponse>\n" +
-                "  <bookingId>dlc:~[var1]</bookingId>\n" +
-                "</bookingResponse>"));
+        assertTrue(XmlUtils.isValid("""
+                <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+                <bookingResponse>
+                  <bookingId>dlc:~[var1]</bookingId>
+                </bookingResponse>"""));
     }
 
     @Test

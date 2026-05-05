@@ -14,56 +14,60 @@ public class MatcherTests {
 
     @Test
     public void testJsonMatcher() {
-        String expected = "{\n" +
-                "  \"copper\": [\n" +
-                "    {\n" +
-                "      \"beneath\": \"heard\",\n" +
-                "      \"jack\": false,\n" +
-                "      \"men\": -1365455482\n" +
-                "    },\n" +
-                "    \"equipment\",\n" +
-                "    false\n" +
-                "  ],\n" +
-                "  \"speak\": -263355062.75097084,\n" +
-                "  \"basis\": 1670107599\n" +
-                "}";
-        String actual = "{\n" +
-                "  \"copper\": [\n" +
-                "    {\n" +
-                "      \"beneath\": \"heard\",\n" +
-                "      \"men\": -1365455482\n" +
-                "    },\n" +
-                "    \"equipment\",\n" +
-                "    false\n" +
-                "  ],\n" +
-                "  \"speak\": -263355062.750,\n" +
-                "  \"nr1\": 62.750,\n" +
-                "  \"nr2\": 60.750\n" +
-                "}";
+        String expected = """
+                {
+                  "copper": [
+                    {
+                      "beneath": "heard",
+                      "jack": false,
+                      "men": -1365455482
+                    },
+                    "equipment",
+                    false
+                  ],
+                  "speak": -263355062.75097084,
+                  "basis": 1670107599
+                }""";
+        String actual = """
+                {
+                  "copper": [
+                    {
+                      "beneath": "heard",
+                      "men": -1365455482
+                    },
+                    "equipment",
+                    false
+                  ],
+                  "speak": -263355062.750,
+                  "nr1": 62.750,
+                  "nr2": 60.750
+                }""";
         assertThrows(AssertionError.class, () -> ObjectMatcher.matchJson("Seems that JSONs do not match", expected, actual,
                 MatchCondition.JSON_NON_EXTENSIBLE_OBJECT, MatchCondition.JSON_STRICT_ORDER_ARRAY));
     }
 
     @Test
     public void testJsonMatcherWithPlaceHolders() {
-        String expected = "{\n" +
-                "  \"copper\": [\n" +
-                "    {\n" +
-                "      \"beneath\": \"~[someValueForBeneath]\"\n" +
-                "    }\n" +
-                "  ],\n" +
-                "  \"speak\": \"~[speakValue]\"\n" +
-                "}";
-        String actual = "{\n" +
-                "  \"copper\": [\n" +
-                "    {\n" +
-                "      \"beneath\": \"heard\",\n" +
-                "      \"men\": -1365455482\n" +
-                "    }\n" +
-                "  ],\n" +
-                "  \"speak\": -263355062.750,\n" +
-                "  \"nr2\": 60.750\n" +
-                "}";
+        String expected = """
+                {
+                  "copper": [
+                    {
+                      "beneath": "~[someValueForBeneath]"
+                    }
+                  ],
+                  "speak": "~[speakValue]"
+                }""";
+        String actual = """
+                {
+                  "copper": [
+                    {
+                      "beneath": "heard",
+                      "men": -1365455482
+                    }
+                  ],
+                  "speak": -263355062.750,
+                  "nr2": 60.750
+                }""";
         Map<String, Object> capturedData = ObjectMatcher.matchJson(null, expected, actual);
         assertEquals("heard", capturedData.get("someValueForBeneath"));
         assertEquals("-263355062.750", capturedData.get("speakValue"));

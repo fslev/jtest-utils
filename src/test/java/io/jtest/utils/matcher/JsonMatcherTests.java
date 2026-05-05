@@ -264,18 +264,20 @@ public class JsonMatcherTests {
 
     @Test
     public void testPlaceholderFillFromJsonCompareWithRegexSymbols() throws InvalidTypeException {
-        String expected = "{\n" +
-                "  \"/processes/running/ote_company/test-create-1551172176725.com/emailverification.*\": {\n" +
-                "    \"businessKey\": \"tes.*reate-~[businessKey]\",\n" +
-                "    \"type\": \"EMAIL_VERIFICATION\"\n" +
-                "  }\n" +
-                "}";
-        String actual = "{\n" +
-                "  \"/processes/running/ote_company/test-create-1551172176725.com/emailverification/3edb8eeb-b4e2-4b57-a6af-927fc1807b8e\": {\n" +
-                "    \"businessKey\": \"test-create-1551172176725.com|email-verif|1d55b4f3-6ec1-4d89-ba58-2ba2a3eaa80e\",\n" +
-                "    \"type\": \"EMAIL_VERIFICATION\"\n" +
-                "  }\n" +
-                "}";
+        String expected = """
+                {
+                  "/processes/running/ote_company/test-create-1551172176725.com/emailverification.*": {
+                    "businessKey": "tes.*reate-~[businessKey]",
+                    "type": "EMAIL_VERIFICATION"
+                  }
+                }""";
+        String actual = """
+                {
+                  "/processes/running/ote_company/test-create-1551172176725.com/emailverification/3edb8eeb-b4e2-4b57-a6af-927fc1807b8e": {
+                    "businessKey": "test-create-1551172176725.com|email-verif|1d55b4f3-6ec1-4d89-ba58-2ba2a3eaa80e",
+                    "type": "EMAIL_VERIFICATION"
+                  }
+                }""";
         JsonMatcher matcher = new JsonMatcher(null, expected, actual, null);
         Map<String, Object> symbols = matcher.match();
         assertEquals("1551172176725.com|email-verif|1d55b4f3-6ec1-4d89-ba58-2ba2a3eaa80e", symbols.get("businessKey"),
@@ -410,48 +412,50 @@ public class JsonMatcherTests {
 
     @Test
     public void matchHttpResponsesInJsonFormat() throws InvalidTypeException {
-        String expected = "{\n" +
-                "  \"status\": 202,\n" +
-                "  \"body\": {\n" +
-                "    \"id\": \"~[ipBlockId]\",\n" +
-                "    \"properties\": {\n" +
-                "      \"ips\": [\n" +
-                "        \"~[ipAddress1]\",\n" +
-                "        \"~[ipAddress2]\"\n" +
-                "      ]\n" +
-                "    }\n" +
-                "  },\n" +
-                "  \"headers\": {\n" +
-                "    \"Location\": \".*requests/~[requestId]/status.*\"\n" +
-                "  }\n" +
-                "}";
-        String actual = "{\n" +
-                "  \"status\": 202,\n" +
-                "  \"body\": {\n" +
-                "    \"id\": \"ef0698ab-28d4-47b7-bc39-3f07a3452671\",\n" +
-                "    \"type\": \"ipblock\",\n" +
-                "    \"metadata\": {\n" +
-                "      \"etag\": \"46ec48c011c4e48ffe3c1f9e78bdd30f\",\n" +
-                "      \"createdDate\": \"2021-04-14T08:20:55Z\",\n" +
-                "      \"lastModifiedDate\": \"2021-04-14T08:20:55Z\",\n" +
-                "      \"lastModifiedByUserId\": \"a5e7e4e2-d788-4a23-861a-63f144518063\",\n" +
-                "      \"state\": \"BUSY\"\n" +
-                "    },\n" +
-                "    \"properties\": {\n" +
-                "      \"ips\": [\n" +
-                "        \"87.106.0.246\",\n" +
-                "        \"87.106.0.247\"\n" +
-                "      ],\n" +
-                "      \"location\": \"de/fkb\",\n" +
-                "      \"size\": 2,\n" +
-                "      \"name\": \"IP Block Cucumber\",\n" +
-                "      \"ipConsumers\": []\n" +
-                "    }\n" +
-                "  },\n" +
-                "  \"headers\": {\n" +
-                "    \"Location\": \".*requests/someRequestId1000/status.*\"\n" +
-                "  }\n" +
-                "}";
+        String expected = """
+                {
+                  "status": 202,
+                  "body": {
+                    "id": "~[ipBlockId]",
+                    "properties": {
+                      "ips": [
+                        "~[ipAddress1]",
+                        "~[ipAddress2]"
+                      ]
+                    }
+                  },
+                  "headers": {
+                    "Location": ".*requests/~[requestId]/status.*"
+                  }
+                }""";
+        String actual = """
+                {
+                  "status": 202,
+                  "body": {
+                    "id": "ef0698ab-28d4-47b7-bc39-3f07a3452671",
+                    "type": "ipblock",
+                    "metadata": {
+                      "etag": "46ec48c011c4e48ffe3c1f9e78bdd30f",
+                      "createdDate": "2021-04-14T08:20:55Z",
+                      "lastModifiedDate": "2021-04-14T08:20:55Z",
+                      "lastModifiedByUserId": "a5e7e4e2-d788-4a23-861a-63f144518063",
+                      "state": "BUSY"
+                    },
+                    "properties": {
+                      "ips": [
+                        "87.106.0.246",
+                        "87.106.0.247"
+                      ],
+                      "location": "de/fkb",
+                      "size": 2,
+                      "name": "IP Block Cucumber",
+                      "ipConsumers": []
+                    }
+                  },
+                  "headers": {
+                    "Location": ".*requests/someRequestId1000/status.*"
+                  }
+                }""";
         Map<String, Object> props = new JsonMatcher(null, expected, actual, null).match();
         assertEquals("ef0698ab-28d4-47b7-bc39-3f07a3452671", props.get("ipBlockId"));
         assertEquals("87.106.0.246", props.get("ipAddress1"));

@@ -9,8 +9,8 @@ import io.jtest.utils.matcher.comparators.json.CustomJsonComparator;
 import io.jtest.utils.matcher.condition.MatchCondition;
 import org.junit.jupiter.api.AssertionFailureBuilder;
 
+import java.util.EnumSet;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -22,8 +22,6 @@ public class JsonMatcher extends AbstractObjectMatcher<JsonNode> {
 
     public JsonMatcher(String message, Object expected, Object actual, Set<MatchCondition> matchConditions) throws InvalidTypeException {
         super(message, expected, actual, matchConditions);
-        this.message += "JSONs do not match" + System.lineSeparator() + System.lineSeparator() + ASSERTION_ERROR_HINT_MESSAGE +
-                System.lineSeparator() + System.lineSeparator();
         this.comparator = new CustomJsonComparator(matchConditions);
     }
 
@@ -34,6 +32,12 @@ public class JsonMatcher extends AbstractObjectMatcher<JsonNode> {
         } catch (Exception e) {
             throw new InvalidTypeException("Invalid JSON NODE", e);
         }
+    }
+
+    @Override
+    protected String matchTypeSuffix() {
+        return "JSONs do not match" + System.lineSeparator() + System.lineSeparator() + ASSERTION_ERROR_HINT_MESSAGE +
+                System.lineSeparator() + System.lineSeparator();
     }
 
     @Override
@@ -58,40 +62,49 @@ public class JsonMatcher extends AbstractObjectMatcher<JsonNode> {
 
     private Map<String, Object> positiveMatch() {
         try {
-            JSONCompare.assertMatches(expected, actual, comparator, jsonCompareModes(), message);
-        } catch (AssertionError e) {
-            if (!comparator.getFieldProperties().isEmpty()) {
-                while (true) {
-                    comparator.getDepletedFieldPropertyList().add(new HashMap<>(comparator.getFieldProperties()));
-                    comparator.getFieldProperties().clear();
-                    try {
-                        JSONCompare.assertMatches(expected, actual, comparator, jsonCompareModes(), message);
-                    } catch (AssertionError e1) {
-                        if (!comparator.getFieldProperties().isEmpty()) {
-                            continue;
-                        }
-                        throw e1;
-                    }
-                    break;
-                }
-            } else {
-                throw e;
+            assertJsonsMatch();
+        } catch (AssertionError firstFailure) {
+            if (comparator.getFieldProperties().isEmpty()) {
+                throw firstFailure;
             }
+            retryUntilFieldPropertiesDepleted();
         }
         return comparator.getValueProperties();
     }
 
-    private Set<CompareMode> jsonCompareModes() {
-        Set<CompareMode> jsonCompareModes = new HashSet<>();
-        for (MatchCondition condition : matchConditions) {
-            if (MatchCondition.JSON_NON_EXTENSIBLE_OBJECT.equals(condition)) {
-                jsonCompareModes.add(CompareMode.JSON_OBJECT_NON_EXTENSIBLE);
-            } else if (MatchCondition.JSON_NON_EXTENSIBLE_ARRAY.equals(condition)) {
-                jsonCompareModes.add(CompareMode.JSON_ARRAY_NON_EXTENSIBLE);
-            } else if (MatchCondition.JSON_STRICT_ORDER_ARRAY.equals(condition)) {
-                jsonCompareModes.add(CompareMode.JSON_ARRAY_STRICT_ORDER);
+    private void retryUntilFieldPropertiesDepleted() {
+        while (true) {
+            comparator.getDepletedFieldPropertyList().add(new HashMap<>(comparator.getFieldProperties()));
+            comparator.getFieldProperties().clear();
+            try {
+                assertJsonsMatch();
+                return;
+            } catch (AssertionError retryFailure) {
+                if (comparator.getFieldProperties().isEmpty()) {
+                    throw retryFailure;
+                }
             }
         }
-        return jsonCompareModes;
+    }
+
+    private void assertJsonsMatch() {
+        JSONCompare.compare(expected, actual)
+                .comparator(comparator)
+                .modes(jsonCompareModes())
+                .message(message)
+                .assertMatches();
+    }
+
+    private Set<CompareMode> jsonCompareModes() {
+        Set<CompareMode> modes = EnumSet.noneOf(CompareMode.class);
+        for (MatchCondition condition : matchConditions) {
+            switch (condition) {
+                case JSON_NON_EXTENSIBLE_OBJECT -> modes.add(CompareMode.JSON_OBJECT_NON_EXTENSIBLE);
+                case JSON_NON_EXTENSIBLE_ARRAY -> modes.add(CompareMode.JSON_ARRAY_NON_EXTENSIBLE);
+                case JSON_STRICT_ORDER_ARRAY -> modes.add(CompareMode.JSON_ARRAY_STRICT_ORDER);
+                default -> { /* unrelated condition, ignore */ }
+            }
+        }
+        return modes;
     }
 }

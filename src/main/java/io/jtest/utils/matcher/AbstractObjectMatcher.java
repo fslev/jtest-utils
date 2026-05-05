@@ -10,11 +10,12 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 abstract class AbstractObjectMatcher<T> {
-    protected static final String ASSERTION_ERROR_HINT_MESSAGE = "Matching is by default case-sensitive and uses regular expressions." + System.lineSeparator() +
-            "If expected object contains any unintentional regexes, then quote them between \\Q and \\E delimiters.\n" +
-            "For disabling case-sensitivity, use (?i) and (?-i) modifiers.";
+    protected static final String ASSERTION_ERROR_HINT_MESSAGE = """
+            Matching is by default case-sensitive and uses regular expressions.
+            If expected object contains any unintentional regexes, then quote them between \\Q and \\E delimiters.
+            For disabling case-sensitivity, use (?i) and (?-i) modifiers.""";
 
-    protected String message;
+    protected final String message;
     protected final String negativeMatchMessage;
     protected final T expected;
     protected final T actual;
@@ -24,8 +25,17 @@ abstract class AbstractObjectMatcher<T> {
         this.expected = convert(expected);
         this.actual = convert(actual);
         this.matchConditions = matchConditions != null ? matchConditions : new HashSet<>();
-        this.message = message != null ? message + System.lineSeparator() : "";
+        String userPrefix = message != null ? message + System.lineSeparator() : "";
+        this.message = userPrefix + matchTypeSuffix();
         this.negativeMatchMessage = message == null ? negativeMatchMessage() : message + System.lineSeparator() + negativeMatchMessage();
+    }
+
+    /**
+     * Suffix appended to the user-provided message describing the type of objects being matched.
+     * Returns an empty string when no suffix is needed.
+     */
+    protected String matchTypeSuffix() {
+        return "";
     }
 
     protected String negativeMatchMessage() {
