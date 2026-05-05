@@ -524,66 +524,68 @@ public class StringMatcherTests {
 
     @Test
     public void compareStringWithMultipleAssignSymbols_performance() throws InvalidTypeException {
-        String expected = ".*Apply complete.*Resources:.*4 added.*0 changed.*\n" +
-                ".*Outputs.*\n" +
-                ".*create-zone-record-ipv4-result1.*\n" +
-                ".*content.*\"1.2.3.4\".*\n" +
-                ".*disabled.*false.*\n" +
-                "^.*id.*=.*\"~[ipv4RecordId1]\"$\n" +
-                ".*name.*\"www.terraform-dns-provider-test1.de\".*\n" +
-                ".*ttl.*1800.*\n" +
-                ".*type.*\"(?-i)A(?i)\".*\n" +
-                ".*zone_id.*\"1\".*\n" +
-                ".*create-zone-record-ipv4-result2.*\n" +
-                ".*content.*\"1.2.3.5\".*\n" +
-                ".*disabled.*false.*\n" +
-                "^.*id.*=.*\"~[ipv4RecordId2]\"$\n" +
-                ".*name.*\"www.terraform-dns-provider-test1.de\".*\n" +
-                ".*ttl.*1800.*\n" +
-                ".*type.*\"(?-i)A(?i)\".*\n" +
-                ".*zone_id.*\"2\".*\n" +
-                ".*create-zone-record-ipv6-result1.*\n" +
-                ".*content.*\"2001:db8:85a3:0:0:8a2e:370:7334\".*\n" +
-                ".*disabled.*false.*\n" +
-                "^.*id.*=.*\"~[ipv6RecordId1]\"$\n" +
-                ".*name.*\"www.terraform-dns-provider-test1.de\".*\n" +
-                ".*ttl.*1800.*\n" +
-                ".*type.*\"(?-i)AAAA(?i)\".*\n" +
-                ".*zone_id.*\"3\".*";
-        String actual = "Apply complete! Resources: 4 added, 0 changed, 0 destroyed.\n" +
-                "\n" +
-                "Outputs:\n" +
-                "\n" +
-                "create-zone-record-ipv4-result1 = {\n" +
-                "  \"content\" = \"1.2.3.4\"\n" +
-                "  \"disabled\" = false\n" +
-                "  \"id\" = \"a\"\n" +
-                "  \"name\" = \"www.terraform-dns-provider-test1.de\"\n" +
-                "  \"prio\" = 0\n" +
-                "  \"ttl\" = 1800\n" +
-                "  \"type\" = \"A\"\n" +
-                "  \"zone_id\" = \"1\"\n" +
-                "}\n" +
-                "create-zone-record-ipv4-result2 = {\n" +
-                "  \"content\" = \"1.2.3.5\"\n" +
-                "  \"disabled\" = false\n" +
-                "  \"id\" = \"b\"\n" +
-                "  \"name\" = \"www.terraform-dns-provider-test1.de\"\n" +
-                "  \"prio\" = 0\n" +
-                "  \"ttl\" = 1800\n" +
-                "  \"type\" = \"A\"\n" +
-                "  \"zone_id\" = \"2\"\n" +
-                "}\n" +
-                "create-zone-record-ipv6-result1 = {\n" +
-                "  \"content\" = \"2001:db8:85a3:0:0:8a2e:370:7334\"\n" +
-                "  \"disabled\" = false\n" +
-                "  \"id\" = \"c\"\n" +
-                "  \"name\" = \"www.terraform-dns-provider-test1.de\"\n" +
-                "  \"prio\" = 0\n" +
-                "  \"ttl\" = 1800\n" +
-                "  \"type\" = \"AAAA\"\n" +
-                "  \"zone_id\" = \"3\"\n" +
-                "}";
+        String expected = """
+                .*Apply complete.*Resources:.*4 added.*0 changed.*
+                .*Outputs.*
+                .*create-zone-record-ipv4-result1.*
+                .*content.*"1.2.3.4".*
+                .*disabled.*false.*
+                ^.*id.*=.*"~[ipv4RecordId1]"$
+                .*name.*"www.terraform-dns-provider-test1.de".*
+                .*ttl.*1800.*
+                .*type.*"(?-i)A(?i)".*
+                .*zone_id.*"1".*
+                .*create-zone-record-ipv4-result2.*
+                .*content.*"1.2.3.5".*
+                .*disabled.*false.*
+                ^.*id.*=.*"~[ipv4RecordId2]"$
+                .*name.*"www.terraform-dns-provider-test1.de".*
+                .*ttl.*1800.*
+                .*type.*"(?-i)A(?i)".*
+                .*zone_id.*"2".*
+                .*create-zone-record-ipv6-result1.*
+                .*content.*"2001:db8:85a3:0:0:8a2e:370:7334".*
+                .*disabled.*false.*
+                ^.*id.*=.*"~[ipv6RecordId1]"$
+                .*name.*"www.terraform-dns-provider-test1.de".*
+                .*ttl.*1800.*
+                .*type.*"(?-i)AAAA(?i)".*
+                .*zone_id.*"3".*""";
+        String actual = """
+                Apply complete! Resources: 4 added, 0 changed, 0 destroyed.
+
+                Outputs:
+
+                create-zone-record-ipv4-result1 = {
+                  "content" = "1.2.3.4"
+                  "disabled" = false
+                  "id" = "a"
+                  "name" = "www.terraform-dns-provider-test1.de"
+                  "prio" = 0
+                  "ttl" = 1800
+                  "type" = "A"
+                  "zone_id" = "1"
+                }
+                create-zone-record-ipv4-result2 = {
+                  "content" = "1.2.3.5"
+                  "disabled" = false
+                  "id" = "b"
+                  "name" = "www.terraform-dns-provider-test1.de"
+                  "prio" = 0
+                  "ttl" = 1800
+                  "type" = "A"
+                  "zone_id" = "2"
+                }
+                create-zone-record-ipv6-result1 = {
+                  "content" = "2001:db8:85a3:0:0:8a2e:370:7334"
+                  "disabled" = false
+                  "id" = "c"
+                  "name" = "www.terraform-dns-provider-test1.de"
+                  "prio" = 0
+                  "ttl" = 1800
+                  "type" = "AAAA"
+                  "zone_id" = "3"
+                }""";
         StringMatcher matcher = new StringMatcher(null, expected, actual, null);
         Map<String, Object> symbols = matcher.match();
         assertEquals(3, symbols.size());
