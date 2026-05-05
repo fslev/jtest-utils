@@ -82,10 +82,14 @@ public class XmlMatcherTests {
         try {
             new XmlMatcher(null, expected, actual, new HashSet<>(Arrays.asList(MatchCondition.DO_NOT_MATCH))).match();
         } catch (AssertionError e) {
-            assertEquals("\nXMLs match!\n" +
-                    "Matching is by default case-sensitive and uses regular expressions.\n" +
-                    "If expected object contains any unintentional regexes, then quote them between \\Q and \\E delimiters.\n" +
-                    "For disabling case-sensitivity, use (?i) and (?-i) modifiers.\n\n", e.getMessage());
+            assertEquals("""
+
+                    XMLs match!
+                    Matching is by default case-sensitive and uses regular expressions.
+                    If expected object contains any unintentional regexes, then quote them between \\Q and \\E delimiters.
+                    For disabling case-sensitivity, use (?i) and (?-i) modifiers.
+
+                    """, e.getMessage());
             return;
         }
         fail("Negative test failed");
@@ -100,12 +104,15 @@ public class XmlMatcherTests {
         try {
             new XmlMatcher("Should not match", expected, actual, new HashSet<>(Arrays.asList(MatchCondition.DO_NOT_MATCH))).match();
         } catch (AssertionError e) {
-            assertEquals("Should not match\n" +
-                    "\n" +
-                    "XMLs match!\n" +
-                    "Matching is by default case-sensitive and uses regular expressions.\n" +
-                    "If expected object contains any unintentional regexes, then quote them between \\Q and \\E delimiters.\n" +
-                    "For disabling case-sensitivity, use (?i) and (?-i) modifiers.\n\n", e.getMessage());
+            assertEquals("""
+                    Should not match
+
+                    XMLs match!
+                    Matching is by default case-sensitive and uses regular expressions.
+                    If expected object contains any unintentional regexes, then quote them between \\Q and \\E delimiters.
+                    For disabling case-sensitivity, use (?i) and (?-i) modifiers.
+
+                    """, e.getMessage());
             return;
         }
         fail("Negative test failed");
@@ -113,29 +120,43 @@ public class XmlMatcherTests {
 
     @Test
     public void compareComplexXmlWithAssignprops() throws InvalidTypeException {
-        String expected = "<bookstore>\n"
-                + "    <book price=\"730.54\" ISBN=\"string\" publicationdate=\"~[pubDate]\">\n"
-                + "        <author>\n" + "            <last-name>test~[lastName]</last-name>"
-                + "        </author>\n" + "        <genre>string</genre>\n" + "    </book>\n"
-                + "    <book price=\"~[price]\" ISBN=\"string\">\n"
-                + "        <title>string</title>\n" + "        <author>\n"
-                + "            <first-name>string</first-name>\n"
-                + "            <last-name>string</last-name>\n" + "        </author>\n"
-                + "    </book>\n" + "</bookstore>";
-        String actual = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n"
-                + "<!-- Created with Liquid Studio -->\n"
-                + "<bookstore xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n"
-                + "           xsi:noNamespaceSchemaLocation=\"BookStore.xsd\">\n"
-                + "    <book price=\"730.54\" ISBN=\"string\" publicationdate=\"2016-02-27\">\n"
-                + "        <title>string</title>\n" + "        <author>\n"
-                + "            <first-name>string</first-name>\n"
-                + "            <last-name>teststring</last-name>\n" + "        </author>\n"
-                + "        <genre>string</genre>\n" + "    </book>\n"
-                + "    <book price=\"6738.774\" ISBN=\"string\">\n"
-                + "        <title>string</title>\n" + "        <author>\n"
-                + "            <first-name>string</first-name>\n"
-                + "            <last-name>string</last-name>\n" + "        </author>\n"
-                + "    </book>\n" + "</bookstore>";
+        String expected = """
+                <bookstore>
+                    <book price="730.54" ISBN="string" publicationdate="~[pubDate]">
+                        <author>
+                            <last-name>test~[lastName]</last-name>
+                        </author>
+                        <genre>string</genre>
+                    </book>
+                    <book price="~[price]" ISBN="string">
+                        <title>string</title>
+                        <author>
+                            <first-name>string</first-name>
+                            <last-name>string</last-name>
+                        </author>
+                    </book>
+                </bookstore>""";
+        String actual = """
+                <?xml version="1.0" encoding="utf-8"?>
+                <!-- Created with Liquid Studio -->
+                <bookstore xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                           xsi:noNamespaceSchemaLocation="BookStore.xsd">
+                    <book price="730.54" ISBN="string" publicationdate="2016-02-27">
+                        <title>string</title>
+                        <author>
+                            <first-name>string</first-name>
+                            <last-name>teststring</last-name>
+                        </author>
+                        <genre>string</genre>
+                    </book>
+                    <book price="6738.774" ISBN="string">
+                        <title>string</title>
+                        <author>
+                            <first-name>string</first-name>
+                            <last-name>string</last-name>
+                        </author>
+                    </book>
+                </bookstore>""";
         XmlMatcher matcher = new XmlMatcher(null, expected, actual, null);
         Map<String, Object> props = matcher.match();
         assertEquals("2016-02-27", props.get("pubDate"));
@@ -263,84 +284,76 @@ public class XmlMatcherTests {
     @Test
     public void matchWithNameSpaces() throws InvalidTypeException {
         String expected = "<struct><int a=\"[0-9]*\">3da</int><boolean>.*</boolean></struct>";
-        String actual = "<?xml version=\"1.0\"?>\n" +
-                "<struct xmlns:opt=\"http://test.net/test.optional.xml\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"http://www.test/config.xml\" xsi:schemaLocation=\"http://www.test/config.xml file:///usr/test/java/test/schema/config.xsd\"><boolean>false</boolean><int a=\"2\" b=\"3\">3da</int></struct>";
+        String actual = """
+                <?xml version="1.0"?>
+                <struct xmlns:opt="http://test.net/test.optional.xml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.test/config.xml" xsi:schemaLocation="http://www.test/config.xml file:///usr/test/java/test/schema/config.xsd"><boolean>false</boolean><int a="2" b="3">3da</int></struct>""";
         new XmlMatcher("", expected, actual, null).match();
     }
 
     @Test
     public void matchInnerLists() throws InvalidTypeException {
-        String expected = "<config>\n" +
-                "    <protocols>\n" +
-                "      <ldp>" +
-                "           <a>1</a>" +
-                "      </ldp>\n" +
-                "    </protocols>\n" +
-                "</config>";
-        String actual = "<config>\n" +
-                "   <protocols>\n" +
-                "       <ldp>" +
-                "           <a>2</a>" +
-                "       </ldp>" +
-                "       <ldp>" +
-                "           <a>1</a>" +
-                "       </ldp>\n" +
-                "       <ldp>" +
-                "           <a>3</a>" +
-                "       </ldp>\n" +
-                "   </protocols>\n" +
-                "</config>\n";
+        String expected = """
+                <config>
+                    <protocols>
+                      <ldp>
+                          <a>1</a>
+                      </ldp>
+                    </protocols>
+                </config>""";
+        String actual = """
+                <config>
+                   <protocols>
+                       <ldp><a>2</a></ldp>
+                       <ldp><a>1</a></ldp>
+                       <ldp><a>3</a></ldp>
+                   </protocols>
+                </config>
+                """;
         new XmlMatcher("Failed", expected, actual, null).match();
     }
 
     @Test
     public void matchInnerLists_strict_size() {
-        String expected = "<config>\n" +
-                "    <protocols>\n" +
-                "      <ldp>" +
-                "           <a>1</a>" +
-                "      </ldp>\n" +
-                "    </protocols>\n" +
-                "</config>";
-        String actual = "<config>\n" +
-                "   <protocols>\n" +
-                "       <ldp>" +
-                "           <a>2</a>" +
-                "       </ldp>" +
-                "       <ldp>" +
-                "           <a>1</a>" +
-                "       </ldp>\n" +
-                "       <ldp>" +
-                "           <a>3</a>" +
-                "       </ldp>\n" +
-                "   </protocols>\n" +
-                "</config>\n";
+        String expected = """
+                <config>
+                    <protocols>
+                      <ldp>
+                          <a>1</a>
+                      </ldp>
+                    </protocols>
+                </config>""";
+        String actual = """
+                <config>
+                   <protocols>
+                       <ldp><a>2</a></ldp>
+                       <ldp><a>1</a></ldp>
+                       <ldp><a>3</a></ldp>
+                   </protocols>
+                </config>
+                """;
         assertThrows(AssertionError.class, () ->
                 new XmlMatcher("Failed", expected, actual, new HashSet<>(Collections.singleton(MatchCondition.XML_CHILD_NODELIST_LENGTH))).match());
     }
 
     @Test
     public void matchInnerLists_strict_order() {
-        String expected = "<config>\n" +
-                "    <protocols>\n" +
-                "      <ldp>" +
-                "           <a>1</a>" +
-                "      </ldp>\n" +
-                "    </protocols>\n" +
-                "</config>";
-        String actual = "<config>\n" +
-                "   <protocols>\n" +
-                "       <ldp>" +
-                "           <a>2</a>" +
-                "       </ldp>" +
-                "       <ldp>" +
-                "           <a>1</a>" +
-                "       </ldp>\n" +
-                "       <ldp>" +
-                "           <a>3</a>" +
-                "       </ldp>\n" +
-                "   </protocols>\n" +
-                "</config>\n";
+        String expected = """
+                <config>
+                    <protocols>
+                      <ldp>
+                          <a>1</a>
+                      </ldp>
+                    </protocols>
+                </config>""";
+        String actual = """
+                <config>
+                   <protocols>
+                       <ldp><a>2</a></ldp>
+                       <ldp><a>1</a></ldp>
+                       <ldp><a>3</a></ldp>
+                   </protocols>
+                </config>
+                """;
         assertThrows(AssertionError.class, () ->
                 new XmlMatcher("Failed", expected, actual, new HashSet<>(Collections.singleton(MatchCondition.XML_CHILD_NODELIST_SEQUENCE))).match());
     }
@@ -348,26 +361,23 @@ public class XmlMatcherTests {
     @Test
     public void matchInnerLists_negative() throws InvalidTypeException {
         try {
-            String expected = "<config>\n" +
-                    "    <protocols>\n" +
-                    "      <ldp>" +
-                    "           <a attr1=\"test\">1</a>" +
-                    "      </ldp>\n" +
-                    "    </protocols>\n" +
-                    "</config>";
-            String actual = "<config>\n" +
-                    "   <protocols>\n" +
-                    "       <ldp>" +
-                    "           <a>2</a>" +
-                    "       </ldp>" +
-                    "       <ldp>" +
-                    "           <a attr1=\"test\">01</a>" +
-                    "       </ldp>\n" +
-                    "       <ldp>" +
-                    "           <a attr2=\"test\" attr1=\"test\">3</a>" +
-                    "       </ldp>\n" +
-                    "   </protocols>\n" +
-                    "</config>\n";
+            String expected = """
+                    <config>
+                        <protocols>
+                          <ldp>
+                              <a attr1="test">1</a>
+                          </ldp>
+                        </protocols>
+                    </config>""";
+            String actual = """
+                    <config>
+                       <protocols>
+                           <ldp><a>2</a></ldp>
+                           <ldp><a attr1="test">01</a></ldp>
+                           <ldp><a attr2="test" attr1="test">3</a></ldp>
+                       </protocols>
+                    </config>
+                    """;
             new XmlMatcher("Failed", expected, actual, null).match();
             fail("XMLs match");
         } catch (AssertionError e) {
