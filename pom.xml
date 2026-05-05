@@ -21,10 +21,10 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <jsoncompare.version>7.2</jsoncompare.version>
         <xmlunit.version>2.11.0</xmlunit.version>
-        <surefire.version>3.5.4</surefire.version>
-        <jackson.version>2.20.1</jackson.version>
+        <surefire.version>3.5.5</surefire.version>
+        <jackson.version>2.21.3</jackson.version>
         <jackson.databind.version>2.17.2</jackson.databind.version>
-        <log4j.version>2.25.2</log4j.version>
+        <log4j.version>2.25.4</log4j.version>
     </properties>
 
     <dependencyManagement>
@@ -44,7 +44,7 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-text</artifactId>
-            <version>1.14.0</version>
+            <version>1.15.0</version>
         </dependency>
         <!--XmlUnit-->
         <dependency>
@@ -105,7 +105,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-source-plugin</artifactId>
-                        <version>3.3.1</version>
+                        <version>3.4.0</version>
                         <executions>
                             <execution>
                                 <id>attach-sources</id>
@@ -149,7 +149,7 @@
                     <plugin>
                         <groupId>org.sonatype.central</groupId>
                         <artifactId>central-publishing-maven-plugin</artifactId>
-                        <version>0.9.0</version>
+                        <version>0.10.0</version>
                         <extensions>true</extensions>
                         <configuration>
                             <publishingServerId>central</publishingServerId>
@@ -187,7 +187,7 @@
                     <plugin>
                         <groupId>org.jacoco</groupId>
                         <artifactId>jacoco-maven-plugin</artifactId>
-                        <version>0.8.13</version>
+                        <version>0.8.14</version>
                         <executions>
                             <execution>
                                 <goals>
@@ -227,7 +227,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.14.1</version>
+                <version>3.15.0</version>
                 <configuration>
                     <release>17</release>
                 </configuration>
