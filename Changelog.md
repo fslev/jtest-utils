@@ -1,5 +1,9 @@
 # Changelog
 
+## 7.1 (2026-06-15)
+- #### Changed
+  - Updated json-compare dependency.
+
 ## 7.0 (2026-05-05)
 - #### Removed
   - Removed deprecated `Polling` API. Use [Awaitility](https://github.com/awaitility/awaitility) instead.
