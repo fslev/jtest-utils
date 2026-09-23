@@ -1,5 +1,9 @@
 # Changelog
 
+## 7.2 (2026-09-23)
+- #### Changed
+  - Updated json-compare dependency.
+
 ## 7.1 (2026-06-15)
 - #### Changed
   - Updated json-compare dependency.
