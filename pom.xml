@@ -7,7 +7,7 @@
     <version>7.4-SNAPSHOT</version>
 
     <name>JTest Utils</name>
-    <description>Java Utilities for testing</description>
+    <description>Java library to match and assert JSON, XML, plain text and HTTP responses in tests, with regex support and value capture</description>
     <url>http://github.com/fslev/jtest-utils</url>
     <developers>
         <developer>

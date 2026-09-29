@@ -302,6 +302,12 @@ The library also exposes a few small helpers (see Javadoc for full method lists)
 
 For end-to-end usage in a test framework, see [cucumber-jutils-tutorial](https://github.com/fslev/cucumber-jutils-tutorial).
 
-## 11. License
+## 11. Related projects
+
+- [json-compare](https://github.com/fslev/json-compare) — the JSON comparison engine used by JTest Utils, also usable on its own to compare JSONs in Java.
+- [cucumber-jutils](https://github.com/fslev/cucumber-jutils) — Cucumber for Java extension with scenario variables and assertion steps powered by JTest Utils.
+- [cucumber-jutils-tutorial](https://github.com/fslev/cucumber-jutils-tutorial) — end-to-end example project.
+
+## 12. License
 
 [Apache License 2.0](LICENSE)

@@ -5,8 +5,9 @@ plugins:
   - jekyll-remote-theme
 
 title: "JTest Utils"
-tagline: "A set of testing utilities for Java"
-description: "Match JSON, XML and simple texts using matching conditions and regex"
+tagline: "Match JSON, XML, text and HTTP responses in Java tests, with regex and value capture"
+description: "Java library for matching and asserting JSON, XML, plain text and HTTP responses in JUnit and TestNG tests, with regex support, match conditions and value capture from the actual data"
 author: "Florin Slevoaca"
 url: "https://fslev.github.io/jtest-utils"
 permalink: pretty
+google_analytics: G-T93JGK4KGJ
