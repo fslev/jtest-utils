@@ -1,5 +1,9 @@
 # Changelog
 
+## 7.4 (2026-10-14)
+- #### Changed
+  - Updated json-compare dependency to 8.4: diff paths in assertion messages are labelled `EXPECTED` / `ACTUAL`, and nested differences show full expected paths.
+
 ## 7.3 (2026-09-24)
 - #### Changed
   - Updated json-compare dependency.
