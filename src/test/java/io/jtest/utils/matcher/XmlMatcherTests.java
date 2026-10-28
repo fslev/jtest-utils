@@ -1,5 +1,6 @@
 package io.jtest.utils.matcher;
 
+import io.jtest.utils.common.StringFormat;
 import io.jtest.utils.exceptions.InvalidTypeException;
 import io.jtest.utils.matcher.condition.MatchCondition;
 import org.junit.jupiter.api.Test;
@@ -383,5 +384,28 @@ public class XmlMatcherTests {
         } catch (AssertionError e) {
             assertTrue(e.getMessage().contains("doesn't match any actual element"));
         }
+    }
+
+    @Test
+    public void captureXmlChildElements() throws InvalidTypeException {
+        String expected = "<r><a>~[sub]</a><t>~[text]</t></r>";
+        String actual = "<r><a><b>1</b><c x=\"2\"/></a><t>plain</t></r>";
+        Map<String, Object> props = new XmlMatcher(null, expected, actual, null).match();
+        assertEquals("plain", props.get("text"));
+
+        String substituted = StringFormat.replaceProps("<copy>#[sub]</copy>", props);
+        new XmlMatcher(null, "<copy><b>1</b><c x=\"2\"/></copy>", substituted,
+                new HashSet<>(Arrays.asList(MatchCondition.XML_CHILD_NODELIST_LENGTH, MatchCondition.XML_ELEMENT_NUM_ATTRIBUTES))).match();
+    }
+
+    @Test
+    public void captureXmlChildElementsOfMatchingSibling() throws InvalidTypeException {
+        String expected = "<r><a id=\"2\">~[sub]</a></r>";
+        String actual = "<r><a id=\"1\"><b>1</b></a><a id=\"2\"><b>2</b></a></r>";
+        Map<String, Object> props = new XmlMatcher(null, expected, actual, null).match();
+
+        String substituted = StringFormat.replaceProps("<copy>#[sub]</copy>", props);
+        new XmlMatcher(null, "<copy><b>2</b></copy>", substituted,
+                new HashSet<>(Collections.singletonList(MatchCondition.XML_CHILD_NODELIST_LENGTH))).match();
     }
 }

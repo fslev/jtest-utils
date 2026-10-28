@@ -1,5 +1,6 @@
 package io.jtest.utils.readme;
 
+import io.jtest.utils.common.StringFormat;
 import io.jtest.utils.matcher.ObjectMatcher;
 import io.jtest.utils.matcher.condition.MatchCondition;
 import org.junit.jupiter.api.Test;
@@ -110,5 +111,17 @@ public class MatcherTests {
         String expected = "{\"status\": 200, \"headers\":[{\"Content-Length\":\"157\"}], \"body\":{\"employee\":\"John Johnson\"}}";
         String actual = "{\"status\": 200, \"headers\":[{\"Content-Length\":\"157\"}], \"body\":{\"employee\":\"John Johnson\"}}";
         ObjectMatcher.matchHttpResponse("Matching failure", from(expected), from(actual));
+    }
+
+    @Test
+    public void testCaptureJsonObjectAndXmlChildElements() {
+        Map<String, Object> captured = ObjectMatcher.matchJson(null,
+                "{\"data\": {\"user\": \"~[user]\"}}",
+                "{\"data\": {\"user\": {\"name\": \"Ann\", \"roles\": [\"admin\"]}}}");
+        assertEquals("{\"name\":\"Ann\",\"roles\":[\"admin\"]}", captured.get("user"));
+        assertEquals("{\"owner\": {\"name\":\"Ann\",\"roles\":[\"admin\"]}}",
+                StringFormat.replaceProps("{\"owner\": #[user]}", captured));
+
+        assertEquals("<b>1</b>", ObjectMatcher.matchXml(null, "<r><a>~[sub]</a></r>", "<r><a><b>1</b></a></r>").get("sub"));
     }
 }

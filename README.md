@@ -251,6 +251,22 @@ captured.get("who"); // "world"
 A placeholder that occupies an entire scalar (e.g. an entire JSON value, an entire attribute, an entire
 string) captures the raw value, not its string form. Otherwise the captured value is the matched substring.
 
+When the placeholder is the only thing in the value, it can also capture a whole JSON object, a JSON array or
+XML child elements, at any nesting level: `{"user": "~[user]"}` or `<a>~[sub]</a>` (but not `{"user": "id-~[user]"}`).
+The captured value is JSON / XML text, ready to be reused:
+
+```java
+Map<String, Object> captured = ObjectMatcher.matchJson(null,
+        "{\"data\": {\"user\": \"~[user]\"}}",
+        "{\"data\": {\"user\": {\"name\": \"Ann\", \"roles\": [\"admin\"]}}}");
+captured.get("user"); // {"name":"Ann","roles":["admin"]}
+
+StringFormat.replaceProps("{\"owner\": #[user]}", captured); // no quotes around #[user]
+// {"owner": {"name":"Ann","roles":["admin"]}}
+
+ObjectMatcher.matchXml(null, "<r><a>~[sub]</a></r>", "<r><a><b>1</b></a></r>").get("sub"); // <b>1</b>
+```
+
 ## 7. Match conditions
 
 Pass any combination as the trailing varargs of an `ObjectMatcher.matchXxx` call.

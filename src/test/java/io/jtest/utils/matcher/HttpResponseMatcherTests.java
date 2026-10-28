@@ -26,6 +26,14 @@ public class HttpResponseMatcherTests {
     }
 
     @Test
+    public void captureJsonObjectFromHttpResponseBody() throws InvalidTypeException {
+        String expected = "{\"status\": 200, \"body\":{\"data\":\"~[data]\"}}";
+        String actual = "{\"status\": 200, \"body\":{\"data\":{\"user\":{\"id\":1}}}}";
+        Map<String, Object> props = new HttpResponseMatcher(null, from(expected), from(actual), null).match();
+        assertEquals("{\"user\":{\"id\":1}}", props.get("data"));
+    }
+
+    @Test
     public void matchInvalidHttpResponses() {
         String expected = "{\"status\": 200, \"headers\":{\"auth\":1}, \"reason\":\"test\",\"body\":{\"a\":\"~[val1] ipsum\"}}";
 
@@ -316,7 +324,7 @@ public class HttpResponseMatcherTests {
     public void doNotMatchHttpResponsesByXMLBody() throws InvalidTypeException {
         String expected = "{\"headers\":[{\"auth\":1},{\"x-auth\":2}],\"body\": \"<a><a1 attr=\\\"~[attrVal]\\\">~[val]</a1></a>\"}";
         String actual = "{\"status\": 200, \"reason\":\"test\", \"headers\":[{\"Authorization\":\"Bzasuiofrz====\"},{\"auth\":1}, {\"x-auth\":2}]," +
-                " \"body\":\"<a><a1 attr=\\\"lorem\\\" type=\\\"text\\\"><a2>0</a2></a1><b>null</b></a>\"}";
+                " \"body\":\"<a><a1 type=\\\"text\\\"><a2>0</a2></a1><b>null</b></a>\"}";
 
         Map<String, Object> props = new HttpResponseMatcher(null, from(expected), from(actual),
                 new HashSet<>(Collections.singletonList(MatchCondition.DO_NOT_MATCH_HTTP_RESPONSE_BY_BODY))).match();

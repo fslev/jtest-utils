@@ -1,5 +1,6 @@
 package io.jtest.utils.matcher.comparators.json;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import io.json.compare.JsonComparator;
 import io.jtest.utils.exceptions.InvalidTypeException;
 import io.jtest.utils.matcher.StringMatcher;
@@ -29,6 +30,16 @@ public class CustomJsonComparator implements JsonComparator {
         } catch (AssertionError | InvalidTypeException e) {
             return false;
         }
+    }
+
+    @Override
+    public boolean compareValueToNode(String expected, JsonNode actual) {
+        String placeholder = StringMatcher.standalonePlaceholderName(expected);
+        if (placeholder == null) {
+            return false;
+        }
+        this.valueProperties.put(placeholder, actual.toString());
+        return true;
     }
 
     public boolean compareFields(String expected, String actual) {

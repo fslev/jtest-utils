@@ -1,10 +1,13 @@
 package io.jtest.utils.matcher.comparators.xml;
 
+import io.jtest.utils.common.XmlUtils;
 import io.jtest.utils.exceptions.InvalidTypeException;
 import io.jtest.utils.matcher.StringMatcher;
 import io.jtest.utils.matcher.condition.MatchCondition;
 import org.w3c.dom.Attr;
+import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;
 import org.xmlunit.diff.Comparison;
 import org.xmlunit.diff.ComparisonResult;
@@ -13,13 +16,16 @@ import org.xmlunit.diff.DifferenceEvaluator;
 import org.xmlunit.util.Nodes;
 
 import javax.xml.namespace.QName;
+import javax.xml.transform.TransformerException;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
 public class CustomXmlDiffEvaluator implements DifferenceEvaluator {
 
     private final Map<String, Object> generatedProperties = new HashMap<>();
+    private final Set<Node> capturedPlaceholders = new HashSet<>();
     private final Set<MatchCondition> matchConditions;
 
     public CustomXmlDiffEvaluator(Set<MatchCondition> matchConditions) {
@@ -66,7 +72,54 @@ public class CustomXmlDiffEvaluator implements DifferenceEvaluator {
         if (comparisonType == ComparisonType.ATTR_NAME_LOOKUP) {
             return compare(Nodes.getAttributes(expectedNode), Nodes.getAttributes(actualNode));
         }
+        // Reported for every matched element pair, before their children are compared
+        if (comparisonType == ComparisonType.ELEMENT_TAG_NAME
+                && expectedNode instanceof Element expectedElement && actualNode instanceof Element actualElement) {
+            captureChildElements(expectedElement, actualElement);
+        }
+        if (comparisonType == ComparisonType.CHILD_LOOKUP && capturedPlaceholders.contains(expectedNode)) {
+            return ComparisonResult.SIMILAR;
+        }
         return comparisonResult;
+    }
+
+    /**
+     * {@code <a>~[name]</a>} captures the child elements of the actual {@code <a>} as XML text.
+     */
+    private void captureChildElements(Element expected, Element actual) {
+        NodeList expectedChildren = expected.getChildNodes();
+        if (expectedChildren.getLength() != 1 || !(expectedChildren.item(0) instanceof Text placeholderNode)) {
+            return;
+        }
+        String placeholder = StringMatcher.standalonePlaceholderName(placeholderNode.getData());
+        if (placeholder == null || !hasChildElements(actual)) {
+            return;
+        }
+        generatedProperties.put(placeholder, innerXml(actual));
+        capturedPlaceholders.add(placeholderNode);
+    }
+
+    private static boolean hasChildElements(Element element) {
+        NodeList children = element.getChildNodes();
+        for (int i = 0; i < children.getLength(); i++) {
+            if (children.item(i).getNodeType() == Node.ELEMENT_NODE) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static String innerXml(Element element) {
+        StringBuilder xml = new StringBuilder();
+        NodeList children = element.getChildNodes();
+        try {
+            for (int i = 0; i < children.getLength(); i++) {
+                xml.append(XmlUtils.toString(children.item(i)));
+            }
+        } catch (TransformerException e) {
+            throw new RuntimeException(e);
+        }
+        return xml.toString().strip();
     }
 
     private ComparisonResult compare(Map<QName, String> expectedAttributes, Map<QName, String> actualAttributes) {

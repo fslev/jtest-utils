@@ -1,5 +1,11 @@
 # Changelog
 
+## 7.5 (2026-10-28)
+- #### Added
+  - Capture placeholders can now capture whole JSON objects, JSON arrays and XML child elements, not only simple values. This works when the placeholder is the only thing in the value, e.g. `{"user": "~[user]"}` or `<a>~[sub]</a>` (but not `{"user": "id-~[user]"}`). The captured value is JSON / XML text, so it can be reused as `#[user]` (in JSON without quotes: `{"owner": #[user]}`)
+- #### Changed
+  - Updated json-compare dependency to 8.5.
+
 ## 7.4 (2026-10-14)
 - #### Changed
   - Updated json-compare dependency to 8.4: diff paths in assertion messages are labelled `EXPECTED` / `ACTUAL`, and nested differences show full expected paths.

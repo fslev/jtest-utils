@@ -86,6 +86,14 @@ public class StringMatcher extends AbstractObjectMatcher<Object> {
         return matchAsRegexOrLiteral(expectedString, actualString);
     }
 
+    /**
+     * @return the name inside {@code ~[name]} if {@code value} is exactly one placeholder, otherwise null
+     */
+    public static String standalonePlaceholderName(String value) {
+        List<String> placeholderNames = StringParser.captureValues(value, captureGroupPattern);
+        return isStandalonePlaceholder(value, placeholderNames) ? placeholderNames.get(0) : null;
+    }
+
     private static boolean isStandalonePlaceholder(String expectedString, List<String> placeholderNames) {
         return placeholderNames.size() == 1
                 && expectedString.equals(CAPTURE_PLACEHOLDER_PREFIX + placeholderNames.get(0) + CAPTURE_PLACEHOLDER_SUFFIX);

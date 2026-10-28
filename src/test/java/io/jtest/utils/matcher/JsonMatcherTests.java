@@ -3,6 +3,7 @@ package io.jtest.utils.matcher;
 import com.fasterxml.jackson.databind.node.IntNode;
 import com.fasterxml.jackson.databind.node.TextNode;
 import io.jtest.utils.common.ResourceUtils;
+import io.jtest.utils.common.StringFormat;
 import io.jtest.utils.exceptions.InvalidTypeException;
 import io.jtest.utils.matcher.condition.MatchCondition;
 import org.junit.jupiter.api.Test;
@@ -473,6 +474,44 @@ public class JsonMatcherTests {
         assertEquals("me", symbols.get("sym1"));
         assertEquals(1, symbols.size());
 
+        assertThrows(AssertionError.class, () -> new JsonMatcher(null, expected, actual, null).match());
+    }
+
+    @Test
+    public void captureJsonObjectsAndArraysAtDifferentLevels() throws InvalidTypeException {
+        String expected = """
+                {
+                  "id": "~[id]",
+                  "data": { "user": "~[user]" },
+                  "items": [ { "sku": "B2", "tags": "~[tags]" } ]
+                }""";
+        String actual = """
+                {
+                  "id": 7,
+                  "data": { "user": { "name": "Ann", "roles": [ "admin" ] } },
+                  "items": [ { "sku": "A1", "tags": [] }, { "sku": "B2", "tags": [ "x", "y" ] } ]
+                }""";
+        Map<String, Object> symbols = new JsonMatcher(null, expected, actual, null).match();
+        assertEquals(Map.of(
+                "id", "7",
+                "user", "{\"name\":\"Ann\",\"roles\":[\"admin\"]}",
+                "tags", "[\"x\",\"y\"]"), symbols);
+    }
+
+    @Test
+    public void capturedJsonObjectCanBeSubstitutedBackAsJson() throws InvalidTypeException {
+        String actual = "{\"data\":{\"user\":{\"name\":\"Ann \\\"A\\\"\",\"age\":30}}}";
+        Map<String, Object> symbols = new JsonMatcher(null, "{\"data\":{\"user\":\"~[user]\"}}", actual, null).match();
+
+        String substituted = StringFormat.replaceProps("{\"owner\": #[user]}", symbols);
+        new JsonMatcher(null, "{\"owner\":{\"name\":\"Ann \\\"A\\\"\",\"age\":30}}", substituted,
+                new HashSet<>(Arrays.asList(MatchCondition.JSON_NON_EXTENSIBLE_OBJECT, MatchCondition.REGEX_DISABLED))).match();
+    }
+
+    @Test
+    public void partialPlaceholderDoesNotMatchJsonObject() {
+        String expected = "{\"user\":\"x~[user]\"}";
+        String actual = "{\"user\":{\"name\":\"Ann\"}}";
         assertThrows(AssertionError.class, () -> new JsonMatcher(null, expected, actual, null).match());
     }
 }
