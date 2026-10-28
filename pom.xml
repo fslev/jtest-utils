@@ -4,7 +4,7 @@
 
     <groupId>io.github.fslev</groupId>
     <artifactId>jtest-utils</artifactId>
-    <version>7.5</version>
+    <version>7.6-SNAPSHOT</version>
 
     <name>JTest Utils</name>
     <description>Java library to match and assert JSON, XML, plain text and HTTP responses in tests, with regex support and value capture</description>
@@ -252,7 +252,7 @@
         <connection>scm:git:ssh://git@github.com/fslev/jtest-utils.git</connection>
         <developerConnection>scm:git:ssh://git@github.com/fslev/jtest-utils.git</developerConnection>
         <url>https://github.com/fslev/jtest-utils/tree/main</url>
-        <tag>jtest-utils-7.5</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <licenses>
