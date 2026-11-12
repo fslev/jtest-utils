@@ -1,5 +1,11 @@
 # Changelog
 
+## 7.6 (2026-11-12)
+- #### Changed
+  - Updated json-compare dependency to 8.6: JSON diff messages are Markdown safe (`==== DIFF 1 OF 4 ====` headers, `: ` instead of ` -> `, no `-` bullets, `EXPECTED JSON` / `ACTUAL JSON` sections instead of JUnit's `<...>` values).
+  - String and XML assertion messages are Markdown safe too: the expected and actual values follow under `EXPECTED:` and `ACTUAL:` instead of JUnit's `==> expected: <...> but was: <...>`, and XML differences are described as plain text with their XPaths, without XMLUnit's `- comparing <...>` tail. IDE diff views still get both values.
+  - The `PlainHttpResponse` expected format help text uses example values instead of `<placeholders>`.
+
 ## 7.5 (2026-10-28)
 - #### Added
   - Capture placeholders can now capture whole JSON objects, JSON arrays and XML child elements, not only simple values. This works when the placeholder is the only thing in the value, e.g. `{"user": "~[user]"}` or `<a>~[sub]</a>` (but not `{"user": "id-~[user]"}`). The captured value is JSON / XML text, so it can be reused as `#[user]` (in JSON without quotes: `{"owner": #[user]}`)

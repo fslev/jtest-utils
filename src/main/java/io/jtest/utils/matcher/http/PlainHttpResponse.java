@@ -144,10 +144,10 @@ public record PlainHttpResponse(
         /** The shape that {@link PlainHttpResponse} expects when deserialized from JSON. */
         public static final String EXPECTED_FORMAT = """
                 {
-                  "status": <number> | "<text>",
-                  "body": <object>,
-                  "headers": [{"<name>":<value>}, ...],
-                  "reason": "<text>"
+                  "status": 200 or "200",
+                  "body": {"any": "JSON"},
+                  "headers": [{"name": "value"}],
+                  "reason": "text"
                 }""";
 
         /** Creates a parse exception with no underlying cause. */

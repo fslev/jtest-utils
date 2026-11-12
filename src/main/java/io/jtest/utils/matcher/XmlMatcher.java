@@ -5,9 +5,16 @@ import io.jtest.utils.exceptions.InvalidTypeException;
 import io.jtest.utils.matcher.comparators.xml.CustomXmlDiffEvaluator;
 import io.jtest.utils.matcher.condition.MatchCondition;
 import org.junit.jupiter.api.AssertionFailureBuilder;
+import org.w3c.dom.Attr;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+import org.w3c.dom.Text;
+import org.xmlunit.builder.DiffBuilder;
+import org.xmlunit.diff.Comparison;
+import org.xmlunit.diff.ComparisonControllers;
+import org.xmlunit.diff.DefaultComparisonFormatter;
 import org.xmlunit.diff.DefaultNodeMatcher;
+import org.xmlunit.diff.Diff;
 import org.xmlunit.diff.DifferenceEvaluators;
 import org.xmlunit.diff.ElementSelector;
 import org.xmlunit.diff.XPathContext;
@@ -18,8 +25,6 @@ import java.util.Map;
 import java.util.Set;
 
 import static io.jtest.utils.common.XmlUtils.toNode;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.xmlunit.matchers.CompareMatcher.isSimilarTo;
 
 public class XmlMatcher extends AbstractObjectMatcher<Node> {
 
@@ -80,11 +85,35 @@ public class XmlMatcher extends AbstractObjectMatcher<Node> {
     }
 
     private Map<String, Object> positiveMatch() {
-        assertThat(message, actual, isSimilarTo(expected).ignoreWhitespace()
+        Diff diff = DiffBuilder.compare(expected).withTest(actual).ignoreWhitespace().checkForSimilar()
                 .withNodeMatcher(new DefaultNodeMatcher(new ByNameAndSiblingOfSameNameAndTypeSelector()))
-                .withDifferenceEvaluator(
-                        DifferenceEvaluators.chain(diffEvaluator)));
+                .withDifferenceEvaluator(DifferenceEvaluators.chain(diffEvaluator))
+                .withComparisonController(ComparisonControllers.StopWhenDifferent)
+                .build();
+        if (diff.hasDifferences()) {
+            fail(message + describe(diff.getDifferences().iterator().next().getComparison()),
+                    toString(expected).strip(), toString(actual).strip());
+        }
         return diffEvaluator.getGeneratedProperties();
+    }
+
+    // Plain text description: XMLUnit's own ends with " - comparing <a...> at /x to <b...> at /y", which is Markdown syntax
+    private static String describe(Comparison comparison) {
+        Node control = comparison.getControlDetails().getTarget();
+        Node test = comparison.getTestDetails().getTarget();
+        String description;
+        if ((control instanceof Text || control instanceof Attr) && test != null && test.getNodeType() == control.getNodeType()) {
+            description = "Expected " + (control instanceof Text ? "text" : "attribute") + " value '"
+                    + control.getNodeValue() + "' but was '" + test.getNodeValue() + "'";
+        } else {
+            description = new DefaultComparisonFormatter().getDescription(comparison);
+            int tail = description.indexOf(" - comparing ");
+            description = tail < 0 ? description : description.substring(0, tail);
+        }
+        String ls = System.lineSeparator();
+        return description + ls
+                + "Expected XPath: " + comparison.getControlDetails().getXPath() + ls
+                + "Actual XPath: " + comparison.getTestDetails().getXPath() + ls + ls;
     }
 
     private class ByNameAndSiblingOfSameNameAndTypeSelector implements ElementSelector {

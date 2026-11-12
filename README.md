@@ -134,18 +134,18 @@ The match fails and every difference is reported together, not just the first:
 ```
 FOUND 4 DIFFERENCE(S):
 
-_________________________DIFF__________________________
+==== DIFF 1 OF 4 ====
 $.copper[0].jack was not found
 
-_________________________DIFF__________________________
+==== DIFF 2 OF 4 ====
 $.speak
 Expected value: -263355062.75097084 But got: -263355062.750
 
-_________________________DIFF__________________________
+==== DIFF 3 OF 4 ====
 $.basis was not found
 
-_________________________DIFF__________________________
-$ -> Actual JSON OBJECT has extra fields
+==== DIFF 4 OF 4 ====
+$: Actual JSON OBJECT has extra fields
 
 Seems that JSONs do not match
 JSONs do not match
@@ -207,7 +207,7 @@ The match fails and the assertion error spells out which component differed and 
 ```
 FOUND 1 DIFFERENCE(S):
 
-_________________________DIFF__________________________
+==== DIFF 1 OF 1 ====
 $.employee
 Expected value: "John Johnson" But got: "John Johnny"
 

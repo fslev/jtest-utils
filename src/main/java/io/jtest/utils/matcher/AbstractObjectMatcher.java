@@ -2,6 +2,7 @@ package io.jtest.utils.matcher;
 
 import io.jtest.utils.exceptions.InvalidTypeException;
 import io.jtest.utils.matcher.condition.MatchCondition;
+import org.junit.jupiter.api.AssertionFailureBuilder;
 
 import java.util.HashSet;
 import java.util.Map;
@@ -40,6 +41,18 @@ abstract class AbstractObjectMatcher<T> {
 
     protected String negativeMatchMessage() {
         return System.lineSeparator() + "Objects match!" + System.lineSeparator();
+    }
+
+    /**
+     * Throws an assertion failure that ends with the expected and actual values under plain labels.
+     * JUnit's own " ==> expected: &lt;...&gt; but was: &lt;...&gt;" suffix is turned off, as &lt; and &gt; are
+     * Markdown syntax. IDEs still get both values for their diff view.
+     */
+    static void fail(String message, Object expected, Object actual) {
+        String ls = System.lineSeparator();
+        AssertionFailureBuilder.assertionFailure()
+                .message(message + "EXPECTED:" + ls + expected + ls + ls + "ACTUAL:" + ls + actual)
+                .expected(expected).actual(actual).includeValuesInMessage(false).buildAndThrow();
     }
 
     protected String toString(T value) {

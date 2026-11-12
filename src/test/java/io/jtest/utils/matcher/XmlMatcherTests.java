@@ -174,7 +174,7 @@ public class XmlMatcherTests {
             try {
                 new XmlMatcher("Some message", expected, actual, null).match();
             } catch (AssertionError e) {
-                assertTrue(e.getMessage().contains("Some message") && e.getMessage().contains("Expected:"));
+                assertTrue(e.getMessage().contains("Some message") && e.getMessage().contains("EXPECTED:"));
                 throw e;
             }
         });
@@ -407,5 +407,28 @@ public class XmlMatcherTests {
         String substituted = StringFormat.replaceProps("<copy>#[sub]</copy>", props);
         new XmlMatcher(null, "<copy><b>2</b></copy>", substituted,
                 new HashSet<>(Collections.singletonList(MatchCondition.XML_CHILD_NODELIST_LENGTH))).match();
+    }
+
+    @Test
+    public void failureMessageHasNoMarkdownSyntax() {
+        AssertionError e = assertThrows(AssertionError.class,
+                () -> new XmlMatcher("Some message", "<a><b>x</b></a>", "<a><b>y</b></a>", null).match());
+        String description = e.getMessage().split("EXPECTED:", 2)[0];
+        assertTrue(description.contains("Expected text value 'x' but was 'y'"), e.getMessage());
+        assertTrue(description.contains("Expected XPath: /a[1]/b[1]/text()[1]"), e.getMessage());
+        for (String token : new String[]{"->", " - ", "<", ">"}) {
+            assertFalse(description.contains(token), "Markdown token '" + token + "' in: " + description);
+        }
+        assertTrue(e.getMessage().contains("ACTUAL:"), e.getMessage());
+
+        e = assertThrows(AssertionError.class,
+                () -> new XmlMatcher(null, "<a x=\"1\"><b/></a>", "<a x=\"2\"><b/></a>", null).match());
+        String attrDescription = e.getMessage().split("EXPECTED:", 2)[0];
+        assertTrue(attrDescription.contains("Expected XPath: /a[1]/@x"), e.getMessage());
+        assertFalse(attrDescription.contains("<") || attrDescription.contains(" - "), e.getMessage());
+
+        e = assertThrows(AssertionError.class, () -> new XmlMatcher(null, "<a><b/></a>", "<a><c/></a>", null).match());
+        String childDescription = e.getMessage().split("EXPECTED:", 2)[0];
+        assertFalse(childDescription.contains("<") || childDescription.contains(" - "), e.getMessage());
     }
 }

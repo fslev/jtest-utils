@@ -210,7 +210,7 @@ public class StringMatcherTests {
             try {
                 new StringMatcher("Some mess", expected, actual, null).match();
             } catch (AssertionError e) {
-                assertTrue(e.getMessage().contains("Some mess") && e.getMessage().contains("Expected:"));
+                assertTrue(e.getMessage().contains("Some mess") && e.getMessage().contains("EXPECTED:"));
                 throw e;
             }
         });
@@ -256,7 +256,7 @@ public class StringMatcherTests {
             assertTrue(e.getMessage().matches("(?s)Strings do not match\n\nMatching is by default case-sensitive and uses regular expressions.\n" +
                     "If expected object contains any unintentional regexes, then quote them between \\\\Q and \\\\E delimiters.\n" +
                     "For disabling case-sensitivity, use \\Q(?i)\\E and \\Q(?-i)\\E modifiers.\n" +
-                    ".*expected.*\\Q<.* is regex ~[regex] [0-9]*>\\E.*\\Q<This is regex a|b|c|d [0-9]*>\\E.*"));
+                    ".*EXPECTED:\n\\Q.* is regex ~[regex] [0-9]*\\E\n\nACTUAL:\n\\QThis is regex a|b|c|d [0-9]*\\E"));
             return;
         }
         fail("Values should not match ! But they do...");
@@ -273,7 +273,7 @@ public class StringMatcherTests {
                     "Matching is by default case-sensitive and uses regular expressions.\n" +
                     "If expected object contains any unintentional regexes, then quote them between \\\\Q and \\\\E delimiters.\n" +
                     "For disabling case-sensitivity, use \\Q(?i)\\E and \\Q(?-i)\\E modifiers.\n" +
-                    ".*expected.*\\Q<.* is regex ~[regex]lorem>\\E.*\\Q<This is regex a|b|c|d>\\E.*"));
+                    ".*EXPECTED:\n\\Q.* is regex ~[regex]lorem\\E\n\nACTUAL:\n\\QThis is regex a|b|c|d\\E"));
             return;
         }
         fail("Values should not match ! But they do...");
@@ -635,5 +635,15 @@ public class StringMatcherTests {
     public void compareIntegerWithLongOfSameValue() throws InvalidTypeException {
         Map<String, Object> props = new StringMatcher(null, 42, 42L, null).match();
         assertTrue(props.isEmpty());
+    }
+
+    @Test
+    public void failureMessageHasNoMarkdownSyntax() {
+        AssertionError e = assertThrows(AssertionError.class,
+                () -> new StringMatcher("Some message", "lorem", "ipsum", null).match());
+        assertTrue(e.getMessage().endsWith("EXPECTED:\nlorem\n\nACTUAL:\nipsum"), e.getMessage());
+        for (String token : new String[]{"->", " - ", "<", ">"}) {
+            assertFalse(e.getMessage().contains(token), "Markdown token '" + token + "' in: " + e.getMessage());
+        }
     }
 }

@@ -78,7 +78,7 @@ public class StringMatcher extends AbstractObjectMatcher<Object> {
             return captureActualAsStandalonePlaceholder(placeholderNames.get(0));
         }
         if (actual == null) {
-            AssertionFailureBuilder.assertionFailure().message(message).expected(expected).actual(null).buildAndThrow();
+            fail(message, expected, null);
         }
         if (!placeholderNames.isEmpty()) {
             return matchWithCaptureGroups(expectedString, actualString, placeholderNames);
@@ -110,7 +110,7 @@ public class StringMatcher extends AbstractObjectMatcher<Object> {
                 matchConditions.contains(MatchCondition.REGEX_DISABLED));
         List<String> capturedValues = StringParser.captureValues(actualString, pattern, true);
         if (capturedValues.isEmpty()) {
-            AssertionFailureBuilder.assertionFailure().message(message).expected(expected).actual(actual).buildAndThrow();
+            fail(message, expected, actual);
         }
         Map<String, Object> properties = new HashMap<>();
         int limit = Math.min(capturedValues.size(), placeholderNames.size());
@@ -123,18 +123,18 @@ public class StringMatcher extends AbstractObjectMatcher<Object> {
     private Map<String, Object> matchAsRegexOrLiteral(String expectedString, String actualString) {
         if (matchConditions.contains(MatchCondition.REGEX_DISABLED)) {
             if (!expectedString.equals(actualString)) {
-                AssertionFailureBuilder.assertionFailure().message(message).expected(expected).actual(actual).buildAndThrow();
+                fail(message, expected, actual);
             }
             return new HashMap<>();
         }
         try {
             Pattern pattern = Pattern.compile(expectedString, Pattern.DOTALL | Pattern.MULTILINE);
             if (!pattern.matcher(actualString).matches()) {
-                AssertionFailureBuilder.assertionFailure().message(message).expected(expected).actual(actual).buildAndThrow();
+                fail(message, expected, actual);
             }
         } catch (PatternSyntaxException e) {
             if (!expectedString.equals(actual)) {
-                AssertionFailureBuilder.assertionFailure().message(message).expected(expected).actual(actual).buildAndThrow();
+                fail(message, expected, actual);
             }
         }
         return new HashMap<>();
@@ -143,7 +143,7 @@ public class StringMatcher extends AbstractObjectMatcher<Object> {
     private boolean matchesWithNull() {
         if (expected == null) {
             if (actual != null) {
-                AssertionFailureBuilder.assertionFailure().message(message).expected(null).actual(actual).buildAndThrow();
+                fail(message, null, actual);
             } else {
                 return true;
             }
