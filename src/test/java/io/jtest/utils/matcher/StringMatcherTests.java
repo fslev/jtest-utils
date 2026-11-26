@@ -212,7 +212,7 @@ public class StringMatcherTests {
             try {
                 new StringMatcher("Some mess", expected, actual, null).match();
             } catch (AssertionError e) {
-                assertTrue(e.getMessage().contains("Some mess") && e.getMessage().contains("EXPECTED:"));
+                assertTrue(e.getMessage().contains("Some mess") && e.getMessage().contains(" ==> expected: <"));
                 throw e;
             }
         });
@@ -258,7 +258,7 @@ public class StringMatcherTests {
             assertTrue(e.getMessage().matches("(?s)Strings do not match\n\nMatching is by default case-sensitive and uses regular expressions.\n" +
                     "If expected object contains any unintentional regexes, then quote them between \\\\Q and \\\\E delimiters.\n" +
                     "For disabling case-sensitivity, use \\Q(?i)\\E and \\Q(?-i)\\E modifiers.\n" +
-                    ".*EXPECTED: \\Q.* is regex ~[regex] [0-9]*\\E\n BUT WAS: \\QThis is regex a|b|c|d [0-9]*\\E\n"));
+                    ".* ==> expected: <\\Q.* is regex ~[regex] [0-9]*\\E> but was: <\\QThis is regex a|b|c|d [0-9]*\\E>"));
             return;
         }
         fail("Values should not match ! But they do...");
@@ -275,7 +275,7 @@ public class StringMatcherTests {
                     "Matching is by default case-sensitive and uses regular expressions.\n" +
                     "If expected object contains any unintentional regexes, then quote them between \\\\Q and \\\\E delimiters.\n" +
                     "For disabling case-sensitivity, use \\Q(?i)\\E and \\Q(?-i)\\E modifiers.\n" +
-                    ".*EXPECTED: \\Q.* is regex ~[regex]lorem\\E\n BUT WAS: \\QThis is regex a|b|c|d\\E\n"));
+                    ".* ==> expected: <\\Q.* is regex ~[regex]lorem\\E> but was: <\\QThis is regex a|b|c|d\\E>"));
             return;
         }
         fail("Values should not match ! But they do...");
@@ -643,35 +643,35 @@ public class StringMatcherTests {
     public void failureMessageHasNoMarkdownSyntax() {
         AssertionError e = assertThrows(AssertionError.class,
                 () -> new StringMatcher("Some message", "lorem", "ipsum", null).match());
-        assertTrue(e.getMessage().endsWith("EXPECTED: lorem\n BUT WAS: ipsum\n"), e.getMessage());
+        // JUnit's " ==> expected: <...> but was: <...>" suffix is kept on purpose, for IDE diff links
+        assertTrue(e.getMessage().endsWith(" ==> expected: <lorem> but was: <ipsum>"), e.getMessage());
+        String libraryText = e.getMessage().substring(0, e.getMessage().indexOf(" ==> expected: <"));
         for (String token : new String[]{"->", " - ", "<", ">"}) {
-            assertFalse(e.getMessage().contains(token), "Markdown token '" + token + "' in: " + e.getMessage());
+            assertFalse(libraryText.contains(token), "Markdown token '" + token + "' in: " + libraryText);
         }
     }
 
     /**
-     * Cucumber's TeamCity formatter (io.cucumber:teamcity-formatter, used by IntelliJ for Cucumber 7+) gives the
-     * IDE its "Click to see difference" link only when the trimmed message matches this pattern (find).
+     * The patterns Cucumber's TeamCity formatter (io.cucumber:teamcity-formatter 0.3.1, used by IntelliJ for
+     * Cucumber 7+) tries in this order on the trimmed message to give the IDE its "Click to see difference" link.
      */
-    static final Pattern CUCUMBER_TEAMCITY_EXPECTED_BUT_WAS =
-            Pattern.compile("expected: (.*)(?:\r\n|\r|\n) but was: (.*)$", Pattern.DOTALL | Pattern.CASE_INSENSITIVE);
-
-    /**
-     * IntelliJ's own pattern, used by its JUnit and older Cucumber runners (case-insensitive, DOTALL, find).
-     */
-    static final Pattern INTELLIJ_EXPECTED_BUT_WAS =
-            Pattern.compile("expected: (.*)\\s+but was: (.*)", Pattern.DOTALL | Pattern.CASE_INSENSITIVE);
+    static final Pattern[] CUCUMBER_TEAMCITY_COMPARE_PATTERNS = {
+            Pattern.compile("expected: (.*)(?:\r\n|\r|\n) {5}but: was (.*)$", Pattern.DOTALL | Pattern.CASE_INSENSITIVE),
+            Pattern.compile("expected: (.*)(?:\r\n|\r|\n) but was: (.*)$", Pattern.DOTALL | Pattern.CASE_INSENSITIVE),
+            Pattern.compile("expected: <(.*)> but was: <(.*)>$", Pattern.DOTALL | Pattern.CASE_INSENSITIVE),
+            Pattern.compile("expected:\\s?<(.*)> but was:\\s?<(.*)>$", Pattern.DOTALL | Pattern.CASE_INSENSITIVE),
+            Pattern.compile("expected \\[(.*)] but found \\[(.*)]$", Pattern.DOTALL | Pattern.CASE_INSENSITIVE)};
 
     static void assertIdeDiffValues(String message, String expected, String actual) {
-        Matcher cucumber = CUCUMBER_TEAMCITY_EXPECTED_BUT_WAS.matcher(message.trim());
-        assertTrue(cucumber.find(), message);
-        assertEquals(expected, cucumber.group(1), message);
-        assertEquals(actual, cucumber.group(2), message);
-
-        Matcher intellij = INTELLIJ_EXPECTED_BUT_WAS.matcher(message);
-        assertTrue(intellij.find(), message);
-        assertEquals(expected + System.lineSeparator(), intellij.group(1), message);
-        assertEquals(actual + System.lineSeparator(), intellij.group(2), message);
+        for (Pattern pattern : CUCUMBER_TEAMCITY_COMPARE_PATTERNS) {
+            Matcher matcher = pattern.matcher(message.trim());
+            if (matcher.find()) {
+                assertEquals(expected, matcher.group(1), message);
+                assertEquals(actual, matcher.group(2), message);
+                return;
+            }
+        }
+        fail("No IDE diff pattern matches: " + message);
     }
 
     @Test

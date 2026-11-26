@@ -1,5 +1,10 @@
 # Changelog
 
+## 7.9 (2026-11-26)
+- #### Changed
+  - Updated json-compare dependency to 8.9.
+  - String and XML assertion messages end with JUnit's ` ==> expected: <...> but was: <...>` suffix again, instead of the `EXPECTED` / `BUT WAS` labels of 7.6 to 7.8. IntelliJ runs Cucumber 7+ scenarios through Cucumber's TeamCity formatter, which gives the "Click to see difference" link only from the message text, and this is the layout it is built for. It is the one part of the message that is not Markdown safe. Failures of negative matches (`DO_NOT_MATCH*`) still leave the values out.
+
 ## 7.8 (2026-11-26)
 - #### Changed
   - Updated json-compare dependency to 8.8.

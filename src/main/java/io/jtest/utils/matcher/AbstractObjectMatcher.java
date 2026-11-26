@@ -44,21 +44,13 @@ abstract class AbstractObjectMatcher<T> {
     }
 
     /**
-     * Throws an assertion failure that ends with "EXPECTED: ..." and, on the next line, " BUT WAS: ...".
-     * JUnit's own " ==> expected: &lt;...&gt; but was: &lt;...&gt;" suffix is turned off, as &lt; and &gt; are
-     * Markdown syntax.
-     * <p>
-     * IDEs that run Cucumber 7+ get their diff link from Cucumber's TeamCity formatter, which reads only the message
-     * text and matches {@code expected: (.*)(?:\r\n|\r|\n) but was: (.*)$} on it (case-insensitive, message
-     * trimmed). So each value starts on its label's line, exactly one line break and one space come before
-     * "BUT WAS", and the values come last. The final line break keeps both values ending the same way for
-     * IntelliJ's own patterns.
+     * Throws an assertion failure carrying the expected and actual values. JUnit's AssertionFailureBuilder appends
+     * them to the message as " ==> expected: &lt;...&gt; but was: &lt;...&gt;": IDEs that run Cucumber 7+ get their
+     * diff link from Cucumber's TeamCity formatter, which reads only the message text and recognizes this layout.
+     * It is the one place where the message contains Markdown syntax (&lt; &gt;).
      */
     static void fail(String message, Object expected, Object actual) {
-        String ls = System.lineSeparator();
-        AssertionFailureBuilder.assertionFailure()
-                .message(message + "EXPECTED: " + expected + ls + " BUT WAS: " + actual + ls)
-                .expected(expected).actual(actual).includeValuesInMessage(false).buildAndThrow();
+        AssertionFailureBuilder.assertionFailure().message(message).expected(expected).actual(actual).buildAndThrow();
     }
 
     protected String toString(T value) {
