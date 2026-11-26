@@ -1,5 +1,10 @@
 # Changelog
 
+## 7.8 (2026-11-26)
+- #### Changed
+  - Updated json-compare dependency to 8.8.
+  - String and XML assertion messages put ` BUT WAS: <value>` on the line right after `EXPECTED: <value>`, indented by one space, without a blank line in between. IntelliJ runs Cucumber 7+ scenarios through Cucumber's TeamCity formatter, which offers the "Click to see difference" link only for that layout (`expected: ...`, one line break, ` but was: ...`). With 7.7, Cucumber scenarios still showed no link.
+
 ## 7.7 (2026-11-26)
 - #### Changed
   - Updated json-compare dependency to 8.7: the JSONs at the end of a JSON diff message are labelled `EXPECTED: ` and `BUT WAS: ` instead of `EXPECTED JSON:` and `ACTUAL JSON:`.
