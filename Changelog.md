@@ -1,5 +1,10 @@
 # Changelog
 
+## 7.7 (2026-11-26)
+- #### Changed
+  - Updated json-compare dependency to 8.7: the JSONs at the end of a JSON diff message are labelled `EXPECTED: ` and `BUT WAS: ` instead of `EXPECTED JSON:` and `ACTUAL JSON:`.
+  - String and XML assertion messages end with `EXPECTED: <value>` and `BUT WAS: <value>`, each value starting on its label's line, instead of `EXPECTED:` and `ACTUAL:` sections. IntelliJ's Cucumber runner builds its "Click to see difference" link only from the message text, by matching `expected: ... but was: ...`, so it showed no link with the 7.6 labels.
+
 ## 7.6 (2026-11-12)
 - #### Changed
   - Updated json-compare dependency to 8.6: JSON diff messages are Markdown safe (`==== DIFF 1 OF 4 ====` headers, `: ` instead of ` -> `, no `-` bullets, `EXPECTED JSON` / `ACTUAL JSON` sections instead of JUnit's `<...>` values).

@@ -419,7 +419,7 @@ public class XmlMatcherTests {
         for (String token : new String[]{"->", " - ", "<", ">"}) {
             assertFalse(description.contains(token), "Markdown token '" + token + "' in: " + description);
         }
-        assertTrue(e.getMessage().contains("ACTUAL:"), e.getMessage());
+        assertTrue(e.getMessage().contains("BUT WAS: "), e.getMessage());
 
         e = assertThrows(AssertionError.class,
                 () -> new XmlMatcher(null, "<a x=\"1\"><b/></a>", "<a x=\"2\"><b/></a>", null).match());

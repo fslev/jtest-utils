@@ -11,6 +11,8 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -256,7 +258,7 @@ public class StringMatcherTests {
             assertTrue(e.getMessage().matches("(?s)Strings do not match\n\nMatching is by default case-sensitive and uses regular expressions.\n" +
                     "If expected object contains any unintentional regexes, then quote them between \\\\Q and \\\\E delimiters.\n" +
                     "For disabling case-sensitivity, use \\Q(?i)\\E and \\Q(?-i)\\E modifiers.\n" +
-                    ".*EXPECTED:\n\\Q.* is regex ~[regex] [0-9]*\\E\n\nACTUAL:\n\\QThis is regex a|b|c|d [0-9]*\\E"));
+                    ".*EXPECTED: \\Q.* is regex ~[regex] [0-9]*\\E\n\nBUT WAS: \\QThis is regex a|b|c|d [0-9]*\\E\n"));
             return;
         }
         fail("Values should not match ! But they do...");
@@ -273,7 +275,7 @@ public class StringMatcherTests {
                     "Matching is by default case-sensitive and uses regular expressions.\n" +
                     "If expected object contains any unintentional regexes, then quote them between \\\\Q and \\\\E delimiters.\n" +
                     "For disabling case-sensitivity, use \\Q(?i)\\E and \\Q(?-i)\\E modifiers.\n" +
-                    ".*EXPECTED:\n\\Q.* is regex ~[regex]lorem\\E\n\nACTUAL:\n\\QThis is regex a|b|c|d\\E"));
+                    ".*EXPECTED: \\Q.* is regex ~[regex]lorem\\E\n\nBUT WAS: \\QThis is regex a|b|c|d\\E\n"));
             return;
         }
         fail("Values should not match ! But they do...");
@@ -641,9 +643,33 @@ public class StringMatcherTests {
     public void failureMessageHasNoMarkdownSyntax() {
         AssertionError e = assertThrows(AssertionError.class,
                 () -> new StringMatcher("Some message", "lorem", "ipsum", null).match());
-        assertTrue(e.getMessage().endsWith("EXPECTED:\nlorem\n\nACTUAL:\nipsum"), e.getMessage());
+        assertTrue(e.getMessage().endsWith("EXPECTED: lorem\n\nBUT WAS: ipsum\n"), e.getMessage());
         for (String token : new String[]{"->", " - ", "<", ">"}) {
             assertFalse(e.getMessage().contains(token), "Markdown token '" + token + "' in: " + e.getMessage());
         }
+    }
+
+    /**
+     * IntelliJ's Cucumber runner reads only the message text to offer its "Click to see difference" link,
+     * using this pattern (case-insensitive, DOTALL, find).
+     */
+    static final Pattern INTELLIJ_EXPECTED_BUT_WAS =
+            Pattern.compile("expected: (.*)\\s+but was: (.*)", Pattern.DOTALL | Pattern.CASE_INSENSITIVE);
+
+    static void assertIdeDiffValues(String message, String expected, String actual) {
+        Matcher matcher = INTELLIJ_EXPECTED_BUT_WAS.matcher(message);
+        assertTrue(matcher.find(), message);
+        assertEquals(expected, matcher.group(1).stripTrailing(), message);
+        assertEquals(actual, matcher.group(2).stripTrailing(), message);
+        assertEquals(matcher.group(1).length() - matcher.group(1).stripTrailing().length(),
+                matcher.group(2).length() - matcher.group(2).stripTrailing().length(),
+                "Both values must end the same way, or the IDE diff shows a false difference on the last line");
+    }
+
+    @Test
+    public void failureMessageGivesBothValuesToIdeDiffPatterns() {
+        AssertionError e = assertThrows(AssertionError.class,
+                () -> new StringMatcher("Some message", "lorem", "ipsum", null).match());
+        assertIdeDiffValues(e.getMessage(), "lorem", "ipsum");
     }
 }

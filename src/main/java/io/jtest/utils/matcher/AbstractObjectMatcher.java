@@ -44,14 +44,19 @@ abstract class AbstractObjectMatcher<T> {
     }
 
     /**
-     * Throws an assertion failure that ends with the expected and actual values under plain labels.
-     * JUnit's own " ==> expected: &lt;...&gt; but was: &lt;...&gt;" suffix is turned off, as &lt; and &gt; are
-     * Markdown syntax. IDEs still get both values for their diff view.
+     * Throws an assertion failure that ends with the expected and actual values as "EXPECTED: ..." and
+     * "BUT WAS: ...". JUnit's own " ==> expected: &lt;...&gt; but was: &lt;...&gt;" suffix is turned off, as
+     * &lt; and &gt; are Markdown syntax.
+     * <p>
+     * Some IDE runners, such as IntelliJ's Cucumber runner, build their diff link only from the message text,
+     * by matching {@code expected: (.*)\s+but was: (.*)} (case-insensitive). So each value starts on its
+     * label's line, the values come last, and the message ends with a line break so that both captured values
+     * end the same way.
      */
     static void fail(String message, Object expected, Object actual) {
         String ls = System.lineSeparator();
         AssertionFailureBuilder.assertionFailure()
-                .message(message + "EXPECTED:" + ls + expected + ls + ls + "ACTUAL:" + ls + actual)
+                .message(message + "EXPECTED: " + expected + ls + ls + "BUT WAS: " + actual + ls)
                 .expected(expected).actual(actual).includeValuesInMessage(false).buildAndThrow();
     }
 

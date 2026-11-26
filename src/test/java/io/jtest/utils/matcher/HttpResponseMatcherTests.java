@@ -409,4 +409,16 @@ public class HttpResponseMatcherTests {
                 new HashSet<>(Collections.singletonList(MatchCondition.DO_NOT_MATCH))).match();
         assertEquals(0, props.size());
     }
+
+    @Test
+    public void failureMessageGivesBothValuesToIdeDiffPatterns() {
+        AssertionError e = assertThrows(AssertionError.class, () -> new HttpResponseMatcher(null,
+                from("{\"status\": 200, \"body\": {\"a\": 1}}"), from("{\"status\": 200, \"body\": {\"a\": 2}}"), null).match());
+        StringMatcherTests.assertIdeDiffValues(e.getMessage(), "{" + System.lineSeparator() + "  \"a\" : 1" + System.lineSeparator() + "}",
+                "{" + System.lineSeparator() + "  \"a\" : 2" + System.lineSeparator() + "}");
+
+        e = assertThrows(AssertionError.class, () -> new HttpResponseMatcher(null,
+                from("{\"status\": 201}"), from("{\"status\": 200}"), null).match());
+        StringMatcherTests.assertIdeDiffValues(e.getMessage(), "201", "200");
+    }
 }
